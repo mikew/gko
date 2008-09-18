@@ -24,7 +24,6 @@ define('ACTION', !empty($keywords[1]) ? $keywords[1] : 'index');
 
 $controller = CONTROLLER . 'Controller';
 $controller = new $controller();
-$controller->{ACTION}();
 $controller->render();
 
 unset($keywords);
