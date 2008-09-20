@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title><?= $helpers->write_title() ?></title>
+	<link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" />
+</head>
+
+<body>
+<div id="header">
+	<div id="breadcrumbs">
+		KDEGames Home &raquo; <span>Welcome!</span>
+	</div>
+	<ul>
+		<li id="home"><a href="#">Home</a></li>
+		<li id="catalogue"><a href="#">Catalogue</a></li>
+		<li id="news" class="selected"><a href="#">News</a></li>
+		<li id="about"><a href="#">About</a></li>
+		<li id="empty"></li>
+	</ul>
+</div>
+
+<div id="top"><div id="bottom">
+<div id="airlock">
+<?= $this->content ?>
+<?php $this->render_file('test'); ?>
+</div>
+</div></div>
+
+<div id="footer">
+	<p>
+		Maintained by <a href="mailto:emilsedgh@gmail.com">games.kde.org</a><br />
+		KDE&reg; and <a href="#">the K Desktop Environment&reg; Logo</a> are registered trademarks of the KDE e.V.
+		| Legal
+	</p>
+</div>
+
+</body>
+</html>

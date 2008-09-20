@@ -1,4 +1,4 @@
 <?php
-class ApplicationController extends BaseController {
+class ApplicationController extends CoreController {
 	
 }
