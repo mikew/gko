@@ -1,4 +1,5 @@
 RewriteEngine On
+# RewriteBase /~userdir/path/
 
 RewriteRule ^$ index.html [QSA]
 # RewriteRule ^([^.]+)$ $1.html [QSA]
