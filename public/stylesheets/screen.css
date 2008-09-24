@@ -43,8 +43,12 @@ body
 }
 #header ul li#home
 {
-	margin-left: 100px;
+	margin-left: 69px;
 	border-left: 0;
+}
+#header ul li#home.selected a
+{
+	background: transparent url(/images/nav_home_highlight.png) top left no-repeat;
 }
 #header ul li.selected a
 {
@@ -73,18 +77,25 @@ body
 
 #airlock
 {
-	border: 1px solid #d3d3d1;
-	border-width: 1px 0;
 	padding: 40px;
+	width: 780px;
+	margin: auto;
 }
 
+#top, #bottom
+{
+	border: 1px solid #d3d3d1;
+	border-width: 0;
+}
 #top
 {
 	background: #fff url(/images/shadow-top.png) top left repeat-x;
+	border-top-width: 1px;
 }
 #bottom
 {
 	background: transparent url(/images/shadow-bottom.png) bottom left repeat-x;
+	border-bottom-width: 1px;
 }
 
 #footer
@@ -98,4 +109,73 @@ body
 	margin: 0 auto;
 	width: 748px;
 	text-align: left;
+}
+
+#promo
+{
+	text-align: center;
+}
+
+div.em
+{
+	background: #eee none;
+	position: relative;
+}
+div.em .top
+{
+	background: transparent url(/images/em-t.png) top left repeat-x;
+}
+div.em .right
+{
+	background: transparent url(/images/em-r.png) top right repeat-y;
+}
+div.em .bottom
+{
+	background: transparent url(/images/em-b.png) bottom left repeat-x;
+}
+div.em .left
+{
+	background: transparent url(/images/em-l.png) top left repeat-y;
+	padding: 15px;
+}
+div.em .tl
+{
+	background: transparent url(/images/em-tl.png) top left no-repeat;
+	height: 12px;
+	width: 12px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+div.em .tr
+{
+	background: transparent url(/images/em-tr.png) top right no-repeat;
+	height: 12px;
+	width: 12px;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+div.em .bl
+{
+	background: transparent url(/images/em-bl.png) bottom left no-repeat;
+	height: 12px;
+	width: 12px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+div.em .br
+{
+	background: transparent url(/images/em-br.png) bottom right no-repeat;
+	height: 12px;
+	width: 12px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+#whatsnew
+{
+	width: 500px;
 }
