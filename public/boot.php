@@ -24,7 +24,7 @@ function __autoload($class) {
 
 $path = str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
 $path = substr($path, strlen(str_replace(basename(__FILE__), '', $_SERVER['SCRIPT_NAME'])));
-define('WWW_HOME', $path);
+define('WWW_HOME', str_replace(basename(__FILE__), '', $_SERVER['SCRIPT_NAME']));
 
 $keywords = explode('/', preg_replace(array('/^\//', '/\/$/'), '', $path));
 define('CONTROLLER', !empty($keywords[0]) ? $keywords[0] : 'welcome');
