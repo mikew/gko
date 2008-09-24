@@ -46,7 +46,7 @@ class CoreHelper {
 		if(empty($content)) {
 			$constructed .= ' />';
 		} else {
-			$constructed .= $content;
+			$constructed .= '>' . $content;
 			$constructed .= '</' . $tag . '>';
 		}
 		
@@ -55,7 +55,8 @@ class CoreHelper {
 	
 	public function parse_attributes($attributes, $wants_joined = false) {
 		if(!is_array($attributes)) {
-			
+			// TODO: this is just for now
+			$attributes = array();
 		}
 		
 		if($wants_joined) {
