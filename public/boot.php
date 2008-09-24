@@ -22,9 +22,13 @@ function __autoload($class) {
 		require_once File::join(APP_HOME, 'helpers', String::underscore($class) . '.php');
 }
 
+function clear_end_slash($from) {
+	return substr($from, -1) == '/' ? substr($from, 0, -1) : $from ;
+}
+
 $path = str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
 $path = substr($path, strlen(str_replace(basename(__FILE__), '', $_SERVER['SCRIPT_NAME'])));
-define('WWW_HOME', str_replace(basename(__FILE__), '', $_SERVER['SCRIPT_NAME']));
+define('WWW_HOME', clear_end_slash(str_replace(basename(__FILE__), '', $_SERVER['SCRIPT_NAME'])));
 
 $keywords = explode('/', preg_replace(array('/^\//', '/\/$/'), '', $path));
 define('CONTROLLER', !empty($keywords[0]) ? $keywords[0] : 'welcome');
