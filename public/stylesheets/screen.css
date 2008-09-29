@@ -142,7 +142,7 @@ div.em .left
 div.em .tl
 {
 	background: transparent url(/images/em-tl.png) top left no-repeat;
-	height: 12px;
+	height: 52px;
 	width: 12px;
 	position: absolute;
 	top: 0;
@@ -151,7 +151,7 @@ div.em .tl
 div.em .tr
 {
 	background: transparent url(/images/em-tr.png) top right no-repeat;
-	height: 12px;
+	height: 52px;
 	width: 12px;
 	position: absolute;
 	top: 0;
@@ -160,7 +160,7 @@ div.em .tr
 div.em .bl
 {
 	background: transparent url(/images/em-bl.png) bottom left no-repeat;
-	height: 12px;
+	height: 50px;
 	width: 12px;
 	position: absolute;
 	bottom: 0;
@@ -169,21 +169,29 @@ div.em .bl
 div.em .br
 {
 	background: transparent url(/images/em-br.png) bottom right no-repeat;
-	height: 12px;
+	height: 50px;
 	width: 12px;
 	position: absolute;
 	bottom: 0;
 	right: 0;
+}
+div.divider
+{
+	background: transparent url(/images/em-divider.png) top left no-repeat;
+	width: 1px;
+	height: 170px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -85px;
 }
 
 #whatsnew h2
 {
 	font-weight: normal;
 	color: #323232;
-	margin: 0 0 5px 0;
-	padding: 0 0 2px 0;
+	margin: 0 0 11px 0;
 	text-align: center;
-	border-bottom: 1px solid #bbb;
 }
 #whatsnew ul
 {
@@ -223,12 +231,12 @@ div.em .br
 }
 #whatsnew .kdegames
 {
-	width: 49%;
+	width: 48%;
 	float: left;
 }
 #whatsnew .kde
 {
-	width: 49%;
+	width: 48%;
 	float: right;
 }
 
