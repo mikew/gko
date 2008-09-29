@@ -99,7 +99,7 @@ class CoreController {
 		}
 		
 		if(!empty($errors))
-			die('errors in filters: ' . implode(', ', $errors));
+			die('errors in ' . $from . ' filters: ' . implode(', ', $errors));
 	}
 	
 	private function register_helper($helper) {

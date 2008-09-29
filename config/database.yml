@@ -1,0 +1,3 @@
+default:
+    adapter: sqlite
+    database: :memory:
