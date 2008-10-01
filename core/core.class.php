@@ -1,8 +1,4 @@
 <?php
-require_once FW_HOME . '/core/propertyobject.class.php';
-require_once FW_HOME . '/core/file.class.php';
-require_once FW_HOME . '/core/string.class.php';
-
 class Core {
 	private $extensions = array();
 	private $mimes = array();
@@ -20,7 +16,7 @@ class Core {
 	}
 	
 	public function find_template_file($file, $extension = '') {
-		$file = File::join($file);
+		$file = Core::join_paths($file);
 		
 		$extension = empty($extension) ? $this->extensions[$this->mime] : $this->extensions[$extension];
 		$file = substr($file, 0, 1) == '/' ? $file : File::join(APP_HOME, 'views', CONTROLLER, $file);
@@ -33,4 +29,27 @@ class Core {
 		header("HTTP/1.0 {$this->status}");
 		header("Content-Type: {$this->mimes[$this->mime]}");
 	}
+	
+	public function join_paths() {
+		$args = func_get_args();
+		$args = is_array($args[0]) ? $args[0] : $args;
+		return implode(DIRECTORY_SEPARATOR, $args);
+	}
 }
+
+define('FW_HOME', realpath(Core::join_paths(dirname(__FILE__), '..')));
+define('APP_HOME', Core::join_paths(FW_HOME, 'application'));
+define('CORE_HOME', Core::join_paths(FW_HOME, 'core'));
+define('CORE_VENDOR_HOME', Core::join_paths(CORE_HOME, 'vendor'));
+define('VENDOR_HOME', Core::join_paths(FW_HOME, 'vendor'));
+define('CONFIG_HOME', Core::join_paths(FW_HOME, '/config'));
+
+define('FIXTURE_PATH', Core::join_paths(FW_HOME, 'test', 'fixtures'));
+define('MODEL_PATH', Core::join_paths(APP_HOME, 'models'));
+define('MIGRATIONS_PATH', Core::join_paths(FW_HOME, 'db', 'migrations'));
+define('SCHEMA_PATH', Core::join_paths(FW_HOME, 'db', 'schema'));
+define('SQL_PATH', Core::join_paths(FW_HOME, 'db', 'sql'));
+
+require_once Core::join_paths('core', 'extensions', 'propertyobject.class.php');
+require_once Core::join_paths('core', 'extensions', 'file.class.php');
+require_once Core::join_paths('core', 'extensions', 'string.class.php');

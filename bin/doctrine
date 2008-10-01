@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+chdir(dirname(__FILE__));
+require_once '../config/initialize.php';
+
+// require_once('config.php');
+
+// Configure Doctrine Cli
+// Normally these are arguments to the cli tasks but if they are set here the arguments will be auto-filled
+$config = array('data_fixtures_path'  =>  FIXTURE_PATH,
+                'models_path'         =>  MODEL_PATH,
+                'migrations_path'     =>  MIGRATIONS_PATH,
+                'sql_path'            =>  SQL_PATH,
+                'yaml_schema_path'    =>  SCHEMA_PATH);
+
+$cli = new Doctrine_Cli($config);
+$cli->run($_SERVER['argv']);
