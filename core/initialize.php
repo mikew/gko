@@ -17,12 +17,14 @@ function __autoload($class) {
 		require_once File::join(APP_HOME, 'controllers', String::underscore($class) . '.php');
 	elseif($klass == 'corehelper')
 		require_once File::join(CORE_HOME, 'helpers', 'core_helper.php');
-	elseif(substr($klass, -7) == 'adapter')
-		require_once File::join(CORE_HOME, 'adapters', String::underscore($class) . '.php');
 	elseif(substr($klass, -6) == 'helper')
 		require_once File::join(APP_HOME, 'helpers', String::underscore($class) . '.php');
 	elseif(substr($klass, 0, 8) == 'doctrine')
 		Doctrine::autoload($class);
+	elseif(substr($klass, 0, 4) == 'base')
+		require_once File::join(APP_HOME, 'models', 'generated', $class . '.php');
+	else
+		require_once File::join(APP_HOME, 'models', $class . '.php');
 }
 
-require_once File::join(CORE_VENDOR_HOME, 'Doctrine', 'lib/', 'Doctrine.php');
+require_once File::join(CORE_VENDOR_HOME, 'Doctrine', 'lib', 'Doctrine.php');

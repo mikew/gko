@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 chdir(dirname(__FILE__));
-require_once '../config/initialize.php';
-
+require_once '../core/initialize.php';
+require_once File::join(CORE_HOME, 'load_database.php');
 // require_once('config.php');
 
 // Configure Doctrine Cli

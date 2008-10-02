@@ -1,7 +1,7 @@
 <?php
 $start = microtime(true);
 
-require_once '../config/initialize.php';
+require_once '../core/initialize.php';
 
 function clear_end_slash($from) {
 	return substr($from, -1) == '/' ? substr($from, 0, -1) : $from ;
@@ -18,7 +18,7 @@ define('ACTION', !empty($keywords[1]) ? $keywords[1] : 'index');
 unset($keywords);
 unset($path);
 
-// include CORE_HOME . '/load_database.php';
+include File::join(CORE_HOME, 'load_database.php');
 
 $controller = CONTROLLER . 'Controller';
 $controller = new $controller();

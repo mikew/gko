@@ -1,0 +1,5 @@
+News:
+    columns:
+        title: varchar(255)
+        key: varchar(255)
+        body: text
