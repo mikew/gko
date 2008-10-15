@@ -42,7 +42,8 @@ define('APP_HOME', Core::join_paths(FW_HOME, 'application'));
 define('CORE_HOME', Core::join_paths(FW_HOME, 'core'));
 define('CORE_VENDOR_HOME', Core::join_paths(CORE_HOME, 'vendor'));
 define('VENDOR_HOME', Core::join_paths(FW_HOME, 'vendor'));
-define('CONFIG_HOME', Core::join_paths(FW_HOME, '/config'));
+define('CONFIG_HOME', Core::join_paths(FW_HOME, 'config'));
+define('TMP_HOME', Core::join_paths(FW_HOME, 'tmp'));
 
 define('FIXTURE_PATH', Core::join_paths(FW_HOME, 'test', 'fixtures'));
 define('MODEL_PATH', Core::join_paths(APP_HOME, 'models'));
