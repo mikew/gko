@@ -27,4 +27,4 @@ function __autoload($class) {
 		require_once File::join(APP_HOME, 'models', $class . '.php');
 }
 
-require_once File::join(CORE_VENDOR_HOME, 'Doctrine', 'lib', 'Doctrine.php');
+require_once File::join(CORE_VENDOR_HOME, 'doctrine', 'lib', 'Doctrine.php');
