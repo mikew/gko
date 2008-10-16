@@ -1,0 +1,16 @@
+Games:
+    actAs:
+        Timestampable:
+        Sluggable:
+            fields: [title]
+            alias: key
+            indexName: games_slug
+    columns:
+        title: varchar(255)
+        genre:
+            type: enum
+            values: [arcade, board, card, dice, logic, strategy, toy]
+        online: boolean
+        multiplayer: boolean
+        blurb: text
+        howto: text
