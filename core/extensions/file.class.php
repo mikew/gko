@@ -10,4 +10,8 @@ class File {
 		fwrite($pointer, $data);
 		fclose($pointer);
 	}
+	
+	public static function read($file) {
+		return file_get_contents($file);
+	}
 }

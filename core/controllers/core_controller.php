@@ -6,7 +6,7 @@ class CoreController {
 		'before' => array(),
 		'after' => array()
 	);
-	private $core;
+	protected $core;
 	protected $layout = 'application';
 	
 	protected function _setup() {}
@@ -39,10 +39,14 @@ class CoreController {
 		$helpers = $this->register_helper(CONTROLLER);
 		$file = $this->core->find_template_file($file, $extension);
 		
-		ob_start();
-		include $file;
-		$contents = ob_get_contents();
-		ob_end_clean();
+		if($extension == 'markdown') {
+			$contents = Markdown(File::read($file));
+		} else {
+			ob_start();
+			include $file;
+			$contents = ob_get_contents();
+			ob_end_clean();
+		}
 		
 		return $contents;
 	}

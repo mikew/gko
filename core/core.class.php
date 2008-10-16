@@ -2,15 +2,17 @@
 class Core {
 	private $extensions = array();
 	private $mimes = array();
-	private $mime = 'html';
+	public $mime = 'html';
 	private $status = 200;
 	
 	public function __construct() {
 		// $this->add_mime('html', '.phtml', 'application/xhtml+xml');
-		$this->add_mime('html', '.phtml', 'text/html');
+		$this->add_mime('html', '.phtml');
+		$this->add_mime('markdown', '.markdown');
+		$this->add_mime('mobile', '.mobile.phtml');
 	}
 	
-	protected function add_mime($shorthand, $extension, $content_type) {
+	protected function add_mime($shorthand, $extension, $content_type = 'text/html') {
 		$this->extensions[$shorthand] = $extension;
 		$this->mimes[$shorthand] = $content_type;
 	}
