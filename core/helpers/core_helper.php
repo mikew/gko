@@ -77,4 +77,13 @@ class CoreHelper {
 		
 		return $combined;
 	}
+	
+	public function link_to($text, $url = array(), $html_options = array()) {
+		$html_options['href'] = $this->url_for($url);
+		return $this->tag('a', $html_options, $text);
+	}
+	
+	public function url_for($options) {
+		return $GLOBALS['map']->utils->urlFor($options);
+	}
 }

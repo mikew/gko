@@ -13,10 +13,10 @@
 		KDEGames Home &raquo; <span>Welcome!</span>
 	</div>
 	<ul>
-		<li id="home" class="selected"><a href="#">Home</a></li>
-		<li id="catalogue"><a href="#">Catalogue</a></li>
-		<li id="news"><a href="#">News</a></li>
-		<li id="about"><a href="#">About</a></li>
+		<li id="home" class="selected"><?= $helpers->link_to('Home', '') ?></li>
+		<li id="catalogue"><?= $helpers->link_to('Catalogue', 'catalogue') ?></li>
+		<li id="news"><?= $helpers->link_to('News', 'news') ?></li>
+		<li id="about"><?= $helpers->link_to('About', 'about') ?></li>
 		<li id="empty"></li>
 	</ul>
 </div>
