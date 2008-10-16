@@ -244,3 +244,15 @@ br.clear
 {
 	clear: both;
 }
+
+#disclaimer
+{
+	background: #fff590 none;
+	padding: 5px;
+	font-size: 90%;
+	-webkit-border-radius: 5px;
+}
+#disclaimer p
+{
+	margin: 0;
+}
