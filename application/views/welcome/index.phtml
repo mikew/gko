@@ -4,26 +4,17 @@
 <div class="kdegames">
 <h2>What's new in KDE Games?</h2>
 <ul>
-	<li>
-		<a href="http://dot.kde.org/1221824063/">UserBase Goes Live!</a>
-		<span>02:04 19/09/08</span>
-	</li>
-	<li>
-		<a href="http://dot.kde.org/1221784611/">KDE Commit-Digest for 14th September 2008</a>
-		<span>03:06 18/09/08</span>
-	</li>
-	<li>
-		<a href="http://dot.kde.org/1221232654/">KDE Commit-Digest for 7th September 2008</a>
-		<span>05:47 12/09/08</span>
-	</li>
-	<li>
-		<a href="http://dot.kde.org/1221183052/">KMail BugDay on Sunday</a>
-		<span>04:00 11/09/08</span>
-	</li>
-	<li>
-		<a href="http://dot.kde.org/1221087118/">KDE Congratulates CERN's Large Hadron Collider</a>
-		<span>01:21 10/09/08</span>
-	</li>
+<?php
+for($i = 0; $i < $this->latest->count(); $i++) {
+	$item = $this->latest[$i];
+?>
+<li>
+	<?= $helpers->link_to($item->title, array('controller' => 'news', 'action' => 'archive', 'key' => $item->key)) ?>
+	<span><?= date('H:i d/m/y', strtotime($item->created_at)) ?></span>
+</li>
+<?php
+}
+?>
 </ul>
 </div>
 <div class="divider"></div>

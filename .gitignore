@@ -1,1 +1,2 @@
-tmp/dko.rss
+tmp/*
+db/default.sqlite3

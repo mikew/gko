@@ -1,5 +1,10 @@
 News:
+    actAs:
+        Timestampable:
+        Sluggable:
+            fields: [title]
+            alias: key
+            indexName: news_slug
     columns:
         title: varchar(255)
-        key: varchar(255)
         body: text
