@@ -4,7 +4,7 @@ function scan_controllers() {
 	$directory = File::join(APP_HOME, 'controllers');
 	
 	$files = new RecursiveDirectoryIterator(File::join(APP_HOME, 'controllers'));
-	foreach($files->getChildren() AS $file) {
+	foreach($files AS $file) {
 		if(!$file->isFile())
 			continue;
 		
@@ -15,7 +15,7 @@ function scan_controllers() {
 	}
 	
 	$callback = array('Horde_Routes_Utils', 'longestFirst');
-    usort($controllers, $callback);
+	usort($controllers, $callback);
 
 	return $controllers;
 }
