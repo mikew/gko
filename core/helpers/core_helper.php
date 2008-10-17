@@ -15,7 +15,7 @@ class CoreHelper {
 	
 	public function image_tag($image) {
 		return $this->tag('img', array(
-			'src' => WWW_HOME . '/images/' . $image,
+			'src' => $this->url_for('/images/' . $image),
 			'alt' => $image
 		));
 	}
@@ -29,7 +29,7 @@ class CoreHelper {
 			$html .= $this->tag('link', array(
 				'rel' => 'stylesheet',
 				'type' => 'text/css',
-				'href' => WWW_HOME . '/stylesheets/' . $stylesheet . '.css'
+				'href' => $this->url_for('/stylesheets/' . $stylesheet . '.css')
 			));
 			$html .= "\n";
 		}
