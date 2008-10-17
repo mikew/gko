@@ -2,8 +2,6 @@
 <?php
 chdir(dirname(__FILE__));
 require_once '../core/initialize.php';
-require_once File::join(CORE_HOME, 'load_database.php');
-// require_once('config.php');
 
 // Configure Doctrine Cli
 // Normally these are arguments to the cli tasks but if they are set here the arguments will be auto-filled

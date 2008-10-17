@@ -53,6 +53,6 @@ define('MIGRATIONS_PATH', Core::join_paths(FW_HOME, 'db', 'migrations'));
 define('SCHEMA_PATH', Core::join_paths(FW_HOME, 'db', 'schema'));
 define('SQL_PATH', Core::join_paths(FW_HOME, 'db', 'sql'));
 
-require_once Core::join_paths('core', 'extensions', 'propertyobject.class.php');
-require_once Core::join_paths('core', 'extensions', 'file.class.php');
-require_once Core::join_paths('core', 'extensions', 'string.class.php');
+require_once Core::join_paths(CORE_HOME, 'extensions', 'propertyobject.class.php');
+require_once Core::join_paths(CORE_HOME, 'extensions', 'file.class.php');
+require_once Core::join_paths(CORE_HOME, 'extensions', 'string.class.php');
