@@ -84,6 +84,6 @@ class CoreHelper {
 	}
 	
 	public function url_for($options) {
-		return $GLOBALS['map']->utils->urlFor($options);
+		return WWW_HOME . $GLOBALS['map']->utils->urlFor($options);
 	}
 }
