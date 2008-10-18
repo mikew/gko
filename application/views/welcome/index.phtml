@@ -9,7 +9,7 @@ for($i = 0; $i < $this->latest->count(); $i++) {
 	$item = $this->latest[$i];
 ?>
 <li>
-	<?= $helpers->link_to($item->title, array('controller' => 'news', 'action' => 'archive', 'key' => $item->key)) ?>
+	<?= $helpers->link_to_news($item) ?>
 	<span><?= date('H:i d/m/y', strtotime($item->created_at)) ?></span>
 </li>
 <?php

@@ -17,4 +17,8 @@ class ApplicationHelper extends CoreHelper {
 	public function end_em() {
 		return '</div></div></div></div><div class="tl"></div><div class="tr"></div><div class="br"></div><div class="bl"></div></div>';
 	}
+	
+	public function link_to_news($item) {
+		return $this->link_to_unless_current($item->title, array('controller' => 'news', 'action' => 'show', 'key' => $item->key));
+	}
 }
