@@ -1,5 +1,13 @@
 <?php
 class NewsController extends ApplicationController {
+	public function index() {
+		$this->posts = Doctrine_Query::create()->from('News')->limit(10)->execute();
+	}
+	
+	public function show() {
+		$this->item = Doctrine_Query::create()->from('News')->where('key = ?', $_GET['key'])->execute();
+	}
+	
 	public function sync() {
 		$data = File::read(File::join(TMP_HOME, 'gko.news'));
 		preg_match_all("/<h3><a name=\"(?:.*?)\">(.*?): (.*?)<\/a><\/h3><\/td>\s*<\/tr><tr><td class=\"newsbox2\">(.*?)<\/td>/s", $data, $matches);
