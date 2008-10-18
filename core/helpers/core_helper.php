@@ -84,8 +84,10 @@ class CoreHelper {
 	}
 	
 	public function link_to_unless_current($text, $url = array(), $html_options = array()) {
-		$url = $this->url_for($url);
-		return $url == WWW_PATH ? $text : $this->link_to($text, $url, $html_options);
+		// TODO: url is generated twice. shouldn't have to be
+		$test = $this->url_for($url);
+		// print_r(array(WWW_HOME . '/' . WWW_PATH, $test));
+		return $test == WWW_HOME . WWW_PATH ? $text : $this->link_to($text, $url, $html_options);
 	}
 	
 	public function url_for($options) {
