@@ -33,3 +33,4 @@ function __autoload($class) {
 
 require_once File::join(CORE_VENDOR_HOME, 'php-markdown-extra', 'markdown.php');
 require_once File::join(CORE_HOME, 'init', 'doctrine.php');
+require_once File::join(CORE_HOME, 'init', 'inflector.php');
