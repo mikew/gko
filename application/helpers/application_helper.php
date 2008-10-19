@@ -42,7 +42,7 @@ class ApplicationHelper extends CoreHelper {
 	}
 	
 	public function lay_breadcrumbs() {
-		$parts = explode('/', $this->url_for());
+		$parts = explode('/', WWW_PATH);
 		$crumbs = array('KDE Games Home');
 		array_shift($parts);
 		
