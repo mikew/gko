@@ -21,4 +21,41 @@ class ApplicationHelper extends CoreHelper {
 	public function link_to_news($item) {
 		return $this->link_to_unless_current($item->title, array('controller' => 'news', 'action' => 'show', 'key' => $item->key));
 	}
+	
+	public function link_to_controllers() {
+		$list = func_get_args();
+		$generated = '';
+		
+		foreach($list AS $pair) {
+			$parts = explode(':', $pair);
+			$controller = $parts[0];
+			$url = empty($parts[1]) ? '/' . $controller : $parts[1];
+			
+			$attributes = array('id' => $controller);
+			if($controller == $this->locals->selected_nav)
+				$attributes['class'] = 'selected';
+			
+			$generated .= $this->tag('li', $attributes, $this->link_to(Inflector::humanize($controller), $url)) . "\n";
+		}
+		
+		return $generated;
+	}
+	
+	public function lay_breadcrumbs() {
+		$parts = explode('/', $this->url_for());
+		$crumbs = array('KDE Games Home');
+		array_shift($parts);
+		
+		for($i = 0; $i < count($parts); $i++) {
+			$key = $parts[$i];
+			$human = empty($this->locals->breadcrumbs[$key]) ? Inflector::titleize($key) : $this->locals->breadcrumbs[$key];
+			
+			if($i == count($parts) - 1)
+				$human = $this->tag('span', '', $human);
+			
+			array_push($crumbs, $human);
+		}
+		
+		return implode(' &raquo; ', $crumbs);
+	}
 }

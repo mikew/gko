@@ -6,6 +6,7 @@ class NewsController extends ApplicationController {
 	
 	public function show() {
 		$this->item = Doctrine_Query::create()->from('News')->where('key = ?', $_GET['key'])->execute();
+		$this->breadcrumbs[$this->item[0]->key] = $this->item[0]->title;
 	}
 	
 	public function sync() {

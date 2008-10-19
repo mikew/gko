@@ -6,12 +6,14 @@ class WelcomeController extends ApplicationController {
 	const DKO_TTL = 1800;
 	const DKO_URL = 'http://www.kde.org/dotkdeorg.rdf';
 	
-	// protected function _setup() {
-	// 	$this->add_before_filter('test', 'after');
-	// }
+	protected function _setup() {
+		$this->selected_nav = 'home';
+	}
 	
 	public function index() {
 		array_push($this->title, 'Welcome');
+		$this->breadcrumbs[''] = 'Welcome!';
+		
 		$this->kde_feed = $this->update_dko_cache();
 		$this->latest = Doctrine_Query::create()->from('News n')->limit(5)->execute();
 	}
@@ -24,14 +26,5 @@ class WelcomeController extends ApplicationController {
 		}
 		
 		return new SimpleXMLElement(file_get_contents($dko_cache));
-		// return filemtime($dko_cache) . ' ' . (time() - self::DKO_TTL);
 	}
-	
-	// protected function run_before_filters() {
-	// 	
-	// }
-	
-	// protected function test() {
-	// 	return false;
-	// }
 }
