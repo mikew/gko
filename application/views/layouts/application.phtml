@@ -10,14 +10,9 @@
 <body>
 <div id="header">
 	<div id="breadcrumbs">
-		<!-- KDEGames Home &raquo; <span>Welcome!</span> -->
 		<?= $helpers->lay_breadcrumbs() ?>
 	</div>
 	<ul>
-		<!-- <li id="home" class="selected"><?= $helpers->link_to('Home', '/') ?></li>
-		<li id="catalogue"><?= $helpers->link_to('Catalogue', '/catalogue') ?></li>
-		<li id="news"><?= $helpers->link_to('News', '/news') ?></li>
-		<li id="about"><?= $helpers->link_to('About', '/about') ?></li> -->
 		<?= $helpers->link_to_controllers('home:/', 'catalogue', 'news', 'about') ?>
 		<li id="empty"></li>
 	</ul>

@@ -48,11 +48,16 @@ body
 	margin-left: 69px;
 	border-left: 0;
 }
-#header ul li#home.selected a
+#header ul li#home a
+{
+	padding: 20px 20px 20px 45px;
+	background: transparent url(/images/nav_home.png) 20px 22px no-repeat;
+}
+#header ul li#home.selected
 {
 	background: transparent url(/images/nav_home_highlight.png) top left no-repeat;
 }
-#header ul li.selected a
+#header ul li.selected
 {
 	font-weight: bold;
 	background: transparent url(/images/nav_highlight.png) top left no-repeat;

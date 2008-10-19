@@ -8,5 +8,11 @@ require_once File::join(CORE_HOME, 'init', 'controller.php');
 
 $finish = microtime(true);
 $duration = $finish - $start;
-echo "generated in {$duration} seconds";
+
+echo '<!-- ' .
+		round($duration, 5) .
+		's (' .
+		round(1 / $duration, 2) .
+		' requests per second)' .
+		' -->';
 ?>
