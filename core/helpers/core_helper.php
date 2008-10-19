@@ -86,12 +86,11 @@ class CoreHelper {
 	public function link_to_unless_current($text, $url = array(), $html_options = array()) {
 		// TODO: url is generated twice. shouldn't have to be
 		$test = $this->url_for($url);
-		// print_r(array(WWW_HOME . '/' . WWW_PATH, $test));
-		return $test == WWW_HOME . WWW_PATH ? $text : $this->link_to($text, $url, $html_options);
+		return $test == $this->url_for() ? $text : $this->link_to($text, $url, $html_options);
 	}
 	
-	public function url_for($options) {
-		return WWW_HOME . $GLOBALS['map']->utils->urlFor($options);
+	public function url_for($options = array()) {
+		return empty($options) ? WWW_HOME . WWW_PATH : WWW_HOME . $GLOBALS['map']->utils->urlFor($options);
 	}
 	
 	public function format_date($date, $format) {
