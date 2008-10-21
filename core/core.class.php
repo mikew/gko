@@ -11,7 +11,7 @@ final class Core {
 		$this->add_mime('markdown', '.markdown');
 		$this->add_mime('mobile', '.mobile.phtml');
 		// $this->add_mime('rss', '.rss', 'application/rss+xml');
-		$this->add_mime('rss', '.rss.php', 'text/xml');
+		$this->add_mime('rss', '.rss.php', 'application/rss+xml');
 	}
 	
 	protected function add_mime($shorthand, $extension, $content_type = 'text/html') {
@@ -21,11 +21,11 @@ final class Core {
 	
 	public function interpret_mime($mime = '') {
 		$options = array_keys($this->mimes);
-		return !empty($mime) && !in_array($mime, $options) ? $mime : $this->mime;
+		return !empty($mime) && in_array($mime, $options) ? $mime : $this->mime;
 	}
 	
 	public function interpret_extension($mime = '') {
-		return $this->extensions[$this->interpret_mime()];
+		return $this->extensions[$this->interpret_mime($mime)];
 	}
 	
 	public function find_template_file($file, $mime = '') {
@@ -34,7 +34,7 @@ final class Core {
 		$extension = $this->interpret_extension($mime);
 		$file = substr($file, 0, 1) == '/' ? $file : File::join(APP_HOME, 'views', CONTROLLER, $file);
 		$file .= substr($file, -strlen($extension)) == $extension ? '' : $extension;
-		
+
 		return is_file($file) ? $file : false;
 	}
 	

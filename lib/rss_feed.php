@@ -55,7 +55,7 @@ class RSSElement {
 		return $base;
 	}
 	
-	public function toString() {
+	public function __toString() {
 		$dom = new DOMDocument();
 		$rss = $dom->createElement('rss');
 		$rss->setAttribute('version', '2.0');

@@ -26,6 +26,7 @@ class CoreController {
 	
 	public function render() {
 		$content = $this->{ACTION}();
+
 		$this->core->set_headers();
 		$this->content = empty($content) ? $this->render_file(ACTION) : $content ;
 		
@@ -36,21 +37,24 @@ class CoreController {
 	
 	protected function render_file($file, $mime = '') {
 		$mime = $this->core->interpret_mime($mime);
-		
+
 		$helpers = $this->register_helper(CONTROLLER);
 		$file = $this->core->find_template_file($file, $mime);
 		
-		if($mime == 'rss') {
-			$feed = new RSSFeed();
-			include $file;
-			$contents = $feed->toString();
-		} elseif($mime == 'markdown') {
-			$contents = Markdown(File::read($file));
-		} else {
-			ob_start();
-			include $file;
-			$contents = ob_get_contents();
-			ob_end_clean();
+		switch($mime) {
+			case 'rss':
+				$feed = new RSSFeed();
+				include $file;
+				$contents = $feed;
+			break;
+			case 'markdown':
+				$contents = Markdown(File::read($file));
+			break;
+			default:
+				ob_start();
+				include $file;
+				$contents = ob_get_contents();
+				ob_end_clean();
 		}
 		
 		return $contents;
