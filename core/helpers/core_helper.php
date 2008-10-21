@@ -37,6 +37,15 @@ class CoreHelper {
 		return $html;
 	}
 	
+	public function rss_tag($title = 'RSS Feed', $url_options) {
+		return $this->tag('link', array(
+			'title' => $title,
+			'rel' => 'alternate',
+			'type' => 'application/rss+xml',
+			'href' => $this->url_for('rss')
+		));
+	}
+	
 	public function tag($tag, $attributes = array(), $content = '') {
 		$attributes = $this->parse_attributes($attributes);
 		$constructed = '<' . $tag;
@@ -90,7 +99,9 @@ class CoreHelper {
 	}
 	
 	public function url_for($options = array()) {
-		return empty($options) ? WWW_HOME . WWW_PATH : WWW_HOME . $GLOBALS['map']->utils->urlFor($options);
+		$generated = empty($options) ? WWW_HOME . WWW_PATH : $GLOBALS['map']->utils->urlFor($options);
+		
+		return $generated;
 	}
 	
 	public function format_date($date, $format) {

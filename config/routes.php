@@ -4,4 +4,5 @@ $map->connect('/news/archive/:key', array(
 	'controller' => 'news',
 	'action' => 'show'
 ));
-$map->connect(':controller/:action/:id');
+$map->connect('rss', '/rss', array('controller' => 'news', 'action' => 'index', 'format' => 'rss'));
+$map->connect(':controller/:action/:id.:format', array('format' => 'html'));

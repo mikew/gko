@@ -27,8 +27,15 @@ function __autoload($class) {
 		$parts = explode('_', $class);
 		require_once File::join(CORE_VENDOR_HOME, 'routes', $parts[2] . '.php');
 	}
-	else
-		require_once File::join(APP_HOME, 'models', $class . '.php');
+	else {
+		$model = File::join(APP_HOME, 'models', $class . '.php');
+		$lib = File::join(LIB_HOME, String::underscore($class) . '.php');
+		
+		if(File::exists($model))
+			require_once $model;
+		elseif(File::exists($lib))
+			require_once $lib;
+	}
 }
 
 require_once File::join(CORE_VENDOR_HOME, 'php-markdown-extra', 'markdown.php');

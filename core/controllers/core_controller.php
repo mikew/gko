@@ -16,7 +16,6 @@ class CoreController {
 		
 		$this->_setup();
 		$this->run_filters('before');
-		$this->core->set_headers();
 		$this->render();
 		$this->run_filters('after');
 	}
@@ -27,7 +26,7 @@ class CoreController {
 	
 	public function render() {
 		$content = $this->{ACTION}();
-		
+		$this->core->set_headers();
 		$this->content = empty($content) ? $this->render_file(ACTION) : $content ;
 		
 		// I should clean this up to allow for actions to disable the layout
@@ -35,11 +34,17 @@ class CoreController {
 		echo $this->layout === false ? $this->content : $this->render_file(array(APP_HOME, 'views', 'layouts', $this->layout));
 	}
 	
-	protected function render_file($file, $extension = '') {
-		$helpers = $this->register_helper(CONTROLLER);
-		$file = $this->core->find_template_file($file, $extension);
+	protected function render_file($file, $mime = '') {
+		$mime = $this->core->interpret_mime($mime);
 		
-		if($extension == 'markdown') {
+		$helpers = $this->register_helper(CONTROLLER);
+		$file = $this->core->find_template_file($file, $mime);
+		
+		if($mime == 'rss') {
+			$feed = new RSSFeed();
+			include $file;
+			$contents = $feed->toString();
+		} elseif($mime == 'markdown') {
 			$contents = Markdown(File::read($file));
 		} else {
 			ob_start();

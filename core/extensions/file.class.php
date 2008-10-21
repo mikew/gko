@@ -14,4 +14,8 @@ class File {
 	public static function read($file) {
 		return file_get_contents($file);
 	}
+	
+	public static function exists($file) {
+		return is_file(self::join($file));
+	}
 }

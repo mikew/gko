@@ -1,5 +1,5 @@
 <?php
-class Core {
+final class Core {
 	private $extensions = array();
 	private $mimes = array();
 	public $mime = 'html';
@@ -10,6 +10,8 @@ class Core {
 		$this->add_mime('html', '.phtml');
 		$this->add_mime('markdown', '.markdown');
 		$this->add_mime('mobile', '.mobile.phtml');
+		// $this->add_mime('rss', '.rss', 'application/rss+xml');
+		$this->add_mime('rss', '.rss.php', 'text/xml');
 	}
 	
 	protected function add_mime($shorthand, $extension, $content_type = 'text/html') {
@@ -17,10 +19,19 @@ class Core {
 		$this->mimes[$shorthand] = $content_type;
 	}
 	
-	public function find_template_file($file, $extension = '') {
+	public function interpret_mime($mime = '') {
+		$options = array_keys($this->mimes);
+		return !empty($mime) && !in_array($mime, $options) ? $mime : $this->mime;
+	}
+	
+	public function interpret_extension($mime = '') {
+		return $this->extensions[$this->interpret_mime()];
+	}
+	
+	public function find_template_file($file, $mime = '') {
 		$file = Core::join_paths($file);
 		
-		$extension = empty($extension) ? $this->extensions[$this->mime] : $this->extensions[$extension];
+		$extension = $this->interpret_extension($mime);
 		$file = substr($file, 0, 1) == '/' ? $file : File::join(APP_HOME, 'views', CONTROLLER, $file);
 		$file .= substr($file, -strlen($extension)) == $extension ? '' : $extension;
 		
@@ -46,6 +57,7 @@ define('CORE_VENDOR_HOME', Core::join_paths(CORE_HOME, 'vendor'));
 define('VENDOR_HOME', Core::join_paths(FW_HOME, 'vendor'));
 define('CONFIG_HOME', Core::join_paths(FW_HOME, 'config'));
 define('TMP_HOME', Core::join_paths(FW_HOME, 'tmp'));
+define('LIB_HOME', Core::join_paths(FW_HOME, 'lib'));
 
 define('FIXTURE_PATH', Core::join_paths(FW_HOME, 'test', 'fixtures'));
 define('MODEL_PATH', Core::join_paths(APP_HOME, 'models'));
