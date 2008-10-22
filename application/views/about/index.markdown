@@ -8,4 +8,18 @@ To date **KDEGames** has accumulated an impressive selection of quality games in
 
 Additionally, we want you to remember that a large part of our success comes from careful and considerate review of users' feedback and comments. Meaning that **YOU** can help us to make these games even more fun to play. Send us your thoughts and suggestions today and enjoy them being taken into account in our next big release.
 
-<div id="disclaimer" markdown="1">***KDEGames** development team does not guarantee an immediate reaction to your suggestion. We take our time to evaluate the proposals and select the most interesting ones. From then on it may take up to three release cycles for a suggestion to become an actual feature.</div>
+<div class="em">
+	<div class="top">
+		<div class="right">
+			<div class="bottom">
+				<div class="left">
+					<strong>*KDEGames</strong> development team does not guarantee an immediate reaction to your suggestion. We take our time to evaluate the proposals and select the most interesting ones. From then on it may take up to three release cycles for a suggestion to become an actual feature.
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tl"></div>
+	<div class="tr"></div>
+	<div class="br"></div>
+	<div class="bl"></div>
+</div>

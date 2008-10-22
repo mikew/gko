@@ -6,7 +6,6 @@ class NewsController extends ApplicationController {
 			case 'rss':
 				$this->core->mime = 'rss';
 				$this->layout = false;
-				// return 'RSS feed';
 			break;
 		}
 	}
