@@ -1,0 +1,9 @@
+<ul>
+<?php
+foreach($this->posts AS $post){
+?>
+<?= $helpers->tag('li', '', $helpers->link_to($post->title, array('edit_admin/post', array('id' => $post->key)))) ?>
+<?php
+}
+?>
+</ul>

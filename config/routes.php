@@ -1,4 +1,6 @@
 <?php
+$map->resource('admin/game', 'admin/games');
+$map->resource('admin/post', 'admin/posts');
 $map->connect('root', '/', array('controller'=>'welcome', 'action'=>'index'));
 $map->connect('/news/archive/:key', array(
 	'controller' => 'news',
