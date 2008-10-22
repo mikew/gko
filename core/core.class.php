@@ -32,7 +32,7 @@ final class Core {
 		$file = Core::join_paths($file);
 		
 		$extension = $this->interpret_extension($mime);
-		$file = substr($file, 0, 1) == '/' ? $file : File::join(APP_HOME, 'views', CONTROLLER, $file);
+		$file = substr($file, 0, 1) == '/' ? $file : File::join(APP_HOME, 'views', String::underscore(CONTROLLER), $file);
 		$file .= substr($file, -strlen($extension)) == $extension ? '' : $extension;
 
 		return is_file($file) ? $file : false;
