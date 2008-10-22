@@ -98,11 +98,15 @@ class CoreHelper {
 		return $test == $this->url_for() ? $text : $this->link_to($text, $url, $html_options);
 	}
 	
-	public function url_for($options) {
-		if(is_array($options))
-			$url = $GLOBALS['map']->utils->urlFor($options[0], $options[1]);
-		else 
+	public function url_for($options = array()) {
+		if(is_array($options)) {
+			if(isset($options[0]))
+				$url = $GLOBALS['map']->utils->urlFor($options[0], $options[1]);
+			else
+				$url = $GLOBALS['map']->utils->urlFor($options);
+		} else {
 			$url = $GLOBALS['map']->utils->urlFor($options);
+		}
 		
 		$generated = empty($options) ? WWW_HOME . WWW_PATH : $url;
 		
