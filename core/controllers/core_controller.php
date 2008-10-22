@@ -11,7 +11,7 @@ class CoreController {
 	
 	protected function _setup() {}
 	
-	public function run() {
+	final public function run() {
 		$this->core = new Core();
 		
 		$this->_setup();
@@ -20,11 +20,11 @@ class CoreController {
 		$this->run_filters('after');
 	}
 	
-	protected function set_status($status) {
+	final protected function set_status($status) {
 		$this->core->status = $status;
 	}
 	
-	public function render() {
+	final public function render() {
 		$content = $this->{ACTION}();
 
 		$this->core->set_headers();
@@ -87,22 +87,22 @@ class CoreController {
 		return $contents;
 	}
 	
-	protected function add_before_filter() {
+	final protected function add_before_filter() {
 		$args = func_get_args();
 		$this->add_filter('before', $args);
 	}
-	protected function add_after_filter() {
+	final protected function add_after_filter() {
 		$args = func_get_args();
 		$this->add_filter('after', $args);
 	}
-	private function add_filter($where, $args) {
+	final private function add_filter($where, $args) {
 		$source = is_array($args[0]) ? $args[0] : $args ;
 		foreach($source AS $filter) {
 			array_push($this->filters[$where], $filter);
 		}
 	}
 	
-	private function run_filters($from) {
+	final private function run_filters($from) {
 		$errors = array();
 		
 		foreach($this->filters[$from] AS $filter) {
@@ -115,7 +115,7 @@ class CoreController {
 			die('errors in ' . $from . ' filters: ' . implode(', ', $errors));
 	}
 	
-	private function register_helper($helper) {
+	final private function register_helper($helper) {
 		$helper = strtolower($helper);
 		$klass = $helper . 'Helper';
 		if(!isset($this->helpers[$helper]))
