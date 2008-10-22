@@ -225,14 +225,18 @@ div.divider
 {
 	color: #000;
 }
-#whatsnew a
+a
 {
 	color: #00438a;
 	text-decoration: none;
 }
-#whatsnew a:hover
+a:visited
 {
 	color: #6193cf;
+}
+a:hover
+{
+	color: #00316e;
 	text-decoration: underline;
 }
 #whatsnew .kdegames
@@ -251,14 +255,23 @@ br.clear
 	clear: both;
 }
 
-#disclaimer
-{
-	background: #fff590 none;
-	padding: 5px;
-	font-size: 90%;
-	-webkit-border-radius: 5px;
-}
-#disclaimer p
+.post h2
 {
 	margin: 0;
+}
+.hr
+{
+	background: transparent url(/images/hr.png) center center no-repeat;
+	height: 1px;
+	margin: 2em 0;
+}
+
+p.summary
+{
+	margin: 0 0 0 10px;
+	padding: 0 0 0 7px;
+	text-transform: lowercase;
+	color: #555;
+	font-size: 90%;
+	background: transparent url(/images/arrow_indent.png) center left no-repeat;
 }

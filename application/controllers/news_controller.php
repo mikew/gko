@@ -27,9 +27,10 @@ class NewsController extends ApplicationController {
 			$news = new News();
 			$news->title = $title;
 			$news->body = $body;
-			$news->created_at = $date;
 			
-			// $news->save();
+			$news->save();
+			$news->created_at = $date;
+			$news->save();
 		}
 	}
 }
