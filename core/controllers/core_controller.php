@@ -9,12 +9,14 @@ class CoreController {
 	protected $core;
 	protected $layout = 'application';
 	
-	protected function _setup() {}
+	protected function application_setup() {}
+	protected function controller_setup() {}
 	
 	final public function run() {
 		$this->core = new Core();
 		
-		$this->_setup();
+		$this->application_setup();
+		$this->controller_setup();
 		$this->run_filters('before');
 		$this->render();
 		$this->run_filters('after');
@@ -67,9 +69,14 @@ class CoreController {
 		foreach($locals AS $key => $value) {
 			$$key = $value;
 		}
-		if(empty($data))
+		
+		if(!empty($data)) {
+			if(!isset($data[0]))
+				$data = array($data);
+		} else {
 			$data = array($name);
-			
+		}
+
 		${$name . '_counter'} = 0;
 		foreach($data AS $object) {
 			$$name = $object;
@@ -122,5 +129,37 @@ class CoreController {
 			$this->helpers[$helper] = new $klass();
 		
 		return $this->helpers[$helper];
+	}
+	
+	final private function request_auth($zone) {
+		$this->set_status(401);
+		header('WWW-Authenticate: Basic realm="' . $zone . '"');
+	}
+	
+	public function process_http_auth($username, $password) {
+		$auth = array();
+		if(!empty($username) && !empty($password))
+			array_push($auth, $username, $password);
+
+		return !empty($username) && !empty($password) ? array($username, $password) : false;
+	}
+	
+	final protected function http_auth($callback = '', $zone = 'Restricted') {
+		$result = array();
+		
+		if(isset($_SERVER['PHP_AUTH_USER'])) {
+			$u = $_SERVER['PHP_AUTH_USER'];
+			$p = $_SERVER['PHP_AUTH_PW'];
+			
+			if(empty($callback))
+				$callback = array($this, 'process_http_auth');
+			
+			$result = call_user_func($callback, $u, $p);
+		}
+		
+		if(!empty($result))
+			return $result;
+		else
+			$this->request_auth($zone);
 	}
 }
