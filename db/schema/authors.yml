@@ -1,0 +1,11 @@
+Authors:
+    actAs:
+        Timestampable:
+        Sluggable:
+            fields: [handle]
+            alias: key
+            indexName: authors_slug
+    columns:
+        name: varchar(255)
+        handle: varchar(255)
+        password: varchar(255)
