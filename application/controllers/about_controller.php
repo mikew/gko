@@ -1,6 +1,6 @@
 <?php
 class AboutController extends ApplicationController {
-	public function _setup() {
+	public function controller_setup() {
 		array_push($this->title, 'About');
 	}
 	

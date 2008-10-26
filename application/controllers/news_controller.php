@@ -1,5 +1,9 @@
 <?php
 class NewsController extends ApplicationController {
+	public function controller_setup() {
+		array_push($this->title, 'News');
+	}
+	
 	public function index() {
 		$this->posts = Doctrine_Query::create()->from('News')->limit(10)->execute();
 		switch($_GET['format']) {
@@ -11,8 +15,10 @@ class NewsController extends ApplicationController {
 	}
 	
 	public function show() {
-		$this->item = Doctrine_Query::create()->from('News')->where('key = ?', $_GET['key'])->execute();
-		$this->breadcrumbs[$this->item[0]->key] = $this->item[0]->title;
+		$this->item = Doctrine_Query::create()->from('News')->where('key = ?', $_GET['key'])->fetchOne();
+		$this->breadcrumbs[$this->item->key] = $this->item->title;
+		
+		array_push($this->title, '&#8220;' . $this->item->title . '&#8221;');
 	}
 	
 	public function sync() {
