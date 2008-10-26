@@ -3,7 +3,7 @@ final class Core {
 	private $extensions = array();
 	private $mimes = array();
 	public $mime = 'html';
-	private $status = 200;
+	public $status = 200;
 	
 	public function __construct() {
 		// $this->add_mime('html', '.phtml', 'application/xhtml+xml');
@@ -59,7 +59,8 @@ define('CONFIG_HOME', Core::join_paths(FW_HOME, 'config'));
 define('TMP_HOME', Core::join_paths(FW_HOME, 'tmp'));
 define('LIB_HOME', Core::join_paths(FW_HOME, 'lib'));
 
-define('FIXTURE_PATH', Core::join_paths(FW_HOME, 'test', 'fixtures'));
+# Constants for Doctrine
+define('FIXTURE_PATH', Core::join_paths(FW_HOME, 'db', 'fixtures'));
 define('MODEL_PATH', Core::join_paths(APP_HOME, 'models'));
 define('MIGRATIONS_PATH', Core::join_paths(FW_HOME, 'db', 'migrations'));
 define('SCHEMA_PATH', Core::join_paths(FW_HOME, 'db', 'schema'));

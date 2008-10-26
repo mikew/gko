@@ -1,0 +1,88 @@
+Authors:
+  Authors_1:
+    name: 'Mike Wyatt'
+    handle: mikew
+    password: test
+    created_at: '2008-10-26 09:25:58'
+    updated_at: '2008-10-26 09:25:58'
+News:
+  News_1:
+    title: 'Operation - Kubrik'
+    body: "\n<p><img src=\"pics/rubic_cube.png\" tag=\"Rubic's Cube\" align=\"right\" /><b>Kubrik</b> - the very latest addition to <b>KDEGames</b> package – is none other then a <b>glamorous three dimensional (3D) Rubik's Cube game</b>. The development is now nearing completion and we hope to offer the game to you as soon as <b>KDE 4.1</b> release.</p>\n<p>The original game of <b>Rubic's Cube</b> is quite <b>famous</b>, and is known to be the <b>best selling toy ever made</b>. The game is a <b>puzzle</b> and is usually played with a cube made out of small blocks, 9 of those per side. The sections can be spoon around horizontally as well as vertically, however not diagonally. From the start the cube is <i>'scrambled'</i>, meaning that each of it's 6 sides is a <b>multicolored mess</b>. Player then has to rearrange the colors in such a manner that each of the six sides becomes in <b>one and the same color</b>.</p>\n<p>In essence the game of <b>Kubrik</b> simulates the original toy very well, allowing however for far more complicated puzzles then the original. The entire game play is situated in reach and visually clean <b>3D environment</b> where you use a mouse to control the cube's various rotations. That as well as the ability to <b>save and restore</b> the game at any time will surely make <b>Kubrik</b> into a real <b>highlight</b> of <b>KDEGames'</b> impressive collection.</p>\n<p><img src=\"pics/ian_gifts.png\" tag=\"Rubic's Cube\" align=\"left\" />Using the occasion we, at <b>KDEGames</b>, also would like to mention that today <b>Kubrik's</b> developer, and one of <b>KDEGames'</b> more prominent members - <b>Ian Wadham</b> is celebrating a <b>very special jubilee</b>. We wish <b>Ian</b> all the best, and many-many games ahead.</p>\n<p><b>Happy Birthday Ian!</b></p>\n"
+    created_at: '2008-10-26 09:23:23'
+    updated_at: '2008-10-26 09:23:23'
+  News_2:
+    title: 'A great addition to KDEGames family.'
+    body: "\n<p><img src=\"pics/kollision01.png\" align=\"right\" alt=\"Kollision\" style=\"padding:10px;\" />It is our pleasure to welcome a new game into our selection. <b>Kollision</b> - a wonderful, addictive, and in every way innovative game straight from the lab of our gaming guru <b>Paolo Capriotti</b>. While it may seem very simple at the first glance, <b>Kollision</b> is one of the harder games in the whole gamedom, and what's best - it's all about high score. And all you have to do really, is to stay game for as long as possible.</p>\n<p>In <b>Kollision</b> you use mouse to control a small blue ball in a closed space environment filled with small red balls, which move about chaotically. Your goal is to avoid touching any of those red balls with your blue one, because the moment you do the game will be over. The longer you can stay in game the higher will your score be.</p>\n<p>The game is now in the <b>KDEGames 4</b> package and will make it's debut as soon as <b>KDE 4.1</b> However, the impatient ones can check it out now by compiling <b>KDEGames</b> from source (Click <a href=\"http://games.kde.org/get.php?platform=Source\">here</a> to see how).</p>\n<p>Have fun playing.</p>\n"
+    created_at: '2008-10-26 09:23:23'
+    updated_at: '2008-10-26 09:23:23'
+  News_3:
+    title: 'KDE goes Qt 4.4'
+    body: "\n<p>A few hours ago <b>Qt</b> snapshot in the <b>KDE</b> development tree was updated to <b>Qt4.4</b></p>\n<p><i>'And exactly what does it mean for <b>KDEGames</b>?'</i>, you may be asking.</p>\n<p>Well, beside a multiplicity of various bug fixes, version <b>4.4</b> brings in some very interesting graphical features. One of those happens to be an ability to put widgets directly onto the drawing canvas. This new feature will allow some of our games to move all the important information directly onto the game screen, therefore making the gameplay even easier to perceive. The feature of course, will have to undergo a comprehensive testing before it will make it's way to a screen near you.</p>\n		"
+    created_at: '2008-10-26 09:23:23'
+    updated_at: '2008-10-26 09:23:23'
+  News_4:
+    title: 'Destination - 4.1'
+    body: "\n              <p>Lately quite a few people have been asking about the new games and features planned for <b>4.1</b><img src=\"http://games.kde.org/pics/kdegames.png\" align=\"right\" /><br />\nWell, <b>KDEGames</b> team have spent the whole month of January planing and scheduling, and now we are more, or less set. As games of the project are numerous however, we have so decided to concentrate on a selected few, rather then spreading our attention thin-and-even around the project.</p>\n<p><b>Kgoldrunner</b> will receive a lot of attention within this release cycle, where new theming capabilities are being added as you read. There are also plans to introduce the long awaited sound and make the game all over fun and joy (as if it wasn't joyous enough as is).</p>\n<p><b>Kpatience</b> and consequently <b>Letenant Skat</b> are getting a major caching rework, which promises to make those games even faster to load and play, as some of the card decks are a real handful to handle.</p>\n<p><b>Klines</b> is getting some user interface changes that promises to somewhat enhance the game's usability and bring a gust of fresh air into the gameplay.</p>\n<p><b>Konquest</b> development is swift as ever. Game's restless developer is hard at work this release cycle, hoping to make our best, desktop-oriented mini-strategy-game even better.</p>\n<p>There are currently plans for some on-line gaming and sound integration all over the project. Those however, are much dependent upon other parts of <b>KDE</b> project and therefore may not be ready by <b>4.1</b> release date.</p>\n<p>Beside the existing gaming applications there is a handful of new, never before seen games, ready to jump up the <b>KDE</b> locomotive as soon as <b>4.1</b> release sees the light of day.</p>\n<p>We have an all new <b>Tetris</b> game, which is not a resurrection of severely outdated <b>Ksirtet</b>, but a whole new game all together. Once complete it will feature easy and scalable theming, and gamer-friendly interface to go along. The game is already playable and should be finished in time.</p>\n<p>As if <b>Tetris</b> wasn't exciting enough, we have yet another tasty dish to tickle your senses! If you are currently standing, you would better take a seat, because it's a mind-blowing <b>Arkanoid</b> game! Nearly completed, it features all you have come to love about the classic <b>Arcanoid</b> game, and much, much more.</p>\n<p>Now, get ready for yet another big surprise! <b>Kdiamond</b> will make you jump up-and-down in your seat, because it's a stunning <b>Bejeweled</b> implementation. This game however, may, or may not be ready by <b>4.1</b> as the development was only just started, even though the developer is advancing through at the speed of light.</p>\n<p>Another candidate aiming at <b>4.1</b> release is the long time <b>KDE</b> favorite <b>Ksirk</b> - the Game of Risk implementation. It is being reworked and updated for quite a while, and now is almost ready to join the official <b>KDE</b> games pack.</p>\n<p>A <b>Rubik's cube</b>-like game is planing to land safely into the <b>4.1</b> release and will of course be most welcome.</p>\n<p>We have plans for a <b>Picross</b>-like puzzle game, but there are no dates named yet for this one.</p>\n<p>There are two more games currently hard at work, but those are more of a <b>big-birthday-surprise-cake</b> type of games. Let us give you a small hint here. The first is quite simple, yet so <b>addictive</b> that should you try it just once, you will never be able to stop playing it. As for the second – let me just say that once you see it you are guaranteed to have a severe case of <b>jaw dropping</b> for the next two-three hours. Yes Ladies and Gentlemen, it will be that awesome! And did I mention massive <b>explosions</b>?</p>\n<p>Alas, as you may have already figured, future holds a lot in terms of quality <b>KDE</b> entertainment. Just keep checking up on us, and <b>keep playing</b>.</p>\n			"
+    created_at: '2008-10-26 09:23:23'
+    updated_at: '2008-10-26 09:23:23'
+  News_5:
+    title: 'Today is THE day!'
+    body: "\n<p><b>Ladies and Gentlemen,</b></p>\n<p><b>KDE4</b> v 4.0 has been released!</p>\n<img src=\"http://www.kde.org/img/kde40.png\" />\n<p>And that means – <b>KDEGames</b> v 4.0 has been released along! The whole team is overjoyed, and so I'm sure, are you. It was a difficult <b>year</b>. <b>Year</b> full of a thousand cares and worries. <b>Year</b> of hard, fast paced, nonstop development. But it's <b>all over</b> now.</p>\n<p><b>KDEGames</b> team hopes you will <b>enjoy</b> playing our games just as much as we <b>enjoyed</b> making them. And do trust me, we <b>enjoyed</b> it a lot.</p>\n			"
+    created_at: '2008-10-26 09:23:23'
+    updated_at: '2008-10-26 09:23:23'
+  News_6:
+    title: 'KDE4 has been tagged.'
+    body: "\n<p><b>Ladies and Gentlemen,</b></p>\n<p><b>KDE4</b> has been officially tagged for <b>4.0</b> release on <b>January 11th</b>. This means our winter vacations are indeed over, and back to work we go!</p>\n<p>Form now on the intensive development of <b>KDEGames</b> begins anew; which in turn means bringing in a lot of new, exciting features and improving the existing ones.</p>\n<p>Wish us luck dear games, and don't forget to write :D</p>\n			"
+    created_at: '2008-10-26 09:23:23'
+    updated_at: '2008-10-26 09:23:23'
+  News_7:
+    title: 'Happy New Year!'
+    body: "\n<center><img src=\"http://games.kde.org/pics/konqui.sticker.png\" /></center>\n<p><b>Dear Gamers,</b></p>\n<p><b>KDEGames</b> team wishes to thank you for playing <b>KDEGames</b> all through <b>2007</b>. We want to continue entertaining you in the coming <b>2008</b>. With that we promise to make our games better, happier, and even more engaging then they already are :D</p>\n<p><b>Happy New Year dear friends, and all the best to you!</b></p>\n<p>Best wishes,</p>\n<p>KDEGames team.</p>\n			"
+    created_at: '2008-10-26 09:23:23'
+    updated_at: '2008-10-26 09:23:23'
+  News_8:
+    title: 'Happy Holidays!'
+    body: "\n		<p><b>KDEGames</b> team wishes you all the best this holiday season. May these days be merry and bright for you and your loved ones.</p>\n		<p>In case you were wondering – the new, redesigned website will be released along with the rest of <b>KDE 4.0</b> goodness in just 15 days. In the mean time please be patient.</p>\n			"
+    created_at: '2008-10-26 09:23:23'
+    updated_at: '2008-10-26 09:23:23'
+  News_9:
+    title: 'The future is approaching fast!'
+    body: "\n               <p>Only 21 days left until <b>KDE 4.0</b> goes final! This means – only just 14 days left until <b>KDE 4.0</b> tagging begins. All the changes and alterations to the code and artwork have to be submitted within these 14 days! Thereafter we all can relax and have a drink or two. \nBest of luck to all the contributors to <b>KDEGames</b> and all other <b>KDE</b> projects. <b>We shall be victorious!</b></p>\n			"
+    created_at: '2008-10-26 09:23:23'
+    updated_at: '2008-10-26 09:23:23'
+  News_10:
+    title: 'KDEGames official sidebar button!'
+    body: "\n               <p>Urgent, urgent!</p>\n	       <p>The new and shiny <b>KDEGames</b> official sidebar button has become a reality, thanks to our very own MkBart!</p>\n	       <a href=\"http://games.kde.org/\">\n<img src=\"http://www.kde.org/stuff/buttons/kdegames.png\" alt=\"kdegames\" border=\"0\" />\n</a>\n	       <p>Update your blogs and websites and <i>Enjoy.</i></p>\n            "
+    created_at: '2008-10-26 09:23:24'
+    updated_at: '2008-10-26 09:23:24'
+  News_11:
+    title: 'The last KDEGames meeting... This year that is!'
+    body: "\n               <p>This coming <b>Thursday, December the 13th</b> (wow, great date!) KDEGames team will gather for the very <b>last</b> meeting in <b>2007</b>, before we all go to the long deserved holiday vocations.</p>\n	       <p>It is on this meeting that the road to <b>KDE</b> 4.1 shall be mapped, and all the issues of <b>KDE</b> 4.0 brought to light and discussed.</p>\n	       <p>Also, our very own <b>Emil</b> has created a wonderful <b>KDE4</b> release day counter:</p>\n	       <img src=\"http://games.kde.org/new/counter/\" alt=\"KDE 4.0 Release Counter\" width=\"377\" height=\"47\" />\n	       <p><i>Enjoy.</i></p>\n            "
+    created_at: '2008-10-26 09:23:24'
+    updated_at: '2008-10-26 09:23:24'
+  News_12:
+    title: 'All that''s left is a review!'
+    body: "\n               <p>The main site design is now complete!</p><p>It's time for review and commets - kde-games-devel@kde.org</p>\n            "
+    created_at: '2008-10-26 09:23:24'
+    updated_at: '2008-10-26 09:23:24'
+  News_13:
+    title: 'New, redesigned website!'
+    body: "\n<p>It is with a great pleasure that I wish to inform you of our website redesign near completion.</p>\n<p>Yes, only a few minor “cosmetic” touches and the sleeping beauty shall gracefully awaken and present itself to the world. None of this would have been possible without Emil, our faithful web engineer who stepped in to upgrade the ancient Capacity's code, making sure it is suitable for the new era of <b>KDE</b>. And, as you can see the result is rather pleasing.</p>\n<p>Now, please stay tuned as we unveil the next set of exiting new features in the nearest future. And remember <b>KDEGames</b> always strives for the best!</p>\n            "
+    created_at: '2008-10-26 09:23:24'
+    updated_at: '2008-10-26 09:23:24'
+  News_14:
+    title: 'KSquares has been moved to kdegames'
+    body: "\n               KSquares has being moved into the kdegames module to and will be included in KDE default packages\n            "
+    created_at: '2008-10-26 09:23:24'
+    updated_at: '2008-10-26 09:23:24'
+  News_15:
+    title: 'Boson 0.13 Released'
+    body: "\n               Version 0.13 of the Real Time Strategy game Boson has been released\n            "
+    created_at: '2008-10-26 09:23:24'
+    updated_at: '2008-10-26 09:23:24'
+  News_16:
+    title: ' KDE Games News Opened'
+    body: "\n               KDE Games website's News section opened\n            "
+    created_at: '2008-10-26 09:23:24'
+    updated_at: '2008-10-26 09:23:24'
