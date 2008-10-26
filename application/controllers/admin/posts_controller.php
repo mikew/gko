@@ -1,6 +1,6 @@
 <?php
 class Admin_PostsController extends AdminController {
-	public function _setup() {
+	public function controller_setup() {
 		$this->add_before_filter('require_auth');
 	}
 	
