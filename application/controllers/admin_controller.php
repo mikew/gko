@@ -2,6 +2,10 @@
 class AdminController extends ApplicationController {
 	public $user;
 	
+	public function controller_setup() {
+		$this->add_before_filter('require_auth');
+	}
+	
 	public function require_auth() {
 		$this->user = $this->http_auth();
 	}
