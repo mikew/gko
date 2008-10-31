@@ -7,7 +7,7 @@ ini_set('include_path', implode(':', array(
 	realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..')
 )));
 
-require_once 'core/core.class.php';
+require_once 'core/lib/core.class.php';
 
 function __autoload($class) {
 	$klass = strtolower($class);
@@ -41,3 +41,4 @@ function __autoload($class) {
 require_once File::join(CORE_VENDOR_HOME, 'php-markdown-extra', 'markdown.php');
 require_once File::join(CORE_HOME, 'init', 'doctrine.php');
 require_once File::join(CORE_HOME, 'init', 'inflector.php');
+require_once File::join(CORE_HOME, 'init', 'mimes.php');

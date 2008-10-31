@@ -6,14 +6,13 @@ class CoreController {
 		'before' => array(),
 		'after' => array()
 	);
-	protected $core;
 	protected $layout = 'application';
 	
 	protected function application_setup() {}
 	protected function controller_setup() {}
 	
 	final public function run() {
-		$this->core = new Core();
+		// $this->core = new Core();
 		
 		$this->application_setup();
 		$this->controller_setup();
@@ -22,14 +21,10 @@ class CoreController {
 		$this->run_filters('after');
 	}
 	
-	final protected function set_status($status) {
-		$this->core->status = $status;
-	}
-	
 	final public function render() {
 		$content = $this->{ACTION}();
 
-		$this->core->set_headers();
+		CoreMime::set_headers();
 		$this->content = empty($content) ? $this->render_file(ACTION) : $content ;
 		
 		// I should clean this up to allow for actions to disable the layout
@@ -38,10 +33,10 @@ class CoreController {
 	}
 	
 	protected function render_file($file, $mime = '') {
-		$mime = $this->core->interpret_mime($mime);
+		$mime = CoreMime::interpret($mime);
 
 		$helpers = $this->register_helper(CONTROLLER);
-		$file = $this->core->find_template_file($file, $mime);
+		$file = CoreMime::find_template_file($file, $mime);
 		
 		switch($mime) {
 			case 'rss':
@@ -81,7 +76,7 @@ class CoreController {
 		foreach($data AS $object) {
 			$$name = $object;
 			
-			$file = $this->core->find_template_file('_' . $name);
+			$file = CoreMime::find_template_file('_' . $name);
 			
 			ob_start();
 			include $file;
@@ -132,7 +127,7 @@ class CoreController {
 	}
 	
 	final private function request_auth($zone) {
-		$this->set_status(401);
+		CoreMime::set_status(401);
 		header('WWW-Authenticate: Basic realm="' . $zone . '"');
 	}
 	

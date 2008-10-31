@@ -1,10 +1,9 @@
 <?php
-$matched = $map->match(WWW_PATH);
+$matched = CoreRouter::instance()->match(WWW_PATH);
 
 foreach($matched AS $key => $value) {
 	$_GET[$key] = $value;
 }
-
 // if(empty($_GET['format']))
 // 	$_GET['format'] = 'html';
 

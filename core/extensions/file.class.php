@@ -2,7 +2,7 @@
 class File {
 	public static function join() {
 		$args = func_get_args();
-		return Core::join_paths($args);
+		return call_user_func_array(array('Core', 'join_paths'), $args);
 	}
 	
 	public static function write($file, $data) {
