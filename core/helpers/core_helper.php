@@ -2,31 +2,44 @@
 class CoreHelper {
 	public $locals;
 	
-	// public function __construct($locals) {
-	// 	var_dump($locals);
-	// 	$this->locals = new PropertyObject($locals);
-	// }
 	public function __construct() {
 		foreach($GLOBALS['controller'] AS $key => $value) {
 			$this->locals->{$key} = $value;
 		}
-		// $this->locals = $GLOBALS['controller'];
 	}
 	
 	public function image_tag($image) {
-		return $this->tag('img', array(
+		return $this->simple_tag('img', array(
 			'src' => $this->url_for('/images/' . $image),
 			'alt' => $image
 		));
 	}
 	
-	public function stylesheet_tag($names = array('screen')) {
-		if(!is_array($names))
-			$names = explode(' ', $names);
+	public function javascript_include_tag() {
+		$files = func_get_args();
+		if(empty($files))
+			$files = array('prototype', 'effects');
+		
+		$html = '';
+		foreach($files AS $file) {
+			$html .= $this->tag('script', array(
+				'type' => 'text/javascript',
+				'src' => $this->url_for('/javascripts/' . $file . '.js')
+			));
+			$html .= "\n";
+		}
+		
+		return $html;
+	}
+	
+	public function stylesheet_tag() {
+		$names = func_get_args();
+		if(empty($names))
+			$names = array('screen');
 		
 		$html = '';
 		foreach($names AS $stylesheet) {
-			$html .= $this->tag('link', array(
+			$html .= $this->simple_tag('link', array(
 				'rel' => 'stylesheet',
 				'type' => 'text/css',
 				'href' => $this->url_for('/stylesheets/' . $stylesheet . '.css')
@@ -38,26 +51,27 @@ class CoreHelper {
 	}
 	
 	public function rss_tag($title = 'RSS Feed', $url_options) {
-		return $this->tag('link', array(
+		return $this->simple_tag('link', array(
 			'title' => $title,
 			'rel' => 'alternate',
 			'type' => 'application/rss+xml',
-			'href' => $this->url_for('rss')
-		));
+			'href' => $this->url_for($url_options)
+		)) . "\n";
 	}
 	
 	public function tag($tag, $attributes = array(), $content = '') {
-		$attributes = $this->parse_attributes($attributes);
 		$constructed = '<' . $tag;
-		if(!empty($attributes))
-			$constructed .= $this->join_attributes($attributes, true);
+		$constructed .= $this->parse_attributes($attributes, true);
+		$constructed .= '>' . $content;
+		$constructed .= '</' . $tag . '>';
 		
-		if(empty($content)) {
-			$constructed .= ' />';
-		} else {
-			$constructed .= '>' . $content;
-			$constructed .= '</' . $tag . '>';
-		}
+		return $constructed;
+	}
+	
+	public function simple_tag($tag, $attributes = array()) {
+		$constructed = '<' . $tag;
+		$constructed .= $this->parse_attributes($attributes, true);
+		$constructed .= ' />';
 		
 		return $constructed;
 	}
@@ -99,18 +113,7 @@ class CoreHelper {
 	}
 	
 	public function url_for($options = array()) {
-		if(is_array($options)) {
-			if(isset($options[0]))
-				$url = $GLOBALS['map']->utils->urlFor($options[0], $options[1]);
-			else
-				$url = $GLOBALS['map']->utils->urlFor($options);
-		} else {
-			$url = $GLOBALS['map']->utils->urlFor($options);
-		}
-		
-		$generated = empty($options) ? WWW_HOME . WWW_PATH : $url;
-		
-		return $generated;
+		return CoreRouter::url_for($options);
 	}
 	
 	public function format_date($date, $format) {

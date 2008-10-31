@@ -8,7 +8,7 @@ class NewsController extends ApplicationController {
 		$this->posts = Doctrine_Query::create()->from('News')->limit(10)->execute();
 		switch($_GET['format']) {
 			case 'rss':
-				$this->core->mime = 'rss';
+				CoreMime::set('rss');
 				$this->layout = false;
 			break;
 		}
