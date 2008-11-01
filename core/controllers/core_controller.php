@@ -120,10 +120,16 @@ class CoreController {
 	final private function register_helper($helper) {
 		$helper = strtolower($helper);
 		$klass = $helper . 'Helper';
-		if(!isset($this->helpers[$helper]))
-			$this->helpers[$helper] = new $klass();
 		
-		return $this->helpers[$helper];
+		if(!class_exists('Helpers', false)) {
+			eval('class Helpers extends ' . $klass . ' {}');
+			Helpers::construct();
+		}
+		
+		// if(!isset($this->helpers[$helper]))
+		// 	$this->helpers[$helper] = new $klass();
+		// 
+		// return $this->helpers[$helper];
 	}
 	
 	final private function request_auth($zone) {

@@ -1,6 +1,6 @@
 <?= $this->render_partial('promo') ?>
 
-<?= $helpers->start_em('whatsnew') ?>
+<?= Helpers::start_em('whatsnew') ?>
 <div class="kdegames">
 <h2>What's new in KDE Games?</h2>
 <ul>
@@ -9,7 +9,7 @@ for($i = 0; $i < $this->latest->count(); $i++) {
 	$item = $this->latest[$i];
 ?>
 <li>
-	<?= $helpers->link_to_post($item) ?>
+	<?= Helpers::link_to_post($item) ?>
 	<span><?= date('H:i d/m/y', strtotime($item->created_at)) ?></span>
 </li>
 <?php
@@ -35,4 +35,4 @@ for($i = 0; $i < 5; $i++) {
 </ul>
 </div>
 <br class="clear" />
-<?= $helpers->end_em() ?>
+<?= Helpers::end_em() ?>

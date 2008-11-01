@@ -1,30 +1,30 @@
 <?php
 class CoreHelper {
-	public $locals;
+	public static $locals;
 	
-	public function __construct() {
+	final public static function construct() {
 		foreach($GLOBALS['controller'] AS $key => $value) {
-			$this->locals->{$key} = $value;
+			self::$locals->{$key} = $value;
 		}
 	}
 	
-	public function image_tag($image) {
-		return $this->simple_tag('img', array(
-			'src' => $this->url_for('/images/' . $image),
+	public static function image_tag($image) {
+		return self::simple_tag('img', array(
+			'src' => self::url_for('/images/' . $image),
 			'alt' => $image
 		));
 	}
 	
-	public function javascript_include_tag() {
+	public static function javascript_include_tag() {
 		$files = func_get_args();
 		if(empty($files))
 			$files = array('prototype', 'effects');
 		
 		$html = '';
 		foreach($files AS $file) {
-			$html .= $this->tag('script', array(
+			$html .= self::tag('script', array(
 				'type' => 'text/javascript',
-				'src' => $this->url_for('/javascripts/' . $file . '.js')
+				'src' => self::url_for('/javascripts/' . $file . '.js')
 			));
 			$html .= "\n";
 		}
@@ -32,17 +32,17 @@ class CoreHelper {
 		return $html;
 	}
 	
-	public function stylesheet_tag() {
+	public static function stylesheet_tag() {
 		$names = func_get_args();
 		if(empty($names))
 			$names = array('screen');
 		
 		$html = '';
 		foreach($names AS $stylesheet) {
-			$html .= $this->simple_tag('link', array(
+			$html .= self::simple_tag('link', array(
 				'rel' => 'stylesheet',
 				'type' => 'text/css',
-				'href' => $this->url_for('/stylesheets/' . $stylesheet . '.css')
+				'href' => self::url_for('/stylesheets/' . $stylesheet . '.css')
 			));
 			$html .= "\n";
 		}
@@ -50,47 +50,47 @@ class CoreHelper {
 		return $html;
 	}
 	
-	public function rss_tag($title = 'RSS Feed', $url_options) {
-		return $this->simple_tag('link', array(
+	public static function rss_tag($title = 'RSS Feed', $url_options) {
+		return self::simple_tag('link', array(
 			'title' => $title,
 			'rel' => 'alternate',
 			'type' => 'application/rss+xml',
-			'href' => $this->url_for($url_options)
+			'href' => self::url_for($url_options)
 		)) . "\n";
 	}
 	
-	public function tag($tag, $attributes = array(), $content = '') {
+	public static function tag($tag, $attributes = array(), $content = '') {
 		$constructed = '<' . $tag;
-		$constructed .= $this->parse_attributes($attributes, true);
+		$constructed .= self::parse_attributes($attributes, true);
 		$constructed .= '>' . $content;
 		$constructed .= '</' . $tag . '>';
 		
 		return $constructed;
 	}
 	
-	public function simple_tag($tag, $attributes = array()) {
+	public static function simple_tag($tag, $attributes = array()) {
 		$constructed = '<' . $tag;
-		$constructed .= $this->parse_attributes($attributes, true);
+		$constructed .= self::parse_attributes($attributes, true);
 		$constructed .= ' />';
 		
 		return $constructed;
 	}
 	
-	public function parse_attributes($attributes, $wants_joined = false) {
+	public static function parse_attributes($attributes, $wants_joined = false) {
 		if(!is_array($attributes)) {
 			// TODO: this is just for now
 			$attributes = array();
 		}
 		
 		if($wants_joined) {
-			return $this->join_attributes($attributes);
+			return self::join_attributes($attributes);
 		} else {
 			ksort($attributes);
 			return $attributes;
 		}
 	}
 	
-	public function join_attributes($attributes) {
+	public static function join_attributes($attributes) {
 		// $combined = $with_space ? ' ' : '' ;
 		ksort($attributes);
 		$combined = '';
@@ -101,34 +101,34 @@ class CoreHelper {
 		return $combined;
 	}
 	
-	public function link_to($text, $url = array(), $html_options = array()) {
-		$html_options['href'] = $this->url_for($url);
-		return $this->tag('a', $html_options, $text);
+	public static function link_to($text, $url = array(), $html_options = array()) {
+		$html_options['href'] = self::url_for($url);
+		return self::tag('a', $html_options, $text);
 	}
 	
-	public function link_to_unless_current($text, $url = array(), $html_options = array()) {
+	public static function link_to_unless_current($text, $url = array(), $html_options = array()) {
 		// TODO: url is generated twice. shouldn't have to be
-		$test = $this->url_for($url);
-		return $test == $this->url_for() ? $text : $this->link_to($text, $url, $html_options);
+		$test = self::url_for($url);
+		return $test == self::url_for() ? $text : self::link_to($text, $url, $html_options);
 	}
 	
-	public function url_for($options = array()) {
+	public static function url_for($options = array()) {
 		return CoreRouter::url_for($options);
 	}
 	
-	public function format_date($date, $format) {
-		return date($format, $this->parse_datetime($date));
+	public static function format_date($date, $format) {
+		return date($format, self::parse_datetime($date));
 	}
 	
-	public function format_time($time, $format) {
-		return $this->format_date($time, $format);
+	public static function format_time($time, $format) {
+		return self::format_date($time, $format);
 	}
 	
-	public function parse_datetime($test) {
+	public static function parse_datetime($test) {
 		return is_int($test) ? $test : strtotime($test);
 	}
 	
-	public function time_distance_in_words($timestamp, $options = array()) {
+	public static function time_distance_in_words($timestamp, $options = array()) {
 		$options = array_merge(array(
 			'past' => 'ago',
 			'join' => ' at ',
@@ -136,8 +136,8 @@ class CoreHelper {
 			'date' => 'F jS'
 		), $options);
 		
-		$timestamp = $this->parse_datetime($timestamp);
-		// $basetime = $basetime === false ? time() : $this->parse_datetime($basetime);
+		$timestamp = self::parse_datetime($timestamp);
+		// $basetime = $basetime === false ? time() : self::parse_datetime($basetime);
 		$basetime = time();
 		$difference = $timestamp - $basetime;
 		$absolute = abs($difference);
@@ -183,5 +183,9 @@ class CoreHelper {
 			$relative = $quantity . ' ' . Inflector::conditionalPlural($quantity, $measure) . ' ' . $options['past'];
 		
 		return $relative;
+	}
+	
+	public static function __get($var) {
+		echo $var;
 	}
 }
