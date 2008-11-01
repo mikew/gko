@@ -25,8 +25,9 @@ class CoreController {
 		$content = $this->{ACTION}();
 
 		CoreMime::set_headers();
-		$this->content = empty($content) ? $this->render_file(ACTION) : $content ;
+		CoreHelper::register();
 		
+		$this->content = empty($content) ? $this->render_file(ACTION) : $content ;
 		// I should clean this up to allow for actions to disable the layout
 		// and automatically check for layout.phtnl, and check for a layout variable
 		echo $this->layout === false ? $this->content : $this->render_file(array(APP_HOME, 'views', 'layouts', $this->layout));
@@ -34,8 +35,6 @@ class CoreController {
 	
 	protected function render_file($file, $mime = '') {
 		$mime = CoreMime::interpret($mime);
-
-		$helpers = $this->register_helper(CONTROLLER);
 		$file = CoreMime::find_template_file($file, $mime);
 		
 		switch($mime) {
@@ -59,7 +58,6 @@ class CoreController {
 	
 	protected function render_partial($name, $data = array(), $locals = array()) {
 		$contents = '';
-		$helpers = $this->register_helper(CONTROLLER);
 		
 		foreach($locals AS $key => $value) {
 			$$key = $value;
@@ -115,21 +113,6 @@ class CoreController {
 		
 		if(!empty($errors))
 			die('errors in ' . $from . ' filters: ' . implode(', ', $errors));
-	}
-	
-	final private function register_helper($helper) {
-		$helper = strtolower($helper);
-		$klass = $helper . 'Helper';
-		
-		if(!class_exists('Helpers', false)) {
-			eval('class Helpers extends ' . $klass . ' {}');
-			Helpers::construct();
-		}
-		
-		// if(!isset($this->helpers[$helper]))
-		// 	$this->helpers[$helper] = new $klass();
-		// 
-		// return $this->helpers[$helper];
 	}
 	
 	final private function request_auth($zone) {

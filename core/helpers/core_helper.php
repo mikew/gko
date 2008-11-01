@@ -8,6 +8,15 @@ class CoreHelper {
 		}
 	}
 	
+	final public static function register() {
+		$klass = CONTROLLER . 'Helper';
+		
+		if(!class_exists('Helpers', false)) {
+			eval('class Helpers extends ' . $klass . ' {}');
+			Helpers::construct();
+		}
+	}
+	
 	public static function image_tag($image) {
 		return self::simple_tag('img', array(
 			'src' => self::url_for('/images/' . $image),
