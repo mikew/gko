@@ -9,9 +9,8 @@ class CoreHelper {
 	}
 	
 	final public static function register() {
-		$klass = CONTROLLER . 'Helper';
-		
 		if(!class_exists('Helpers', false)) {
+			$klass = CONTROLLER . 'Helper';
 			eval('class Helpers extends ' . $klass . ' {}');
 			Helpers::construct();
 		}
