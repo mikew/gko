@@ -1,7 +1,6 @@
 <?php
 class CoreController {
 	private $content = '';
-	private $helpers = array();
 	private $filters = array(
 		'before' => array(),
 		'after' => array()
@@ -12,8 +11,6 @@ class CoreController {
 	protected function controller_setup() {}
 	
 	final public function run() {
-		// $this->core = new Core();
-		
 		$this->application_setup();
 		$this->controller_setup();
 		$this->run_filters('before');
@@ -24,39 +21,56 @@ class CoreController {
 	final public function render() {
 		$content = $this->{ACTION}();
 
+		$this->setup_for_mime();
 		CoreMime::set_headers();
 		CoreHelper::register();
 		
 		$this->content = empty($content) ? $this->render_file(ACTION) : $content ;
-		// I should clean this up to allow for actions to disable the layout
-		// and automatically check for layout.phtnl, and check for a layout variable
+
 		echo $this->layout === false ? $this->content : $this->render_file(array(APP_HOME, 'views', 'layouts', $this->layout));
 	}
 	
-	protected function render_file($file, $mime = '') {
+	final private function setup_for_mime() {
+		$callback = 'setup_for_mime_' . CoreMime::current();
+		if(method_exists($this, $callback))
+			call_user_func(array($this, $callback));
+	}
+	
+	final private function setup_for_mime_rss() {
+		$this->layout = false;
+	}
+	
+	final protected function render_file($file, $mime = '') {
 		$mime = CoreMime::interpret($mime);
 		$file = CoreMime::find_template_file($file, $mime);
 		
-		switch($mime) {
-			case 'rss':
-				$feed = new RSSFeed();
-				include $file;
-				$contents = $feed;
-			break;
-			case 'markdown':
-				$contents = Markdown(File::read($file));
-			break;
-			default:
+		$callback = 'render_file_' . $mime;
+		$contents = '';
+		if(!empty($file)) {
+			if(method_exists($this, $callback)) {
+				$contents = call_user_func(array($this, $callback), $file);
+			} else {
 				ob_start();
 				include $file;
 				$contents = ob_get_contents();
 				ob_end_clean();
+			}
 		}
 		
 		return $contents;
 	}
 	
-	protected function render_partial($name, $data = array(), $locals = array()) {
+	protected function render_file_rss($file) {
+		$feed = new RSSFeed();
+		include $file;
+		return $feed;
+	}
+	
+	protected function render_file_markdown($file) {
+		return Markdown(File::read($file));
+	}
+	
+	final protected function render_partial($name, $data = array(), $locals = array()) {
 		$contents = '';
 		
 		foreach($locals AS $key => $value) {
