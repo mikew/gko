@@ -1,5 +1,6 @@
 <?php
 class CoreRouter {
+	static public $will_redirect = false;
 	// static private $map;
 	
 	static public function instance() {
@@ -38,6 +39,16 @@ class CoreRouter {
 	
 	static public function clear_end_slash($from) {
 		return substr($from, -1) == '/' ? substr($from, 0, -1) : $from ;
+	}
+	
+	static public function redirect_to($options) {
+		if(!is_array($options))
+			$options = array($options, array());
+		
+		$options[1]['qualified'] = true;
+		$url = self::url_for($options);
+		CoreMime::reset_headers();
+		CoreMime::set_header('Location', $url);
 	}
 	
 	static public function url_for($options = array()) {
