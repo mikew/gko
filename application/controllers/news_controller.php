@@ -6,12 +6,6 @@ class NewsController extends ApplicationController {
 	
 	public function index() {
 		$this->posts = Doctrine_Query::create()->from('News')->limit(10)->execute();
-		switch($_GET['format']) {
-			case 'rss':
-				CoreMime::set('rss');
-				$this->layout = false;
-			break;
-		}
 	}
 	
 	public function show() {
