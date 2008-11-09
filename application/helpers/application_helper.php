@@ -19,7 +19,7 @@ class ApplicationHelper extends CoreHelper {
 	}
 	
 	public function link_to_post($item) {
-		return self::link_to_unless_current($item->title, self::post_path($item));
+		return CoreHelper::instance()->link_to_unless_current($item->title, self::post_path($item));
 	}
 	public function post_path($item, $for_rss = false) {
 		$url_options = array(
@@ -47,7 +47,7 @@ class ApplicationHelper extends CoreHelper {
 			if($controller == self::$locals->selected_nav)
 				$attributes['class'] = 'selected';
 			
-			$generated .= self::tag('li', $attributes, self::link_to(Inflector::humanize($controller), $url)) . "\n";
+			$generated .= CoreHelper::instance()->tag('li', $attributes, CoreHelper::instance()->link_to(Inflector::humanize($controller), $url)) . "\n";
 		}
 		
 		return $generated;
@@ -63,7 +63,7 @@ class ApplicationHelper extends CoreHelper {
 			$human = empty(self::$locals->breadcrumbs[$key]) ? Inflector::titleize($key) : self::$locals->breadcrumbs[$key];
 			
 			if($i == count($parts) - 1)
-				$human = self::tag('span', '', $human);
+				$human = CoreHelper::instance()->tag('span', '', $human);
 			
 			array_push($crumbs, $human);
 		}

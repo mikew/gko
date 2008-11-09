@@ -1,6 +1,6 @@
 <?= $this->render_partial('promo') ?>
 
-<?= Helpers::start_em('whatsnew') ?>
+<?= $helpers->start_em('whatsnew') ?>
 <div class="kdegames">
 <h2>What's new in KDE Games?</h2>
 <ul>
@@ -9,8 +9,8 @@ for($i = 0; $i < $this->latest->count(); $i++) {
 	$item = $this->latest[$i];
 ?>
 <li>
-	<?= Helpers::link_to_post($item) ?>
-	<span><?= date('H:i d/m/y', strtotime($item->created_at)) ?></span>
+	<?= $helpers->link_to_post($item) ?>
+	<span>| <?= $helpers->time_distance_in_words($item->created_at) ?></span>
 </li>
 <?php
 }
@@ -27,7 +27,7 @@ for($i = 0; $i < 5; $i++) {
 ?>
 <li>
 	<a href="<?= $item->link ?>"><?= $item->title ?></a>
-	<span><?= date('H:i d/m/y', strtotime($item->pubDate)) ?></span>
+	<span>| <?= $helpers->time_distance_in_words($item->pubDate) ?></span>
 </li>
 <?php
 }
@@ -35,4 +35,4 @@ for($i = 0; $i < 5; $i++) {
 </ul>
 </div>
 <br class="clear" />
-<?= Helpers::end_em() ?>
+<?= $helpers->end_em() ?>

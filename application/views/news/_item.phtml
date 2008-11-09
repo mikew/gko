@@ -1,6 +1,6 @@
 <div class="post">
-<h2><?= Helpers::link_to_post($item) ?></h2>
-<p class="summary">posted <?= Helpers::time_distance_in_words($item->created_at) ?> | games, news, release | it-s</p>
+<h2><?= $helpers->link_to_post($item) ?></h2>
+<p class="summary">posted <?= $helpers->time_distance_in_words($item->created_at) ?> | games, news, release | it-s</p>
 <?= $item->body ?>
 <div class="hr"></div>
 </div>

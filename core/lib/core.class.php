@@ -45,8 +45,16 @@ final class Core {
 	
 	public static function join_paths() {
 		$args = func_get_args();
-		$args = is_array($args[0]) ? $args[0] : $args;
+		$args = self::interpret_options($args);
 		return implode(DIRECTORY_SEPARATOR, $args);
+	}
+	
+	public static function interpret_options($args) {
+		// TODO: eventually all user-passed options should go through this function.
+		// therefore, we need to do more checks (
+		// "id=promo size=300x120" => { id => promo, width => 300, height=>120 }
+		// )
+		return is_array($args[0]) ? $args[0] : $args ;
 	}
 }
 

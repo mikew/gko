@@ -2,7 +2,7 @@
 <?php
 foreach($this->posts AS $post){
 ?>
-<?= Helpers::tag('li', '', Helpers::link_to($post->title, array('edit_admin/post', array('id' => $post->key)))) ?>
+<?= $helpers->tag('li', '', $helpers->link_to($post->title, array('edit_admin/post', array('id' => $post->key)))) ?>
 <?php
 }
 ?>

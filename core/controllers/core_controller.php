@@ -1,10 +1,14 @@
 <?php
 class CoreController {
 	private $content = '';
-	private $filters = array(
-		'before' => array(),
-		'after' => array()
-	);
+	private static $_before_filters = array();
+	private static $_after_filters = array();
+	public $before_filters = array();
+	public $after_filters = array();
+	// private $filters = array(
+	// 	'before' => array(),
+	// 	'after' => array()
+	// );
 	protected $layout = 'application';
 	
 	protected function application_setup() {}
@@ -23,7 +27,7 @@ class CoreController {
 
 		$this->setup_for_mime();
 		CoreMime::set_headers();
-		CoreHelper::register();
+		// CoreHelper::register();
 		
 		$this->content = empty($content) ? $this->render_file(ACTION) : $content ;
 
@@ -40,7 +44,9 @@ class CoreController {
 		$this->layout = false;
 	}
 	
+	// TODO: extract render* into a CoreRenderer class or something
 	final protected function render_file($file, $mime = '') {
+		$helpers = CoreHelper::instance();
 		$mime = CoreMime::interpret($mime);
 		$file = CoreMime::find_template_file($file, $mime);
 		
@@ -71,6 +77,7 @@ class CoreController {
 	}
 	
 	final protected function render_partial($name, $data = array(), $locals = array()) {
+		$helpers = CoreHelper::instance();
 		$contents = '';
 		
 		foreach($locals AS $key => $value) {
@@ -110,16 +117,16 @@ class CoreController {
 		$this->add_filter('after', $args);
 	}
 	final private function add_filter($where, $args) {
-		$source = is_array($args[0]) ? $args[0] : $args ;
+		$source = Core::interpret_options($args);
 		foreach($source AS $filter) {
-			array_push($this->filters[$where], $filter);
+			array_push($this->{$where . '_filters'}, $filter);
 		}
 	}
 	
 	final private function run_filters($from) {
 		$errors = array();
 		
-		foreach($this->filters[$from] AS $filter) {
+		foreach($this->{$from . '_filters'} AS $filter) {
 			$result = call_user_func(array($this, $filter));
 			if($result === false)
 				array_push($errors, $filter);
