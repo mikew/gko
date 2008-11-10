@@ -862,7 +862,8 @@ class Horde_Routes_Mapper
 
         // Add the routes for handling collection methods
         foreach ($collectionMethods as $method => $lst) {
-            $primary = ($method != 'GET' && isset($lst[0])) ? array_shift($lst) : null;
+            // $primary = ($method != 'GET' && isset($lst[0])) ? array_shift($lst) : null;
+            $primary = ($method != 'GET' && isset($lst[0])) ? $lst[0] : null;
             $routeOptions = $this->_requirementsFor($method, $options);
 
             foreach ($lst as $action) {
@@ -930,7 +931,8 @@ class Horde_Routes_Mapper
             $routeOptions['requirements'] = array('id' => $requirementsRegexp);
 
             if (!in_array($method, array('POST', 'GET', 'any'))) {
-                $primary = array_shift($lst);
+                // $primary = array_shift($lst);
+                $primary = $lst[0];
             } else {
                 $primary = null;
             }
