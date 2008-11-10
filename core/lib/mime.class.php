@@ -5,6 +5,7 @@ class CoreMime {
 	static private $status = 200;
 	static private $mime = 'html';
 	static private $headers = array();
+	static private $simulate_post_for = array('PUT', 'DELETE');
 	
 	public static function add($shorthand, $extension, $content_type = 'text/html') {
 		self::$extensions[$shorthand] = $extension;
@@ -67,5 +68,21 @@ class CoreMime {
 			array_push(self::$headers, $key);
 		else
 			self::$headers[$key] = $value;
+	}
+	
+	public static function should_simulate_post($method = '') {
+		$method = empty($method) ? @$_REQUEST['_method'] : $method ;
+		
+		return in_array(String::uppercase($method), self::$simulate_post_for);
+		
+		return false;
+	}
+	
+	public static function request_method() {
+		if(self::should_simulate_post()) {
+			return String::uppercase($_REQUEST['_method']);
+		}
+		
+		return $_SERVER['REQUEST_METHOD'];
 	}
 }

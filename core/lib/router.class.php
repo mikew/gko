@@ -7,12 +7,13 @@ class CoreRouter {
 		static $map;
 		if(!isset($map)) {
 			$map = new Horde_Routes_Mapper(array(
-				'controllerScan' => 'CoreRouter::scan_controllers'
+				'controllerScan' => array('CoreRouter', 'scan_controllers')
 			));
 			$map->environ = $_SERVER;
 			$map->environ['SCRIPT_NAME'] = WWW_HOME;
+			$map->environ['REQUEST_METHOD'] = CoreMime::request_method();
 		}
-		
+
 		return $map;
 	}
 	
