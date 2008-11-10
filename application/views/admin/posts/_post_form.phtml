@@ -1,1 +1,4 @@
-<h2>Editing <?= $this->item->title ?></h2>
+<?= $helpers->form_tag_for(array('admin', $this->post, 'key')) ?>
+
+<?= $helpers->submit_button() ?>
+<?= $helpers->end_form_tag() ?>
