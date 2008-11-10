@@ -54,7 +54,7 @@ class CoreController {
 		$contents = '';
 		if(!empty($file)) {
 			if(method_exists($this, $callback)) {
-				$contents = call_user_func(array($this, $callback), $file);
+				$contents = call_user_func(array($this, $callback), $file, $helpers);
 			} else {
 				ob_start();
 				include $file;
@@ -66,7 +66,7 @@ class CoreController {
 		return $contents;
 	}
 	
-	protected function render_file_rss($file) {
+	protected function render_file_rss($file, $helpers) {
 		$feed = new RSSFeed();
 		include $file;
 		return $feed;
