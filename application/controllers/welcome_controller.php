@@ -15,7 +15,15 @@ class WelcomeController extends ApplicationController {
 		$this->breadcrumbs[''] = 'Welcome!';
 		
 		$this->kde_feed = $this->update_dko_cache();
-		$this->latest = Doctrine_Query::create()->from('News n')->limit(5)->execute();
+		$this->latest = Doctrine_Query::create()->from('Posts p')->limit(5)->execute();
+	}
+	
+	public function init_author() {
+		$auth = new Authors();
+		$auth->name = 'Mike Wyatt';
+		$auth->password = 'test';
+		$auth->handle = 'mikew';
+		// $auth->save();
 	}
 	
 	protected function update_dko_cache() {

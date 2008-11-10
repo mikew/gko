@@ -1,11 +1,11 @@
 <?php
 class Admin_PostsController extends AdminController {
 	public function index() {
-		$this->posts = Doctrine_Query::create()->from('News n')->execute();
+		$this->posts = Doctrine_Query::create()->from('Posts p')->execute();
 	}
 	
 	public function edit() {
 		eval('class Helper extends CoreHelper {}');
-		$this->item = Doctrine_Query::create()->from('News')->where('key = ?', $_GET['id'])->fetchOne();
+		$this->post = Doctrine_Query::create()->from('Posts')->where('key = ?', $_GET['id'])->fetchOne();
 	}
 }

@@ -1,11 +1,12 @@
 <?php
-class NewsController extends ApplicationController {
+class PostsController extends ApplicationController {
 	public function controller_setup() {
 		array_push($this->title, 'News');
+		$this->selected_nav = 'news';
 	}
 	
 	public function index() {
-		$this->posts = Doctrine_Query::create()->from('News')->limit(10)->execute();
+		$this->posts = Doctrine_Query::create()->from('Posts')->limit(10)->execute();
 	}
 	
 	public function show() {
@@ -24,13 +25,13 @@ class NewsController extends ApplicationController {
 			$title = $matches[2][$i];
 			$body = $matches[3][$i];
 			
-			$news = new News();
-			$news->title = $title;
-			$news->body = $body;
+			$post = new Posts();
+			$post->title = $title;
+			$post->body = $body;
+			$post->save();
 			
-			$news->save();
-			$news->created_at = $date;
-			$news->save();
+			$post->created_at = $date;
+			$post->save();
 		}
 	}
 }
