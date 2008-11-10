@@ -202,24 +202,16 @@ div.divider
 #whatsnew ul
 {
 	list-style-image: url(/images/whatsnew-bullet.png);
-/*	list-style-position: inside;*/
 	margin: 0 0 0 20px;
 	padding: 0;
-}
-#whatsnew li
-{
-	padding: 5px 120px 5px 0;
-	position: relative;
 }
 #whatsnew span
 {
 	color: #555;
-	font-size: 90%;
-	background: #bbb;
-	padding: 2px 5px;
-	position: absolute;
-	top: 0;
-	right: 0;
+	font-size: 80%;
+/*	display: block;*/
+/*	background: #bbb;*/
+/*	padding: 2px 5px;*/
 }
 #whatsnew li:hover span
 {
