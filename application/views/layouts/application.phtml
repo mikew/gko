@@ -15,14 +15,16 @@
 		<?= $helpers->lay_breadcrumbs() ?>
 	</div>
 	<ul>
-		<?= $helpers->link_to_controllers('home:/', 'catalogue', 'news:/posts', 'about') ?>
+		<?= $helpers->link_to_controllers('home:/', 'catalogue', 'news', 'about') ?>
 		<li id="empty"></li>
 	</ul>
 </div>
 
 <div id="top"><div id="bottom">
 <div id="airlock">
-<?= $this->content ?>
+<? if($helpers->in_admin()) echo self::render_partial('admin/navigation'); ?>
+
+<?= CONTENT ?>
 </div>
 </div></div>
 
