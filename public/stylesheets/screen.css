@@ -267,3 +267,36 @@ p.summary
 	font-size: 90%;
 	background: transparent url(/images/arrow_indent.png) center left no-repeat;
 }
+
+form label
+{
+	float: left;
+	display: block;
+	width: 100px;
+	cursor: pointer;
+}
+
+#admin_nav
+{
+	margin: auto;
+	width: 400px;
+	padding: 0 0 8px 0;
+	list-style: none;
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+}
+#admin_nav li
+{
+	display: inline;
+}
+#admin_nav li a
+{
+	padding: 5px 15px;
+}
+#admin_nav li.selected a
+{
+	color: #000;
+	font-weight: bold;
+	background: #ccc none;
+	-moz-border-radius: 3px;
+}
