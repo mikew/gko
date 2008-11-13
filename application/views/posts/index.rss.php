@@ -8,7 +8,7 @@ $feed->link = $helpers->url_for(array(
 	'qualified' => true
 ));
 
-foreach($this->posts AS $item) {
+foreach($__posts AS $item) {
 	$feed->item = new RSSItem(array(
 		'title' => $item->title,
 		'link' => $helpers->url_for($helpers->post_path($item, true)),

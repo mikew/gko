@@ -1,9 +1,8 @@
 <ul>
+	<li><strong><?= $helpers->link_to('Add a New Post', 'new_admin/post') ?></strong></li>
 <?php
-foreach($this->posts AS $post){
-?>
-<?= $helpers->tag('li', '', $helpers->link_to($post->title, array('edit_admin/post', array('id' => $post->key)))) ?>
-<?php
+foreach($__posts AS $post) {
+	echo $helpers->tag('li', '', $helpers->link_to($post->title, array('edit_admin/post', array('id' => $post->key))));
 }
 ?>
 </ul>

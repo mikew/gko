@@ -1,4 +1,13 @@
-<?= $helpers->form_tag_for(array('admin', $this->post, 'key')) ?>
-
-<?= $helpers->submit_button() ?>
+<?= $helpers->form_tag_for(array('admin', $__post, 'key')) ?>
+	<p>
+		<label for="post_title">Title</label>
+		<?= $helpers->text_field('post', 'title') ?>
+	</p>
+	<p>
+		<label for="post_body">Body</label>
+		<?= $helpers->text_area('post', 'body') ?>
+	</p>
+	<p>
+		<?= $helpers->submit_button() ?> or <?= $helpers->link_to('Cancel', 'admin/posts') ?>
+	</p>
 <?= $helpers->end_form_tag() ?>

@@ -10,8 +10,13 @@ class PostsController extends ApplicationController {
 	}
 	
 	public function show() {
-		$this->item = Doctrine_Query::create()->from('News')->where('key = ?', $_GET['key'])->fetchOne();
+		$this->item = Doctrine_Query::create()->from('Posts')->where('key = ?', $_GET['key'])->fetchOne();
 		$this->breadcrumbs[$this->item->key] = $this->item->title;
+		
+		$this->comment = new PropertyObject(array(
+			'name' => 'Joe Common',
+			'body' => 'stock comment (these do not actually work yet!)'
+		));
 		
 		array_push($this->title, '&#8220;' . $this->item->title . '&#8221;');
 	}

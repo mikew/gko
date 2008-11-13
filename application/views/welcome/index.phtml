@@ -1,12 +1,12 @@
-<?= $this->render_partial('promo') ?>
+<?= self::render_partial('promo') ?>
 
 <?= $helpers->start_em('whatsnew') ?>
 <div class="kdegames">
 <h2>What's new in KDE Games?</h2>
 <ul>
 <?php
-for($i = 0; $i < $this->latest->count(); $i++) {
-	$item = $this->latest[$i];
+for($i = 0; $i < $__latest->count(); $i++) {
+	$item = $__latest[$i];
 ?>
 <li>
 	<?= $helpers->link_to_post($item) ?>
@@ -23,7 +23,7 @@ for($i = 0; $i < $this->latest->count(); $i++) {
 <ul>
 <?php
 for($i = 0; $i < 5; $i++) {
-	$item = $this->kde_feed->channel->item[$i];
+	$item = $__kde_feed->channel->item[$i];
 ?>
 <li>
 	<a href="<?= $item->link ?>"><?= $item->title ?></a>
