@@ -10,7 +10,7 @@ if(empty($_GET['format']))
 CoreMime::set($_GET['format']);
 
 define('CONTROLLER', str_replace('/', '_', $matched['controller']));
-define('ACTION', $matched['action']);
+define('ACTION', $matched['action'] == 'new' ? '_new' : $matched['action']);
 
 $controller = CONTROLLER . 'Controller';
 $controller = new $controller();
