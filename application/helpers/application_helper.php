@@ -1,10 +1,10 @@
 <?php
 class ApplicationHelper extends CoreHelper {
-	public function write_title() {
+	public static function write_title() {
 		return implode(' - ', self::$locals->title);
 	}
 	
-	public function start_em($id = '') {
+	public static function start_em($id = '') {
 		// <div class="em" id="whatsnew"><div class="top"><div class="right"><div class="bottom"><div class="left">
 		$divs = '<div class="em"';
 		if(!empty($id))
@@ -14,16 +14,16 @@ class ApplicationHelper extends CoreHelper {
 		return $divs;
 	}
 	
-	public function end_em() {
+	public static function end_em() {
 		return '</div></div></div></div><div class="tl"></div><div class="tr"></div><div class="br"></div><div class="bl"></div></div>';
 	}
 	
-	public function link_to_post($item) {
+	public static function link_to_post($item) {
 		return CoreHelper::instance()->link_to_unless_current($item->title, self::post_path($item));
 	}
-	public function post_path($item, $for_rss = false) {
+	public static function post_path($item, $for_rss = false) {
 		$url_options = array(
-			'controller' => 'news',
+			'controller' => 'posts',
 			'action' => 'show',
 			'key' => $item->key
 		);
@@ -34,7 +34,7 @@ class ApplicationHelper extends CoreHelper {
 		return $url_options;
 	}
 	
-	public function link_to_controllers() {
+	public static function link_to_controllers() {
 		$list = func_get_args();
 		$generated = '';
 		
@@ -53,7 +53,7 @@ class ApplicationHelper extends CoreHelper {
 		return $generated;
 	}
 	
-	public function lay_breadcrumbs() {
+	public static function lay_breadcrumbs() {
 		$parts = explode('/', WWW_PATH);
 		$crumbs = array('KDE Games Home');
 		array_shift($parts);
@@ -69,5 +69,9 @@ class ApplicationHelper extends CoreHelper {
 		}
 		
 		return implode(' &raquo; ', $crumbs);
+	}
+	
+	public static function in_admin() {
+		return !(strpos(CoreHelper::instance()->url_for(), '/admin/') === FALSE);
 	}
 }
