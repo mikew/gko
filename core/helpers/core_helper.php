@@ -16,6 +16,10 @@ class CoreHelper {
 		self::mixin('CoreFormHelper', 'CoreTagHelper', 'CoreTimeHelper', 'CoreURLHelper', CONTROLLER . 'Helper');
 	}
 	
+	final public static function get_controller_variable($variable) {
+		return self::$locals->{$variable};
+	}
+	
 	final public static function mixin() {
 		$args = func_get_args();
 		$args = Core::interpret_options($args);
@@ -25,7 +29,7 @@ class CoreHelper {
 			}
 		}
 	}
-	
+		
 	// final public static function register() {
 	final public static function instance() {
 		static $instance;
@@ -46,6 +50,9 @@ class CoreHelper {
 	}
 	
 	final public static function __callStatic($method, $arguments) {
-		return call_user_func_array(array(self::$mixed_in[$method], $method), $arguments);
+		if(isset(self::$mixed_in[$method]))
+			return call_user_func_array(array(self::$mixed_in[$method], $method), $arguments);
+		else
+			trigger_error("Helper '{$method}' not found");
 	}
 }
