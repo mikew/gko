@@ -38,15 +38,15 @@ class CoreMime {
 		return self::$extensions[self::interpret($mime)];
 	}
 	
-	public static function find_template_file($file, $mime = '') {
-		$file = File::join($file);
-		
-		$extension = self::extension($mime);
-		$file = substr($file, 0, 1) == '/' ? $file : File::join(APP_HOME, 'views', String::underscore(CONTROLLER), $file);
-		$file .= substr($file, -strlen($extension)) == $extension ? '' : $extension;
-
-		return is_file($file) ? $file : false;
-	}
+	// public static function find_template_file($file, $mime = '') {
+	// 	$file = File::join($file);
+	// 	
+	// 	$extension = self::extension($mime);
+	// 	$file = substr($file, 0, 1) == '/' ? $file : File::join(APP_HOME, 'views', String::underscore(CONTROLLER), $file);
+	// 	$file .= substr($file, -strlen($extension)) == $extension ? '' : $extension;
+	// 
+	// 	return File::exists($file) ? $file : false;
+	// }
 	
 	public static function set_headers() {
 		if(empty(self::$headers['Location'])) {

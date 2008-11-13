@@ -27,11 +27,13 @@ class CoreController {
 
 		$this->setup_for_mime();
 		CoreMime::set_headers();
+		Coreview::initialize();
 		// CoreHelper::register();
 		
-		$this->content = empty($content) ? $this->render_file(ACTION) : $content ;
+		// $this->content = empty($content) ? CoreView::render(ACTION) : $content ;
+		define('CONTENT', empty($content) ? CoreView::render(ACTION) : $content);
 
-		echo $this->layout === false ? $this->content : $this->render_file(array(APP_HOME, 'views', 'layouts', $this->layout));
+		echo $this->layout === false ? CONTENT : CoreView::render("layouts/{$this->layout}");
 	}
 	
 	final private function setup_for_mime() {
@@ -40,72 +42,8 @@ class CoreController {
 			call_user_func(array($this, $callback));
 	}
 	
-	final private function setup_for_mime_rss() {
+	private function setup_for_mime_rss() {
 		$this->layout = false;
-	}
-	
-	// TODO: extract render* into a CoreRenderer class or something
-	final protected function render_file($file, $mime = '') {
-		$helpers = CoreHelper::instance();
-		$mime = CoreMime::interpret($mime);
-		$file = CoreMime::find_template_file($file, $mime);
-		
-		$callback = 'render_file_' . $mime;
-		$contents = '';
-		if(!empty($file)) {
-			if(method_exists($this, $callback)) {
-				$contents = call_user_func(array($this, $callback), $file, $helpers);
-			} else {
-				ob_start();
-				include $file;
-				$contents = ob_get_contents();
-				ob_end_clean();
-			}
-		}
-		
-		return $contents;
-	}
-	
-	protected function render_file_rss($file, $helpers) {
-		$feed = new RSSFeed();
-		include $file;
-		return $feed;
-	}
-	
-	protected function render_file_markdown($file) {
-		return Markdown(File::read($file));
-	}
-	
-	final protected function render_partial($name, $data = array(), $locals = array()) {
-		$helpers = CoreHelper::instance();
-		$contents = '';
-		
-		foreach($locals AS $key => $value) {
-			$$key = $value;
-		}
-		
-		if(!empty($data)) {
-			if(!isset($data[0]))
-				$data = array($data);
-		} else {
-			$data = array($name);
-		}
-
-		${$name . '_counter'} = 0;
-		foreach($data AS $object) {
-			$$name = $object;
-			
-			$file = CoreMime::find_template_file('_' . $name);
-			
-			ob_start();
-			include $file;
-			$contents .= ob_get_contents();
-			ob_end_clean();
-			
-			${$name . '_counter'}++;
-		}
-		
-		return $contents;
 	}
 	
 	final protected function add_before_filter() {
@@ -126,6 +64,7 @@ class CoreController {
 	final private function run_filters($from) {
 		$errors = array();
 		
+		$array = $this->{$from . '_filters'};
 		foreach($this->{$from . '_filters'} AS $filter) {
 			$result = call_user_func(array($this, $filter));
 			if($result === false)
