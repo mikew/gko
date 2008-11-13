@@ -8,9 +8,9 @@ class AboutController extends ApplicationController {
 		// 
 	// }
 	
-	public function __call($controller, $args) {
+	public function __call($action, $args) {
 		// return Markdown();
 		// $this->core->mime = 'markdown';
-		return $this->render_file($controller, 'markdown');
+		return CoreView::render($action, 'markdown');
 	}
 }
