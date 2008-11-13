@@ -42,6 +42,27 @@ class CoreFormHelper {
 		return '</form>';
 	}
 	
+	public static function text_field($object, $key, $attributes = array()) {
+		return CoreHelper::instance()->simple_tag('input', array_merge($attributes, array(
+			'type' => 'text',
+			'name' => self::interpret_pair($object, $key, 'name'),
+			'id' => self::interpret_pair($object, $key, 'id'),
+			'value' => self::interpret_pair($object, $key)
+		)));
+	}
+	
+	public static function text_area($object, $key, $attributes = array()) {
+		$attributes = array_merge(array(
+			'cols' => 60,
+			'rows' => 10
+		), $attributes, array(
+			'name' => self::interpret_pair($object, $key, 'name'),
+			'id' => self::interpret_pair($object, $key, 'id')
+		));
+		
+		return CoreHelper::instance()->tag('textarea', $attributes, self::interpret_pair($object, $key));
+	}
+	
 	public static function hidden_field($name, $value) {
 		return CoreHelper::instance()->simple_tag('input', array(
 			'type' => 'hidden',
@@ -50,7 +71,25 @@ class CoreFormHelper {
 		));
 	}
 	
-	public static function submit_button() {
-		return CoreHelper::instance()->simple_tag('input', array('type' => 'submit'));
+	public static function submit_button($value = 'Continue') {
+		return CoreHelper::instance()->simple_tag('input', array(
+			'type' => 'submit',
+			'value' => $value
+		));
+	}
+	
+	private static function interpret_pair($object, $key, $as = 'data') {
+		switch($as) {
+			case 'id':
+				return $object . '_' . $key;
+				break;
+			case 'name':
+				return $object . '[' . $key . ']';
+				break;
+			case 'data':
+			default:
+				return CoreHelper::get_controller_variable($object)->{$key};
+				break;
+		}
 	}
 }
