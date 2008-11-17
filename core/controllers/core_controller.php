@@ -30,10 +30,14 @@ class CoreController {
 		Coreview::initialize();
 		// CoreHelper::register();
 		
-		// $this->content = empty($content) ? CoreView::render(ACTION) : $content ;
-		define('CONTENT', empty($content) ? CoreView::render(ACTION) : $content);
+		$this->content = empty($content) ? CoreView::render(ACTION) : $content ;
+		// define('CONTENT', $this->content);
 
 		echo $this->layout === false ? CONTENT : CoreView::render("layouts/{$this->layout}");
+	}
+	
+	final public function content_for_layout() {
+		return $this->content;
 	}
 	
 	final private function setup_for_mime() {

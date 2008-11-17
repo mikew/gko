@@ -1,13 +1,13 @@
-<?= $helpers->form_tag() ?>
+<?= $context->form_tag() ?>
 <p>
 	<label for="comment_name">Your Name</label>
-	<?= $helpers->text_field('comment', 'name') ?>
+	<?= $context->text_field('comment', 'name') ?>
 </p>
 <p>
 	<label for="comment_body">Comment</label>
-	<?= $helpers->text_area('comment', 'body') ?>
+	<?= $context->text_area('comment', 'body') ?>
 </p>
 <p>
-	<?= $helpers->submit_button() ?>
+	<?= $context->submit_button() ?>
 </p>
-<?= $helpers->end_form_tag() ?>
+<?= $context->end_form_tag() ?>

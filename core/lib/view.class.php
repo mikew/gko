@@ -12,27 +12,37 @@ class CoreView {
 		$file = File::join($file);
 
 		$extension = CoreMime::extension($mime);
-		if(substr($file, 0, 1) != '/') {
-			$parts = explode('/', $file);
-			if($is_partial) {
-				$real = array_pop($parts);
-				array_push($parts, '_' . $real);
-			}
-			
-			$view_path = File::join(APP_HOME, 'views');
-			if(count($parts) == 1)
-				$view_path = File::join($view_path, String::underscore(CONTROLLER));
-			
-			$file = File::join($view_path, File::join($parts));
-		}
+		$file = self::interpret_file($file)->{$is_partial ? 'absolute_as_partial' : 'absolute'};
 		
 		$file .= substr($file, -strlen($extension)) == $extension ? '' : $extension;
 	
 		return File::exists($file) ? $file : false ;
 	}
 	
+	protected static function interpret_file($examine) {
+		if(substr($examine, 0, 1) != '/') {
+			if(strpos($examine, '/') === false)
+				$examine = File::join(String::underscore(CONTROLLER), $examine);
+			
+			$examine = File::join(APP_HOME, 'views', $examine);
+		}
+		
+		$parts = explode(DIRECTORY_SEPARATOR, $examine);
+		
+		$name = array_pop($parts);
+		$partial = '_' . $name;
+		$base_path = File::join($parts);
+		
+		return new _H(array(
+			'name' => $name,
+			'name_as_partial' => $partial,
+			'absolute' => File::join($base_path, $name),
+			'absolute_as_partial' => File::join($base_path, $partial)
+		));
+	}
+	
 	final public static function render($file, $mime = '') {
-		$helpers = CoreHelper::instance();
+		$context = CoreContext::instance();
 		$mime = CoreMime::interpret($mime);
 		$file = self::find_file($file, $mime);
 		
@@ -40,13 +50,8 @@ class CoreView {
 		if(!empty($file)) {
 			$callback = 'render_file_' . $mime;
 			
-			// THIS WILL BE REPEATED A LOT. UGH
-			foreach(self::$locals AS $key => $value) {
-				${'__' . $key} = $value;
-			}
-			
 			if(method_exists('CoreView', $callback)) {
-				$contents = call_user_func(array('self', $callback), $file, $helpers);
+				$contents = call_user_func(array('self', $callback), $file, $context);
 			} else {
 				ob_start();
 				include $file;
@@ -58,11 +63,7 @@ class CoreView {
 		return $contents;
 	}
 	
-	protected static function render_file_rss($file, $helpers) {
-		foreach(self::$locals AS $key => $value) {
-			${'__' . $key} = $value;
-		}
-		
+	protected static function render_file_rss($file, $context) {
 		$feed = new RSSFeed();
 		include $file;
 		return $feed;
@@ -72,26 +73,28 @@ class CoreView {
 		return Markdown(File::read($file));
 	}
 	
-	protected static function render_partial($name, $data = array(), $locals = array()) {
-		$helpers = CoreHelper::instance();
+	protected static function render_partial($file, $data = false, $locals = array()) {
+		$context = CoreContext::instance();
 		$contents = '';
-		
-		foreach(self::$locals AS $key => $value) {
-			${'__' . $key} = $value;
-		}
 		
 		foreach($locals AS $key => $value) {
 			${$key} = $value;
 		}
 		
-		if(!empty($data)) {
-			if(!isset($data[0]))
-				$data = array($data);
-		} else {
-			$data = array($name);
+		$interpreted = self::interpret_file($file);
+		$name = $interpreted->name;
+		$plural = Inflector::pluralize($name);
+
+		if($data === false) {
+			if(isset($context->{$plural}))
+				$data = $context->{$plural};
+			elseif(isset($context->{$name}))
+				$data = array($context->{$name});
+			else
+				$data = array($name);
 		}
 		
-		$file = self::find_file($name, '', true);
+		$file = self::find_file($file, '', true);
 		${$name . '_counter'} = 0;
 		foreach($data AS $object) {
 			${$name} = $object;

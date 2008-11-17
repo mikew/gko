@@ -6,3 +6,5 @@ class PropertyObject {
 		}
 	}
 }
+
+class _H extends PropertyObject {}

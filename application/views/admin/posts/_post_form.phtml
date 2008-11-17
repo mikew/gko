@@ -1,13 +1,13 @@
-<?= $helpers->form_tag_for(array('admin', $__post, 'key')) ?>
+<?= $context->form_tag_for(array('admin', $context->post, 'key')) ?>
 	<p>
 		<label for="post_title">Title</label>
-		<?= $helpers->text_field('post', 'title') ?>
+		<?= $context->text_field('post', 'title') ?>
 	</p>
 	<p>
 		<label for="post_body">Body</label>
-		<?= $helpers->text_area('post', 'body') ?>
+		<?= $context->text_area('post', 'body') ?>
 	</p>
 	<p>
-		<?= $helpers->submit_button() ?> or <?= $helpers->link_to('Cancel', 'admin/posts') ?>
+		<?= $context->submit_button() ?> or <?= $context->link_to('Cancel', 'admin/posts') ?>
 	</p>
-<?= $helpers->end_form_tag() ?>
+<?= $context->end_form_tag() ?>

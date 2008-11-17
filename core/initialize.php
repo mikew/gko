@@ -16,6 +16,8 @@ function __autoload($class) {
 		require_once File::join(CORE_HOME, 'controllers', 'core_controller.php');
 	elseif($klass == 'coreview')
 		require_once File::join(CORE_LIB_HOME, 'view.class.php');
+	elseif($klass == 'corecontext')
+		require_once File::join(CORE_LIB_HOME, 'context.class.php');
 	elseif(substr($klass, -10) == 'controller')
 		require_once File::join(APP_HOME, 'controllers', String::underscore($class) . '.php');
 	elseif(substr($klass, 0, 4) == 'core' && substr($klass, -6) == 'helper')

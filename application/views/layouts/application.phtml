@@ -3,28 +3,28 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<title><?= $helpers->write_title() ?></title>
-	<?= $helpers->stylesheet_tag() ?>
-	<?= $helpers->rss_tag('KDE Games (RSS 2.0)', 'rss') ?>
-	<?= $helpers->javascript_include_tag() ?>
+	<title><?= $context->write_title() ?></title>
+	<?= $context->stylesheet_tag() ?>
+	<?= $context->rss_tag('KDE Games (RSS 2.0)', 'rss') ?>
+	<?= $context->javascript_include_tag() ?>
 </head>
 
 <body>
 <div id="header">
 	<div id="breadcrumbs">
-		<?= $helpers->lay_breadcrumbs() ?>
+		<?= $context->lay_breadcrumbs() ?>
 	</div>
 	<ul>
-		<?= $helpers->link_to_controllers('home:/', 'catalogue', 'news', 'about') ?>
+		<?= $context->link_to_controllers('home:/', 'catalogue', 'news', 'about') ?>
 		<li id="empty"></li>
 	</ul>
 </div>
 
 <div id="top"><div id="bottom">
 <div id="airlock">
-<? if($helpers->in_admin()) echo self::render_partial('admin/navigation'); ?>
+<? if($context->in_admin()) echo self::render_partial('admin/navigation'); ?>
 
-<?= CONTENT ?>
+<?= $context->yield() ?>
 </div>
 </div></div>
 

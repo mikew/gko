@@ -1,8 +1,8 @@
 <ul>
-	<li><strong><?= $helpers->link_to('Add a New Post', 'new_admin/post') ?></strong></li>
+	<li><strong><?= $context->link_to('Add a New Post', 'new_admin/post') ?></strong></li>
 <?php
-foreach($__posts AS $post) {
-	echo $helpers->tag('li', '', $helpers->link_to($post->title, array('edit_admin/post', array('id' => $post->key))));
+foreach($context->posts AS $post) {
+	echo $context->tag('li', '', $context->link_to($post->title, array('edit_admin/post', array('id' => $post->key))));
 }
 ?>
 </ul>

@@ -1,16 +1,16 @@
 <?= self::render_partial('promo') ?>
 
-<?= $helpers->start_em('whatsnew') ?>
+<?= $context->start_em('whatsnew') ?>
 <div class="kdegames">
 <h2>What's new in KDE Games?</h2>
 <ul>
 <?php
-for($i = 0; $i < $__latest->count(); $i++) {
-	$item = $__latest[$i];
+for($i = 0; $i < $context->latest->count(); $i++) {
+	$item = $context->latest[$i];
 ?>
 <li>
-	<?= $helpers->link_to_post($item) ?>
-	<span>| <?= $helpers->time_distance_in_words($item->created_at) ?></span>
+	<?= $context->link_to_post($item) ?>
+	<span>| <?= $context->time_distance_in_words($item->created_at) ?></span>
 </li>
 <?php
 }
@@ -23,11 +23,11 @@ for($i = 0; $i < $__latest->count(); $i++) {
 <ul>
 <?php
 for($i = 0; $i < 5; $i++) {
-	$item = $__kde_feed->channel->item[$i];
+	$item = $context->kde_feed->channel->item[$i];
 ?>
 <li>
 	<a href="<?= $item->link ?>"><?= $item->title ?></a>
-	<span>| <?= $helpers->time_distance_in_words($item->pubDate) ?></span>
+	<span>| <?= $context->time_distance_in_words($item->pubDate) ?></span>
 </li>
 <?php
 }
@@ -35,4 +35,4 @@ for($i = 0; $i < 5; $i++) {
 </ul>
 </div>
 <br class="clear" />
-<?= $helpers->end_em() ?>
+<?= $context->end_em() ?>
