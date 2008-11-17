@@ -16,7 +16,7 @@ abstract class BasePosts extends Doctrine_Record
   public function setUp()
   {
     $timestampable0 = new Doctrine_Template_Timestampable();
-    $sluggable0 = new Doctrine_Template_Sluggable(array('fields' => array(0 => 'title'), 'alias' => 'key', 'indexName' => 'news_slug'));
+    $sluggable0 = new Doctrine_Template_Sluggable(array('fields' => array(0 => 'title'), 'alias' => 'key', 'indexName' => 'posts_slug'));
     $this->actAs($timestampable0);
     $this->actAs($sluggable0);
   }

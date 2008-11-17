@@ -4,7 +4,7 @@ Posts:
         Sluggable:
             fields: [title]
             alias: key
-            indexName: news_slug
+            indexName: posts_slug
     columns:
         title: varchar(255)
         body: text
