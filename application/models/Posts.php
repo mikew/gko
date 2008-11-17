@@ -5,5 +5,7 @@
  */
 class Posts extends BasePosts
 {
-
+	public function preSave() {
+		$this->body_markdown = Markdown($this->body);
+	}
 }

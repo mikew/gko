@@ -8,3 +8,4 @@ Posts:
     columns:
         title: varchar(255)
         body: text
+        body_markdown: text
