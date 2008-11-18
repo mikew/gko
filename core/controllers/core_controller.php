@@ -3,12 +3,9 @@ class CoreController {
 	private $content = '';
 	private static $_before_filters = array();
 	private static $_after_filters = array();
-	public $before_filters = array();
-	public $after_filters = array();
-	// private $filters = array(
-	// 	'before' => array(),
-	// 	'after' => array()
-	// );
+	protected $before_filters = array();
+	protected $after_filters = array();
+	protected $action_to_render;
 	protected $layout = 'application';
 	
 	protected function application_setup() {}
@@ -23,17 +20,15 @@ class CoreController {
 	}
 	
 	final public function render() {
+		$this->action_to_render = ACTION;
 		$content = $this->{ACTION}();
 
 		$this->setup_for_mime();
 		CoreMime::set_headers();
-		Coreview::initialize();
-		// CoreHelper::register();
 		
-		$this->content = empty($content) ? CoreView::render(ACTION) : $content ;
-		// define('CONTENT', $this->content);
+		$this->content = empty($content) ? CoreView::render($this->action_to_render) : $content ;
 
-		echo $this->layout === false ? CONTENT : CoreView::render("layouts/{$this->layout}");
+		echo $this->layout === false ? $this->content : CoreView::render("layouts/{$this->layout}");
 	}
 	
 	final public function content_for_layout() {
