@@ -1,11 +1,10 @@
 <?php
 class ApplicationHelper extends CoreHelper {
 	public static function write_title() {
-		return implode(' - ', self::$locals->title);
+		return implode(' - ', CoreContext::get('title'));
 	}
 	
 	public static function start_em($id = '') {
-		// <div class="em" id="whatsnew"><div class="top"><div class="right"><div class="bottom"><div class="left">
 		$divs = '<div class="em"';
 		if(!empty($id))
 			$divs .= ' id="' . $id . '"';
@@ -44,7 +43,7 @@ class ApplicationHelper extends CoreHelper {
 			$url = empty($parts[1]) ? '/' . $controller : $parts[1];
 			
 			$attributes = array('id' => $controller);
-			if($controller == self::$locals->selected_nav)
+			if($controller == CoreContext::get('selected_nav'))
 				$attributes['class'] = 'selected';
 			
 			$generated .= CoreHelper::instance()->tag('li', $attributes, CoreHelper::instance()->link_to(Inflector::humanize($controller), $url)) . "\n";
@@ -60,7 +59,7 @@ class ApplicationHelper extends CoreHelper {
 		
 		for($i = 0; $i < count($parts); $i++) {
 			$key = $parts[$i];
-			$human = empty(self::$locals->breadcrumbs[$key]) ? Inflector::titleize($key) : self::$locals->breadcrumbs[$key];
+			$human = empty(CoreContext::instance()->breadcrumbs[$key]) ? Inflector::titleize($key) : CoreContext::instance()->breadcrumbs[$key] ;
 			
 			if($i == count($parts) - 1)
 				$human = CoreHelper::instance()->tag('span', '', $human);
