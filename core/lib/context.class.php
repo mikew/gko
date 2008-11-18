@@ -1,5 +1,6 @@
 <?php
 class CoreContext {
+	private static $from_controller = array();
 	private $controller;
 	
 	static public function instance() {
@@ -14,14 +15,25 @@ class CoreContext {
 	public function __construct() {
 		$this->controller = $GLOBALS['controller'];
 		foreach($this->controller AS $key => $value) {
-			$this->{$key} = $value;
+			self::$from_controller[$key] = $value;
 		}
 		
 		CoreHelper::instance();
 	}
 	
-	static public function get($key) {
+	public function __get($v) {
+		return self::$from_controller[$v];
+	}
+	public static function get($key) {
 		return self::instance()->{$key};
+	}
+	
+	public function __isset($v) {
+		return isset(self::$from_controller[$v]);
+	}
+		
+	public static function export() {
+		return self::$from_controller;
 	}
 	
 	final public function __call($method, $arguments) {

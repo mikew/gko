@@ -1,23 +1,10 @@
 <?php
 class CoreHelper {
-	public static $locals;
 	private static $mixed_in = array();
+	protected static $context;
 	
-	// final public static function construct() {
-	// 	foreach($GLOBALS['controller'] AS $key => $value) {
-	// 		self::$locals->{$key} = $value;
-	// 	}
-	// }
 	final public function __construct() {
-		foreach($GLOBALS['controller'] AS $key => $value) {
-			self::$locals->{$key} = $value;
-		}
-		
 		self::mixin('CoreFormHelper', 'CoreTagHelper', 'CoreTimeHelper', 'CoreURLHelper', CONTROLLER . 'Helper');
-	}
-	
-	final public static function get_controller_variable($variable) {
-		return self::$locals->{$variable};
 	}
 	
 	final public static function mixin() {
@@ -30,7 +17,6 @@ class CoreHelper {
 		}
 	}
 		
-	// final public static function register() {
 	final public static function instance() {
 		static $instance;
 		if(!isset($instance)) {
@@ -38,11 +24,6 @@ class CoreHelper {
 		}
 		
 		return $instance;
-		// if(!class_exists('Helpers', false)) {
-		// 	$klass = CONTROLLER . 'Helper';
-		// 	eval('class Helpers extends ' . $klass . ' {}');
-		// 	Helpers::construct();
-		// }
 	}
 	
 	final public function __call($method, $arguments) {

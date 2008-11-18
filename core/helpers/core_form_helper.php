@@ -88,7 +88,7 @@ class CoreFormHelper {
 				break;
 			case 'data':
 			default:
-				return CoreHelper::get_controller_variable($object)->{$key};
+				return CoreContext::get($object)->{$key};
 				break;
 		}
 	}

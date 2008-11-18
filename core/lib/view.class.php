@@ -1,16 +1,6 @@
 <?php
 class CoreView {
-	protected static $locals = array();
-	
-	public static function initialize() {
-		foreach($GLOBALS['controller'] AS $key => $value) {
-			self::$locals[$key] = $value;
-		}
-	}
-	
 	protected static function find_file($file, $mime = '', $is_partial = false) {
-		$file = File::join($file);
-
 		$extension = CoreMime::extension($mime);
 		$file = self::interpret_file($file)->{$is_partial ? 'absolute_as_partial' : 'absolute'};
 		
@@ -20,6 +10,8 @@ class CoreView {
 	}
 	
 	protected static function interpret_file($examine) {
+		$examine = File::join($examine);
+		
 		if(substr($examine, 0, 1) != '/') {
 			if(strpos($examine, '/') === false)
 				$examine = File::join(String::underscore(CONTROLLER), $examine);
