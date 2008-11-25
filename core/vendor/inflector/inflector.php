@@ -188,7 +188,7 @@ class AkInflector
      */
     function conditionalPlural($numer_of_records, $word)
     {
-        return $numer_of_records > 1 ? AkInflector::pluralize($word) : $word;
+        return $numer_of_records === 1 ? $word : AkInflector::pluralize($word);
     }
     
     // }}}

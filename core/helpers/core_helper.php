@@ -1,7 +1,6 @@
 <?php
 class CoreHelper {
 	private static $mixed_in = array();
-	protected static $context;
 	
 	final public function __construct() {
 		self::mixin('CoreFormHelper', 'CoreTagHelper', 'CoreTimeHelper', 'CoreURLHelper', CONTROLLER . 'Helper');
@@ -15,6 +14,10 @@ class CoreHelper {
 				self::$mixed_in[$method] = $helper;
 			}
 		}
+	}
+	
+	final public function pluralize($count, $word) {
+		return $count . ' ' . Inflector::conditionalPlural($count, $word);
 	}
 		
 	final public static function instance() {
