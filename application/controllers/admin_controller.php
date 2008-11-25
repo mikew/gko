@@ -7,8 +7,7 @@ class AdminController extends ApplicationController {
 	}
 	
 	public static function setup($self) {
-		// array_push($self->title, 'Administration');
-		echo 'hello? ';
+		array_push($self->title, 'Administration');
 		$self->add_before_filter('require_auth');
 	}
 	
