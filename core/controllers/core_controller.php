@@ -8,12 +8,8 @@ class CoreController {
 	protected $action_to_render;
 	protected $layout = 'application';
 	
-	protected function application_setup() {}
-	protected function controller_setup() {}
-	
 	final public function run() {
-		$this->application_setup();
-		$this->controller_setup();
+		Core::cascade_method($this, 'setup', array($this));
 		$this->run_filters('before');
 		$this->render();
 		$this->run_filters('after');

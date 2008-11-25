@@ -6,8 +6,10 @@ class AdminController extends ApplicationController {
 		CoreRouter::redirect_to('admin/posts');
 	}
 	
-	public function controller_setup() {
-		$this->add_before_filter('require_auth');
+	public static function setup($self) {
+		// array_push($self->title, 'Administration');
+		echo 'hello? ';
+		$self->add_before_filter('require_auth');
 	}
 	
 	public function require_auth() {

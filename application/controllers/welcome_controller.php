@@ -6,8 +6,8 @@ class WelcomeController extends ApplicationController {
 	const DKO_TTL = 1800;
 	const DKO_URL = 'http://www.kde.org/dotkdeorg.rdf';
 	
-	protected function controller_setup() {
-		$this->selected_nav = 'home';
+	protected function setup($self) {
+		$self->selected_nav = 'home';
 	}
 	
 	public function index() {

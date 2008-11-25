@@ -1,48 +1,5 @@
 <?php
 final class Core {
-	// private $extensions = array();
-	// private $mimes = array();
-	// public $mime = 'html';
-	// public $status = 200;
-	// 
-	// public function __construct() {
-	// 	// $this->add_mime('html', '.phtml', 'application/xhtml+xml');
-	// 	$this->add_mime('html', '.phtml');
-	// 	$this->add_mime('markdown', '.markdown');
-	// 	$this->add_mime('mobile', '.mobile.phtml');
-	// 	// $this->add_mime('rss', '.rss', 'application/rss+xml');
-	// 	$this->add_mime('rss', '.rss.php', 'application/rss+xml');
-	// }
-	
-	// protected function add_mime($shorthand, $extension, $content_type = 'text/html') {
-	// 	$this->extensions[$shorthand] = $extension;
-	// 	$this->mimes[$shorthand] = $content_type;
-	// }
-	// 
-	// public function interpret_mime($mime = '') {
-	// 	$options = array_keys($this->mimes);
-	// 	return !empty($mime) && in_array($mime, $options) ? $mime : $this->mime;
-	// }
-	// 
-	// public function interpret_extension($mime = '') {
-	// 	return $this->extensions[$this->interpret_mime($mime)];
-	// }
-	// 
-	// public function find_template_file($file, $mime = '') {
-	// 	$file = Core::join_paths($file);
-	// 	
-	// 	$extension = $this->interpret_extension($mime);
-	// 	$file = substr($file, 0, 1) == '/' ? $file : File::join(APP_HOME, 'views', String::underscore(CONTROLLER), $file);
-	// 	$file .= substr($file, -strlen($extension)) == $extension ? '' : $extension;
-	// 
-	// 	return is_file($file) ? $file : false;
-	// }
-	// 
-	// public function set_headers() {
-	// 	header("HTTP/1.0 {$this->status}");
-	// 	header("Content-Type: {$this->mimes[$this->mime]}");
-	// }
-	
 	public static function join_paths() {
 		$args = func_get_args();
 		$args = self::interpret_options($args);
@@ -55,6 +12,41 @@ final class Core {
 		// "id=promo size=300x120" => { id => promo, width => 300, height=>120 }
 		// )
 		return is_array($args[0]) ? $args[0] : $args ;
+	}
+	
+	public static function router() {
+		return CoreRouter::instance();
+	}
+	
+	public static function context() {
+		return CoreContext::instance();
+	}
+	
+	public static function helpers() {
+		return CoreHelper::instance();
+	}
+	
+	public static function get_methods($of) {
+		return get_class_methods($of);
+	}
+	
+ 	public static function cascade_method($object, $method, $args = array()) {
+		$classes = class_parents($object);
+		array_unshift($classes, get_class($object));
+		$results = array();
+		foreach($classes AS $class) {
+			try {
+				$reflection = new ReflectionMethod($class, $method);
+				if($class === $reflection->getDeclaringClass()->getName()) {
+					call_user_func_array(array($class, $method), $args);
+				}
+			} catch(ReflectionException $e) {
+				// nothing to do. exception is thrown when the class doesn't
+				// have the method we're looking for, which is a good thing
+			}
+		}
+		
+		return $results;
 	}
 }
 

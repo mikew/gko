@@ -1,8 +1,8 @@
 <?php
 class PostsController extends ApplicationController {
-	public function controller_setup() {
-		array_push($this->title, 'News');
-		$this->selected_nav = 'news';
+	public static function setup($self) {
+		array_push($self->title, 'News');
+		$self->selected_nav = 'news';
 	}
 	
 	public function index() {
