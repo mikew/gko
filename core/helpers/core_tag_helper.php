@@ -1,10 +1,12 @@
 <?php
 class CoreTagHelper {
-	public static function image_tag($image) {
-		return self::simple_tag('img', array(
+	public static function image_tag($image, $options = array()) {
+		$options = CoreHelper::instance()->merge_attributes(array(
 			'src' => CoreHelper::instance()->url_for('/images/' . $image),
 			'alt' => $image
-		));
+		), $options);
+		
+		return self::simple_tag('img', $options);
 	}
 	
 	public static function javascript_include_tag() {
@@ -68,16 +70,41 @@ class CoreTagHelper {
 		return $constructed;
 	}
 	
+	public static function merge_attributes() {
+		$sets = func_get_args();
+		$attributes = array();
+		
+		foreach($sets AS $options) {
+			$attributes = (array) $attributes + (array) $options;
+		}
+		
+		return self::parse_attributes($attributes);
+	}
+	
 	public static function parse_attributes($attributes, $wants_joined = false) {
 		if(!is_array($attributes)) {
 			// TODO: this is just for now
 			$attributes = array();
 		}
 		
+		foreach($attributes AS $key => $value) {
+			if($key == 'confirm') {
+				$attributes['onclick'] = "return confirm('" . $value . "')";
+				unset($attributes[$key]);
+			}
+			if($key == 'multipart') {
+				$attributes['enctype'] = 'multipart/form-data';
+				unset($attributes[$key]);
+			}
+			if($value === true) {
+				$attributes[$key] = $key;
+			}
+		}
+		
 		if($wants_joined) {
 			return self::join_attributes($attributes);
 		} else {
-			ksort($attributes);
+			// ksort($attributes);
 			return $attributes;
 		}
 	}
