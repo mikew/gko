@@ -8,7 +8,7 @@ abstract class BasePosts extends Doctrine_Record
   public function setTableDefinition()
   {
     $this->setTableName('posts');
-    $this->hasColumn('title', 'varchar', 255, array('type' => 'varchar', 'length' => '255'));
+    $this->hasColumn('title', 'varchar', 255, array('type' => 'varchar', 'length' => '255', 'notblank' => true));
     $this->hasColumn('body', 'text', null, array('type' => 'text'));
     $this->hasColumn('body_markdown', 'text', null, array('type' => 'text'));
   }

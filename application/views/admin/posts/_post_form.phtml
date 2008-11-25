@@ -1,3 +1,5 @@
+<?= $context->errors_for('post') ?>
+
 <?= $context->form_tag_for(array('admin', $context->post, 'key')) ?>
 	<p>
 		<label for="post_title">Title</label>
@@ -11,3 +13,5 @@
 		<?= $context->submit_button() ?> or <?= $context->link_to('Cancel', 'admin/posts') ?>
 	</p>
 <?= $context->end_form_tag() ?>
+
+<?= $context->button_to('Delete', array('delete_admin/post', array('id' => $context->post->key)), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?>
