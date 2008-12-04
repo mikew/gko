@@ -31,10 +31,10 @@ final class Core {
 	}
 	
  	public static function cascade_method($object, $method, $args = array()) {
-		$classes = class_parents($object);
+		$classes = array_values(class_parents($object));
 		array_unshift($classes, get_class($object));
 		$results = array();
-		foreach($classes AS $class) {
+		foreach(array_reverse($classes) AS $class) {
 			try {
 				$reflection = new ReflectionMethod($class, $method);
 				if($class === $reflection->getDeclaringClass()->getName()) {
@@ -47,6 +47,42 @@ final class Core {
 		}
 		
 		return $results;
+	}
+	
+	public static function autoload($class) {
+		$klass = strtolower($class);
+
+		if($klass == 'corecontroller') {
+			require_once File::join(CORE_HOME, 'controllers', 'core_controller.php');
+		} elseif($klass == 'coreview') {
+			require_once File::join(CORE_LIB_HOME, 'view.class.php');
+		} elseif($klass == 'corecontext') {
+			require_once File::join(CORE_LIB_HOME, 'context.class.php');
+		} elseif($klass == 'coreflash') {
+			require_once File::join(CORE_LIB_HOME, 'flash.class.php');
+		} elseif(substr($klass, -10) == 'controller') {
+			require_once File::join(APP_HOME, 'controllers', String::underscore($class) . '.php');
+		} elseif(substr($klass, 0, 4) == 'core' && substr($klass, -6) == 'helper') {
+			require_once File::join(CORE_HOME, 'helpers', String::underscore($class) . '.php');
+		} elseif(substr($klass, -6) == 'helper') {
+			require_once File::join(APP_HOME, 'helpers', String::underscore($class) . '.php');
+		} elseif(substr($klass, 0, 8) == 'doctrine') {
+			Doctrine::autoload($class);
+		} elseif(substr($klass, 0, 4) == 'base') {
+			require_once File::join(APP_HOME, 'models', 'generated', $class . '.php');
+		} elseif(substr($klass, 0, 12) == 'horde_routes') {
+			$parts = explode('_', $class);
+			require_once File::join(CORE_VENDOR_HOME, 'routes', $parts[2] . '.php');
+		}
+		else {
+			$model = File::join(APP_HOME, 'models', $class . '.php');
+			$lib = File::join(LIB_HOME, String::underscore($class) . '.php');
+
+			if(File::exists($model))
+				require_once $model;
+			elseif(File::exists($lib))
+				require_once $lib;
+		}
 	}
 }
 
