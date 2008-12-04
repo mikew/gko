@@ -22,7 +22,9 @@
 
 <div id="top"><div id="bottom">
 <div id="airlock">
-<? if($context->in_admin()) echo self::render_partial('admin/navigation'); ?>
+	<? if(isset($context->sidebar)) echo self::render_partial("sidebars/{$context->sidebar}") ?>
+	<? if($context->in_admin()) echo self::render_partial('admin/navigation'); ?>
+	<?= $context->write_flash('success') ?>
 
 <?= $context->yield() ?>
 </div>

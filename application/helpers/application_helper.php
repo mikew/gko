@@ -73,4 +73,19 @@ class ApplicationHelper extends CoreHelper {
 	public static function in_admin() {
 		return !(strpos(CoreHelper::instance()->url_for(), '/admin/') === FALSE);
 	}
+	
+	public static function field_summary($summary) {
+		return CoreHelper::instance()->tag('span', array(
+			'class' => 'summary'
+		), $summary);
+	}
+	
+	public static function write_flash($for) {
+		if(isset(CoreContext::get('flash')->{$for})) {
+			return self::instance()->tag('div', array(
+				'id' => "flash_{$for}",
+				'class' => 'flash'
+			), self::instance()->tag('strong', '', Inflector::titleize($for)) . CoreContext::get('flash')->{$for});
+		}
+	}
 }

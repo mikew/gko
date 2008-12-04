@@ -12,7 +12,7 @@ class CoreTagHelper {
 	public static function javascript_include_tag() {
 		$files = func_get_args();
 		if(empty($files))
-			$files = array('prototype', 'effects');
+			$files = array('prototype', 'effects', 'application');
 		
 		$html = '';
 		foreach($files AS $file) {
