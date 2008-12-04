@@ -1,4 +1,5 @@
 <?php
+session_start();
 $start = microtime(true);
 
 require_once '../core/initialize.php';

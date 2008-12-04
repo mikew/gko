@@ -50,6 +50,8 @@ class CoreRouter {
 		$url = self::url_for($options);
 		CoreMime::reset_headers();
 		CoreMime::set_header('Location', $url);
+		CoreMime::set_headers();
+		exit;
 	}
 	
 	static public function url_for($options = array()) {

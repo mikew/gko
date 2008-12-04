@@ -1,5 +1,6 @@
 <?php
 class CoreController {
+	public $flash;
 	private $content = '';
 	private static $_before_filters = array();
 	private static $_after_filters = array();
@@ -10,8 +11,10 @@ class CoreController {
 	
 	final public function run() {
 		Core::cascade_method($this, 'setup', array($this));
+		$this->flash = new CoreFlash();
 		$this->run_filters('before');
 		$this->render();
+		$this->flash->reset();
 		$this->run_filters('after');
 	}
 	
