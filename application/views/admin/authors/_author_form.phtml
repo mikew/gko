@@ -1,0 +1,18 @@
+<?= $context->form_tag_for(array('admin', $context->author, 'handle'), null, &$f) ?>
+	<p>
+		<?= $f->label('name') ?>
+		<?= $f->text_field('name') ?>
+	</p>
+	<p>
+		<?= $f->label('handle') ?>
+		<?= $f->text_field('handle') ?>
+	</p>
+	<p>
+		<?= $f->label('password') ?>
+		<?= $f->password_field('password') ?>
+	</p>
+	<p>
+		<?= $f->label('password_confirmation', 'Confirm') ?>
+		<?= $f->confirm_password_field('password') ?>
+	</p>
+<?= $context->end_form_tag() ?>

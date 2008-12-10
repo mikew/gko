@@ -1,0 +1,6 @@
+<ul>
+	<li><?= $context->link_to('Add a new Author', 'new_admin/author') ?></li>
+<? foreach($context->authors AS $author) { ?>
+	<?= $context->tag('li', '', $context->link_to($author->name, array('edit_admin/author', array('id' => $author->handle)))) ?>
+<? } ?>
+</ul>
