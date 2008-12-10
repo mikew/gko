@@ -1,6 +1,7 @@
 <?php
 class AboutController extends ApplicationController {
 	public function setup($self) {
+		$self->sidebar = 'about';
 		array_push($self->title, 'About');
 	}
 	
