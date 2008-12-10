@@ -1,5 +1,7 @@
 <?php
 class CoreTagHelper {
+	protected static $cached_attributes = array();
+	
 	public static function image_tag($image, $options = array()) {
 		$options = CoreHelper::instance()->merge_attributes(array(
 			'src' => CoreHelper::instance()->url_for('/images/' . $image),
@@ -72,12 +74,13 @@ class CoreTagHelper {
 	
 	public static function merge_attributes() {
 		$sets = func_get_args();
+		// $attributes = call_user_func_array('array_merge', $sets);
+		
 		$attributes = array();
-		
 		foreach($sets AS $options) {
-			$attributes = (array) $attributes + (array) $options;
+			(array) $attributes += (array) $options;
 		}
-		
+
 		return self::parse_attributes($attributes);
 	}
 	
@@ -87,36 +90,62 @@ class CoreTagHelper {
 			$attributes = array();
 		}
 		
-		foreach($attributes AS $key => $value) {
-			if($key == 'confirm') {
-				$attributes['onclick'] = "return confirm('" . $value . "')";
-				unset($attributes[$key]);
+		$cache_key = self::generate_cache_key($attributes);
+		if(isset(self::$cached_attributes[$cache_key])) {
+			$attributes = self::$cached_attributes[$cache_key];
+		} else {
+			foreach($attributes AS $key => $value) {
+				if($key == 'confirm') {
+					$attributes['onclick'] = "return confirm('" . $value . "')";
+					unset($attributes[$key]);
+				}
+				if($key == 'multipart') {
+					$attributes['enctype'] = 'multipart/form-data';
+					unset($attributes[$key]);
+				}
+				if($value === true) {
+					$attributes[$key] = $key;
+				}
 			}
-			if($key == 'multipart') {
-				$attributes['enctype'] = 'multipart/form-data';
-				unset($attributes[$key]);
-			}
-			if($value === true) {
-				$attributes[$key] = $key;
-			}
+			
+			self::$cached_attributes[$cache_key] = $attributes;
 		}
-		
+
 		if($wants_joined) {
 			return self::join_attributes($attributes);
 		} else {
-			// ksort($attributes);
 			return $attributes;
 		}
 	}
 	
 	public static function join_attributes($attributes) {
-		// $combined = $with_space ? ' ' : '' ;
 		ksort($attributes);
 		$combined = '';
+		
 		foreach($attributes AS $key => $value) {
 			$combined .= ' ' . $key . '="' . $value . '"';
 		}
 		
 		return $combined;
+	}
+	
+	final private static function generate_cache_key($array) {
+		$cache_key = '';
+		foreach($array AS $key => $value) {
+			$cache_key .= $key . $value;
+		}
+		
+		return $cache_key;
+	}
+	
+	protected static function find_or_cache_attributes($attributes) {
+		$serialized = serialize($attributes);
+		$key = md5($serialized);
+		if(isset(self::$cached_attributes[$key])) {
+			return unserialize(self::$cached_attributes[$key]);
+		} else {
+			self::$cached_attributes[$key] = $serialized;
+			return $attributes;
+		}
 	}
 }
