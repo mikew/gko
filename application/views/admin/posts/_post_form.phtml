@@ -1,17 +1,17 @@
 <?= $context->errors_for('post') ?>
 
-<?= $context->form_tag_for(array('admin', $context->post, 'key')) ?>
+<?= $context->form_tag_for(array('admin', $context->post, 'key'), null, &$f) ?>
 	<p>
-		<label for="post_title">Title</label>
-		<?= $context->text_field('post', 'title') ?>
+		<?= $f->label('title') ?>
+		<?= $f->text_field('title') ?>
 	</p>
 	<p>
-		<label for="post_body">Body</label>
-		<?= $context->text_area('post', 'body') ?>
+		<?= $f->label('body')?>
+		<?= $f->text_area('body') ?>
 	</p>
 	<p>
 		<?= $context->submit_button() ?> or <?= $context->link_to('Cancel', 'admin/posts') ?>
 	</p>
 <?= $context->end_form_tag() ?>
 
-<?= $context->button_to('Delete', array('delete_admin/post', array('id' => $context->post->key)), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?>
+<? if($context->post->exists()) echo $context->button_to('Delete', array('delete_admin/post', array('id' => $context->post->key)), array('method' => 'delete', 'confirm' => 'Are you sure?')); ?>

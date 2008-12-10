@@ -1,10 +1,10 @@
 <?= $context->form_tag() ?>
 <p>
-	<label for="comment_name">Your Name</label>
+	<?= $context->label('comment', 'name', 'Your Name') ?>
 	<?= $context->text_field('comment', 'name') ?>
 </p>
 <p>
-	<label for="comment_body">Comment</label>
+	<?= $context->label('comment', 'body', 'Comment') ?>
 	<?= $context->text_area('comment', 'body') ?>
 </p>
 <p>
