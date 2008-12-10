@@ -106,3 +106,4 @@ define('SQL_PATH', Core::join_paths(FW_HOME, 'db', 'sql'));
 require_once Core::join_paths(CORE_HOME, 'extensions', 'propertyobject.class.php');
 require_once Core::join_paths(CORE_HOME, 'extensions', 'file.class.php');
 require_once Core::join_paths(CORE_HOME, 'extensions', 'string.class.php');
+require_once Core::join_paths(CORE_HOME, 'extensions', 'time.class.php');

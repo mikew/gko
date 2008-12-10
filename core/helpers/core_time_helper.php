@@ -22,7 +22,7 @@ class CoreTimeHelper {
 		
 		$timestamp = self::parse_datetime($timestamp);
 		// $basetime = $basetime === false ? time() : self::parse_datetime($basetime);
-		$basetime = time();
+		$basetime = Time::now();
 		$difference = $timestamp - $basetime;
 		$absolute = abs($difference);
 		
