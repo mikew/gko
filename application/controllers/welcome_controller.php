@@ -28,7 +28,7 @@ class WelcomeController extends ApplicationController {
 	
 	protected function update_dko_cache() {
 		$dko_cache = File::join(TMP_HOME, 'dko.rss');
-		if(!is_file($dko_cache) || filemtime($dko_cache) < (time() - self::DKO_TTL)) {
+		if(!is_file($dko_cache) || filemtime($dko_cache) < (Time::now() - self::DKO_TTL)) {
 			$feed = new SimpleXMLElement(self::DKO_URL, null, TRUE);
 			$feed->asXML($dko_cache);
 		}
