@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Table.php 4894 2008-09-08 21:45:43Z jwage $
+ *  $Id: Table.php 5280 2008-12-08 23:18:33Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -28,7 +28,7 @@
  * @package     Doctrine
  * @subpackage  Table
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version     $Revision: 4894 $
+ * @version     $Revision: 5280 $
  * @link        www.phpdoctrine.org
  * @since       1.0
  */
@@ -647,8 +647,8 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
                                    'onDelete' => $fk['onDelete']);
 
                 if ($relation instanceof Doctrine_Relation_LocalKey) {
-                    $def = array('local'        => $relation->getLocal(),
-                                 'foreign'      => $relation->getForeign(),
+                    $def = array('local'        => $relation->getLocalColumnName(),
+                                 'foreign'      => $relation->getForeignColumnName(),
                                  'foreignTable' => $relation->getTable()->getTableName());
 
                     if (($key = array_search($def, $options['foreignKeys'])) === false) {
@@ -1203,7 +1203,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
         if (strpos($queryKey, '/') !== false) {
             $e = explode('/', $queryKey);
             
-            return $queryRegistry->get($e[0], $e[1]);
+            return $queryRegistry->get($e[1], $e[0]);
         }
 
         return $queryRegistry->get($queryKey, $this->getComponentName());
@@ -1232,10 +1232,18 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
             return false;
         }
 
+        $ns = $this->getComponentName();
+        $m = $name;
+        
+        // Check for possible cross-access
+        if ( ! is_array($name) && strpos($name, '/') !== false) {
+            list($ns, $m) = explode('/', $name);
+        }
+
         // Define query to be used
         if (
-            ! is_array($name) &&
-            Doctrine_Manager::getInstance()->getQueryRegistry()->has($name, $this->getComponentName())
+            ! is_array($name) && 
+            Doctrine_Manager::getInstance()->getQueryRegistry()->has($m, $ns)
         ) {
             // We're dealing with a named query
             $q = $this->createNamedQuery($name);
@@ -1273,7 +1281,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      * findAll
      * returns a collection of records
      *
-     * @param int $hydrationMode        Doctrine::FETCH_ARRAY or Doctrine::FETCH_RECORD
+     * @param int $hydrationMode        Doctrine::HYDRATE_ARRAY or Doctrine::HYDRATE_RECORD
      * @return Doctrine_Collection
      */
     public function findAll($hydrationMode = null)
@@ -1289,7 +1297,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      *
      * @param string $dql               DQL after WHERE clause
      * @param array $params             query parameters
-     * @param int $hydrationMode        Doctrine::FETCH_ARRAY or Doctrine::FETCH_RECORD
+     * @param int $hydrationMode        Doctrine::HYDRATE_ARRAY or Doctrine::HYDRATE_RECORD
      * @return Doctrine_Collection
      *
      * @todo This actually takes DQL, not SQL, but it requires column names
@@ -1308,7 +1316,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      *
      * @param string $dql               DQL after WHERE clause
      * @param array $params             query parameters
-     * @param int $hydrationMode        Doctrine::FETCH_ARRAY or Doctrine::FETCH_RECORD
+     * @param int $hydrationMode        Doctrine::HYDRATE_ARRAY or Doctrine::HYDRATE_RECORD
      * @return Doctrine_Collection
      */
     public function findByDql($dql, $params = array(), $hydrationMode = null)
@@ -1345,18 +1353,10 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      */
     protected function findOneBy($fieldName, $value, $hydrationMode = null)
     {
-        $results = $this->createQuery('dctrn_find')
-                        ->where('dctrn_find.' . $fieldName . ' = ?',array($value))
-                        ->limit(1)
-                        ->execute(array(), $hydrationMode);
-
-        if (is_array($results) && isset($results[0])) {
-            return $results[0];
-        } else if ($results instanceof Doctrine_Collection && $results->count() > 0) {
-            return $results->getFirst();
-        } else {
-            return false;
-        }
+        return $this->createQuery('dctrn_find')
+                    ->where('dctrn_find.' . $fieldName . ' = ?', array($value))
+                    ->limit(1)
+                    ->fetchOne(array(), $hydrationMode);
     }
 
     /**
@@ -1588,8 +1588,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      */
     public function count()
     {
-        $a = $this->_conn->execute('SELECT COUNT(1) FROM ' . $this->_options['tableName'])->fetch(Doctrine::FETCH_NUM);
-        return current($a);
+        return $this->createQuery()->count();
     }
 
     /**
@@ -2134,7 +2133,8 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
                     || $name == 'scale'
                     || $name == 'type'
                     || $name == 'length'
-                    || $name == 'fixed') {
+                    || $name == 'fixed'
+                    || $name == 'comment') {
                 continue;
             }
             if ($name == 'notnull' && isset($this->_columns[$columnName]['autoincrement'])
@@ -2278,7 +2278,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
         // Forward the method on to the record instance and see if it has anything or one of its behaviors
         try {
             return call_user_func_array(array($this->getRecordInstance(), $method . 'TableProxy'), $arguments);
-        } catch (Exception $e) {}
+        } catch (Doctrine_Record_UnknownPropertyException $e) {}
 
         throw new Doctrine_Table_Exception(sprintf('Unknown method %s::%s', get_class($this), $method));
     }

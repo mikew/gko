@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Doctrine.php 4905 2008-09-09 19:35:30Z pookey $
+ *  $Id: Doctrine.php 5269 2008-12-04 23:50:28Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,14 +29,14 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 4905 $
+ * @version     $Revision: 5269 $
  */
 final class Doctrine
 {
     /**
      * VERSION
      */
-    const VERSION                   = '1.0.2';
+    const VERSION                   = '1.0.5';
 
     /**
      * ERROR CONSTANTS
@@ -536,6 +536,11 @@ final class Doctrine
                                     }
                                 }
                             }
+                            $previouslyLoaded = array_keys(self::$_loadedModelFiles, $file->getPathName());
+                            if ( ! empty($previouslyLoaded)) {
+                                $previouslyLoaded = array_combine(array_values($previouslyLoaded), array_values($previouslyLoaded));
+                                $loadedModels = array_merge($loadedModels, $previouslyLoaded);
+                            }
                         }
                     }
                 }
@@ -768,11 +773,12 @@ final class Doctrine
      */
     public static function generateSqlFromModels($directory = null)
     {
-        $sql = Doctrine_Manager::connection()->export->exportSql($directory);
+        $conn = Doctrine_Manager::connection();
+        $sql = $conn->export->exportSql($directory);
 
         $build = '';
         foreach ($sql as $query) {
-            $build .= $query.";\n";
+            $build .= $query.$conn->sql_file_delimiter;
         }
 
         return $build;
@@ -840,11 +846,7 @@ final class Doctrine
     {
         $data = new Doctrine_Data();
 
-        if ( ! $append) {
-            $data->purge();
-        }
-
-        return $data->importData($yamlPath, 'yml');
+        return $data->importData($yamlPath, 'yml', array(), $append);
     }
 
     /**

@@ -128,7 +128,15 @@ abstract class Doctrine_Record_Abstract extends Doctrine_Access
     public function setSubclasses($map)
     {
         if (isset($map[get_class($this)])) {
-            $this->_table->setOption('inheritanceMap', $map[get_class($this)]);
+            // fix for #1621 
+            $mapFieldNames = $map[get_class($this)]; 
+            $mapColumnNames = array(); 
+
+            foreach ($mapFieldNames as $fieldName => $val) { 
+                $mapColumnNames[$this->getTable()->getColumnName($fieldName)] = $val; 
+            }
+ 
+            $this->_table->setOption('inheritanceMap', $mapColumnNames);
             return;
         }
         $this->_table->setOption('subclasses', array_keys($map));
@@ -280,13 +288,14 @@ abstract class Doctrine_Record_Abstract extends Doctrine_Access
         }
 
         if ( ! ($tpl instanceof Doctrine_Template)) {
-            throw new Doctrine_Record_Exception('Loaded behavior class is not an istance of Doctrine_Template.');
+            throw new Doctrine_Record_Exception('Loaded behavior class is not an instance of Doctrine_Template.');
         }
 
         $className = get_class($tpl);
 
         $this->_table->addTemplate($className, $tpl);
 
+        $tpl->setInvoker($this);
         $tpl->setTable($this->_table);
         $tpl->setUp();
         $tpl->setTableDefinition();

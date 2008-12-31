@@ -103,7 +103,8 @@ class Doctrine_Import_Schema
                                                           'sequence',
                                                           'protected',
                                                           'zerofill',
-                                                          'owner'),
+                                                          'owner',
+                                                          'extra'),
 
                                    'relation'   =>  array('key',
                                                           'class',
@@ -261,6 +262,12 @@ class Doctrine_Import_Schema
         
         $array = $this->buildSchema($schema, $format);
 
+        if (count($array) == 0) { 
+            throw new Doctrine_Import_Exception(
+                sprintf('No ' . $format . ' schema found in ' . implode(", ", $schema))
+            ); 
+        }
+
         foreach ($array as $name => $definition) {
             if ( ! empty($models) && !in_array($definition['className'], $models)) {
                 continue;
@@ -329,6 +336,7 @@ class Doctrine_Import_Schema
         $build = array();
 
         foreach ($array as $className => $table) {
+            $table = (array) $table;
             $this->_validateSchemaElement('root', array_keys($table), $className);
 
             $columns = array();
@@ -376,7 +384,12 @@ class Doctrine_Import_Schema
                     $e = explode('(', $field['type']);
                     if (isset($e[0]) && isset($e[1])) {
                         $colDesc['type'] = $e[0];
-                        $colDesc['length'] = substr($e[1], 0, strlen($e[1]) - 1);
+                        $value = substr($e[1], 0, strlen($e[1]) - 1);
+                        $e = explode(',', $value);
+                        $colDesc['length'] = $e[0];
+                        if (isset($e[1]) && $e[1]) {
+                            $colDesc['scale'] = $e[1];
+                        }
                     } else {
                         $colDesc['type'] = isset($field['type']) ? (string) $field['type']:null;
                         $colDesc['length'] = isset($field['length']) ? (int) $field['length']:null;
@@ -459,10 +472,11 @@ class Doctrine_Import_Schema
                     if ( ! isset($array[$className]['inheritance']['keyValue'])) {
                         $array[$className]['inheritance']['keyValue'] = $className;
                     }
-                    
+
+                    $parent = $this->_findBaseSuperClass($array, $definition['className']);
                     // Add the keyType column to the parent if a definition does not already exist
-                    if ( ! isset($array[$array[$className]['inheritance']['extends']]['columns'][$array[$className]['inheritance']['keyField']])) {
-                        $array[$definition['inheritance']['extends']]['columns'][$array[$className]['inheritance']['keyField']] = array('name' => $array[$className]['inheritance']['keyField'], 'type' => 'string', 'length' => 255);
+                    if ( ! isset($array[$parent]['columns'][$array[$className]['inheritance']['keyField']])) {
+                        $array[$parent]['columns'][$array[$className]['inheritance']['keyField']] = array('name' => $array[$className]['inheritance']['keyField'], 'type' => 'string', 'length' => 255);
                     }
                 }
             }
@@ -470,15 +484,21 @@ class Doctrine_Import_Schema
 
         // Array of the array keys to move to the parent, and the value to default the child definition to
         // after moving it. Will also populate the subclasses array for the inheritance parent
-        $moves = array('columns' => array());
-        
+        $moves = array('columns' => array(),
+                       'indexes' => array(),
+                       'attributes' => array(),
+                       'options' => array(),
+                       'checks' => array());
+
         foreach ($array as $className => $definition) {
             // Move any definitions on the schema to the parent
             if (isset($definition['inheritance']['extends']) && isset($definition['inheritance']['type']) && ($definition['inheritance']['type'] == 'simple' || $definition['inheritance']['type'] == 'column_aggregation')) {
                 $parent = $this->_findBaseSuperClass($array, $definition['className']);
                 foreach ($moves as $move => $resetValue) {
-                    $array[$parent][$move] = Doctrine_Lib::arrayDeepMerge($array[$parent][$move], $definition[$move]);
-                    $array[$definition['className']][$move] = $resetValue;
+                    if (isset($array[$parent][$move]) && isset($definition[$move])) {
+                        $array[$parent][$move] = Doctrine_Lib::arrayDeepMerge($array[$parent][$move], $definition[$move]);
+                        $array[$definition['className']][$move] = $resetValue;
+                    }
                 }
 
                 // Populate the parents subclasses

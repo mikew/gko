@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Export.php 4804 2008-08-25 18:42:53Z subzero2000 $
+ *  $Id: Export.php 5102 2008-10-16 11:03:01Z adrive $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,7 +29,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 4804 $
+ * @version     $Revision: 5102 $
  */
 class Doctrine_Export extends Doctrine_Connection_Module
 {
@@ -242,12 +242,17 @@ class Doctrine_Export extends Doctrine_Connection_Module
 
 
         if (isset($options['primary']) && ! empty($options['primary'])) {
-            $queryFields .= ', PRIMARY KEY(' . implode(', ', array_values($options['primary'])) . ')';
+            $primaryKeys = array_map(array($this->conn, 'quoteIdentifier'), array_values($options['primary']));
+            $queryFields .= ', PRIMARY KEY(' . implode(', ', $primaryKeys) . ')';
         }
 
         if (isset($options['indexes']) && ! empty($options['indexes'])) {
             foreach($options['indexes'] as $index => $definition) {
-                $queryFields .= ', ' . $this->getIndexDeclaration($index, $definition);
+                $indexDeclaration = $this->getIndexDeclaration($index, $definition);
+                // append only created index declarations
+                if ( ! is_null($indexDeclaration)) {
+                    $queryFields .= ', '.$indexDeclaration;
+                } 
             }
         }
 
@@ -1106,7 +1111,8 @@ class Doctrine_Export extends Doctrine_Connection_Module
                      'create_tables'    => array(),
                      'create_sequences' => array(),
                      'create_indexes'   => array(),
-                     'alters'           => array()
+                     'alters'           => array(),
+                     'create_triggers'  => array(),
                  );
              }
 
@@ -1139,12 +1145,21 @@ class Doctrine_Export extends Doctrine_Connection_Module
                      continue;
                  }
 
-                 // If alter table statement
-                 if (substr($query, 0, strlen('ALTER TABLE')) == 'ALTER TABLE') {
+                 // If alter table statement or oracle anonymous block enclosing alter
+                 if (substr($query, 0, strlen('ALTER TABLE')) == 'ALTER TABLE'
+                       || substr($query, 0, strlen('DECLARE')) == 'DECLARE') {
                      $connections[$connectionName]['alters'][] = $query;
 
                      unset($sql[$key]);
                      continue;
+                 }
+                 
+                 // If create trgger statement
+                 if (substr($query, 0, strlen('CREATE TRIGGER')) == 'CREATE TRIGGER') {
+                 	$connections[$connectionName]['create_triggers'][] = $query;
+                 	
+                 	unset($sql[$key]);
+                 	continue;
                  }
              }
          }
@@ -1152,7 +1167,7 @@ class Doctrine_Export extends Doctrine_Connection_Module
          // Loop over all the sql again to merge everything together so it is in the correct order
          $build = array();
          foreach ($connections as $connectionName => $sql) {
-             $build[$connectionName] = array_unique(array_merge($sql['create_tables'], $sql['create_sequences'], $sql['create_indexes'], $sql['alters']));
+             $build[$connectionName] = array_unique(array_merge($sql['create_tables'], $sql['create_sequences'], $sql['create_indexes'], $sql['alters'], $sql['create_triggers']));
          }
 
          if ( ! $groupByConnection) {

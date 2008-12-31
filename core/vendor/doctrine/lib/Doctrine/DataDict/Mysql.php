@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Mysql.php 4858 2008-08-29 05:48:26Z guilhermeblanco $
+ *  $Id: Mysql.php 5232 2008-12-01 22:41:30Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,7 +25,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Lukas Smith <smith@pooteeweet.org> (PEAR MDB2 library)
- * @version     $Revision: 4858 $
+ * @version     $Revision: 5232 $
  * @link        www.phpdoctrine.org
  * @since       1.0
  */
@@ -250,7 +250,7 @@ class Doctrine_DataDict_Mysql extends Doctrine_DataDict
             $decimal = '';
         } else {
             $length = strtok('(), ');
-            $decimal = strtok('(), ');
+            $decimal = strtok('(), ') ? strtok('(), '):null;
         }
         $type = array();
         $unsigned = $fixed = null;
@@ -260,6 +260,7 @@ class Doctrine_DataDict_Mysql extends Doctrine_DataDict
         }
 
         $values = null;
+        $scale = null;
 
         switch ($dbType) {
             case 'tinyint':
@@ -364,6 +365,9 @@ class Doctrine_DataDict_Mysql extends Doctrine_DataDict
             break;
             case 'unknown':
             case 'decimal':
+                if ($decimal !== null) {
+                    $scale = $decimal;
+                }
             case 'numeric':
                 $type[] = 'decimal';
                 $unsigned = preg_match('/ unsigned/i', $field['type']);
@@ -373,6 +377,7 @@ class Doctrine_DataDict_Mysql extends Doctrine_DataDict
             case 'longblob':
             case 'blob':
             case 'binary':
+            case 'varbinary':
                 $type[] = 'blob';
                 $length = null;
             break;
@@ -385,9 +390,6 @@ class Doctrine_DataDict_Mysql extends Doctrine_DataDict
                 $type[] = 'bit';
             break;
             case 'geometry':
-                $type[] = 'geometry';
-                $length = null;
-            break;
             case 'geometrycollection':
             case 'point':
             case 'multipoint':
@@ -403,12 +405,14 @@ class Doctrine_DataDict_Mysql extends Doctrine_DataDict
         }
 
         $length = ((int) $length == 0) ? null : (int) $length;
-
-        if ($values === null) {
-            return array('type' => $type, 'length' => $length, 'unsigned' => $unsigned, 'fixed' => $fixed);
-        } else {
-            return array('type' => $type, 'length' => $length, 'unsigned' => $unsigned, 'fixed' => $fixed, 'values' => $values);
+        $def =  array('type' => $type, 'length' => $length, 'unsigned' => $unsigned, 'fixed' => $fixed);
+        if ($values !== null) {
+            $def['values'] = $values;
         }
+        if ($scale !== null) {
+            $def['scale'] = $scale;
+        }
+        return $def;
     }
 
     /**

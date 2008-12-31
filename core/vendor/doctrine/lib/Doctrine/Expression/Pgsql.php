@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Pgsql.php 4330 2008-05-01 23:11:39Z jwage $
+ *  $Id: Pgsql.php 4958 2008-09-12 20:21:45Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -27,7 +27,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 4330 $
+ * @version     $Revision: 4958 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_Expression_Pgsql extends Doctrine_Expression_Driver
@@ -218,5 +218,16 @@ class Doctrine_Expression_Pgsql extends Doctrine_Expression_Driver
         $match.= "'";
         $match.= $this->patternEscapeString();
         return $match;
+    }
+
+    /**
+     * return syntax for pgsql TRANSLATE() dbms function
+     *
+     * @return string $sql
+     */
+    public function translate($string, $from, $to)
+    {
+    	$translate = 'TRANSLATE(' . $string . ', ' . $from . ', ' . $to . ')';
+    	return $translate;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Oracle.php 4252 2008-04-19 07:37:53Z jwage $
+ *  $Id: Oracle.php 5102 2008-10-16 11:03:01Z adrive $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,7 +29,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 4252 $
+ * @version     $Revision: 5102 $
  */
 class Doctrine_Export_Oracle extends Doctrine_Export
 {
@@ -96,15 +96,21 @@ class Doctrine_Export_Oracle extends Doctrine_Export
     public function _makeAutoincrement($name, $table, $start = 1)
     {
         $sql   = array();
-        $table = strtoupper($table);
         $indexName  = $table . '_AI_PK';
         $definition = array(
             'primary' => true,
             'fields' => array($name => true),
         );
-
-        $sql[] = $this->createConstraintSql($table, $indexName, $definition);
-
+		
+        $sql[] = 'DECLARE
+  constraints_Count NUMBER;
+BEGIN
+  SELECT COUNT(CONSTRAINT_NAME) INTO constraints_Count FROM USER_CONSTRAINTS WHERE TABLE_NAME = \''.$table.'\' AND CONSTRAINT_TYPE = \'P\';
+  IF constraints_Count = 0 THEN
+    EXECUTE IMMEDIATE \''.$this->createConstraintSql($table, $indexName, $definition).'\';
+  END IF;
+END;';   
+		
         if (is_null($start)) {
             $query = 'SELECT MAX(' . $this->conn->quoteIdentifier($name, true) . ') FROM ' . $this->conn->quoteIdentifier($table, true);
             $start = $this->conn->fetchOne($query);
@@ -126,20 +132,19 @@ DECLARE
    last_Sequence NUMBER;
    last_InsertID NUMBER;
 BEGIN
-   SELECT ' . $sequenceName . '.NEXTVAL INTO :NEW.' . $name . ' FROM DUAL;
+   SELECT ' . $this->conn->quoteIdentifier($sequenceName) . '.NEXTVAL INTO :NEW.' . $name . ' FROM DUAL;
    IF (:NEW.' . $name . ' IS NULL OR :NEW.'.$name.' = 0) THEN
-      SELECT ' . $sequenceName . '.NEXTVAL INTO :NEW.' . $name . ' FROM DUAL;
+      SELECT ' . $this->conn->quoteIdentifier($sequenceName) . '.NEXTVAL INTO :NEW.' . $name . ' FROM DUAL;
    ELSE
       SELECT NVL(Last_Number, 0) INTO last_Sequence
         FROM User_Sequences
        WHERE UPPER(Sequence_Name) = UPPER(\'' . $sequenceName . '\');
       SELECT :NEW.' . $name . ' INTO last_InsertID FROM DUAL;
       WHILE (last_InsertID > last_Sequence) LOOP
-         SELECT ' . $sequenceName . '.NEXTVAL INTO last_Sequence FROM DUAL;
+         SELECT ' . $this->conn->quoteIdentifier($sequenceName) . '.NEXTVAL INTO last_Sequence FROM DUAL;
       END LOOP;
    END IF;
-END;
-';
+END;';
         return $sql;
     }
 
@@ -301,7 +306,17 @@ END;
                 $sql = array_merge($sql, $this->_makeAutoincrement($fieldName, $name));
             }
         }
-
+        
+        if (isset($options['indexes']) && ! empty($options['indexes'])) {
+            foreach ($options['indexes'] as $indexName => $definition) {
+                // create nonunique indexes, as they are a part od CREATE TABLE DDL
+                if ( ! isset($definition['type']) || 
+                    (isset($definition['type']) && strtolower($definition['type']) != 'unique')) {
+                    $sql[] = $this->createIndexSql($name, $indexName, $definition);
+                }
+            }
+        }
+        
         return $sql;
     }
 
@@ -501,5 +516,41 @@ END;
     {
         $sequenceName = $this->conn->quoteIdentifier($this->conn->formatter->getSequenceName($seqName), true);
         return 'DROP SEQUENCE ' . $sequenceName;
+    }
+
+    /**
+     * return Oracle's SQL code portion needed to set an index
+     * declaration to be unsed in statements like CREATE TABLE.
+     * 
+     * @param string $name      name of the index
+     * @param array $definition index definition
+     * @return string           Oracle's SQL code portion needed to set an index  
+     */    
+    public function getIndexDeclaration($name, array $definition)
+    {
+        $name = $this->conn->quoteIdentifier($name);
+        $type = '';
+        
+        if ( isset($definition['type']))
+        {
+            if(strtolower($definition['type']) == 'unique') {
+                $type = strtoupper($definition['type']);
+            } else {
+                throw new Doctrine_Export_Exception(
+                    'Unknow type '.$definition['type'] .' for index '.$name
+                );
+            }
+        } else {
+            // only unique indexes should be defined in create table statement
+            return null;
+        }
+        
+        if (!isset($definition['fields']) || !is_array($definition['fields'])) {
+            throw new Doictrine_Export_Exception('No columns given for index '.$name);
+        }
+        
+        $query = 'CONSTRAINT '.$name.' '.$type.' ('.$this->getIndexFieldDeclarationList($definition['fields']).')';
+        
+        return $query;
     }
 }

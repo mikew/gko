@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Oracle.php 4252 2008-04-19 07:37:53Z jwage $
+ *  $Id: Oracle.php 4970 2008-09-18 10:31:18Z adrive $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -28,7 +28,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 4252 $
+ * @version     $Revision: 4970 $
  */
 class Doctrine_Sequence_Oracle extends Doctrine_Sequence
 {
@@ -74,7 +74,7 @@ class Doctrine_Sequence_Oracle extends Doctrine_Sequence
         $seqName = $table . (empty($field) ? '' : '_'.$field);
         $sequenceName =  $this->conn->quoteIdentifier($this->conn->formatter->getSequenceName($seqName), true);
 
-        return $this->conn->fetchOne('SELECT ' . $sequenceName . '.currval');
+        return $this->conn->fetchOne('SELECT ' . $sequenceName . '.currval FROM DUAL');
     }
 
     /**

@@ -213,30 +213,13 @@ class Doctrine_Data
      * @param string $models 
      * @return void
      */
-    public function importData($directory, $format = 'yml', $models = array())
+    public function importData($directory, $format = 'yml', $models = array(), $append = false)
     {
         $import = new Doctrine_Data_Import($directory);
         $import->setFormat($format);
         $import->setModels($models);
         
-        return $import->doImport();
-    }
-
-    /**
-     * importDummyData
-     *
-     * Interface for importing dummy data to models
-     * 
-     * @param string $num 
-     * @param string $models 
-     * @return void
-     */
-    public function importDummyData($num = 3, $models = array())
-    {
-        $import = new Doctrine_Data_Import();
-        $import->setModels($models);
-        
-        return $import->doImportDummyData($num);
+        return $import->doImport($append);
     }
 
     /**
@@ -274,13 +257,14 @@ class Doctrine_Data
      */
     public function purge($models = null)
     {
-        $models = Doctrine::filterInvalidModels($models);
+        if ($models) {
+            $models = Doctrine::filterInvalidModels($models);
+        } else {
+            $models = Doctrine::getLoadedModels();
+        }
 
-        foreach ($models as $model)
-        {
-            $model = new $model();
-
-            $model->getTable()->createQuery()->delete($model)->execute();
+        foreach ($models as $model) {
+            Doctrine::getTable($model)->createQuery()->delete()->execute();
         }
     }
 }

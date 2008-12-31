@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: RawSql.php 4768 2008-08-12 02:19:49Z jwage $
+ *  $Id: RawSql.php 5189 2008-11-19 14:27:32Z guilhermeblanco $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -33,7 +33,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 4768 $
+ * @version     $Revision: 5189 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_RawSql extends Doctrine_Query_Abstract
@@ -43,6 +43,21 @@ class Doctrine_RawSql extends Doctrine_Query_Abstract
      */
     private $fields = array();
     
+	/**
+     * Constructor.
+     *
+     * @param Doctrine_Connection  The connection object the query will use.
+     * @param Doctrine_Hydrator_Abstract  The hydrator that will be used for generating result sets.
+     */
+    function __construct(Doctrine_Connection $connection = null, Doctrine_Hydrator_Abstract $hydrator = null) {
+        parent::__construct($connection, $hydrator);
+
+        // Fix #1472. It's alid to disable QueryCache since there's no DQL for RawSql.
+        // RawSql expects to be plain SQL + syntax for SELECT part. It is used as is in query execution.
+        $this->useQueryCache(false);
+    }
+
+
     /**
      * @deprecated
      */
@@ -207,19 +222,20 @@ class Doctrine_RawSql extends Doctrine_Query_Abstract
         }
 
         // force-add all primary key fields
+        if ($this->_sqlParts['distinct'] != true) {
+            foreach ($this->getTableAliasMap() as $tableAlias => $componentAlias) {
+                $map = $this->_queryComponents[$componentAlias];
 
-        foreach ($this->getTableAliasMap() as $tableAlias => $componentAlias) {
-            $map = $this->_queryComponents[$componentAlias];
+                foreach ((array) $map['table']->getIdentifierColumnNames() as $key) {
+                    $field = $tableAlias . '.' . $key;
 
-            foreach ((array) $map['table']->getIdentifierColumnNames() as $key) {
-                $field = $tableAlias . '.' . $key;
-
-                if ( ! isset($this->_sqlParts['select'][$field])) {
-                    $select[$componentAlias][$field] = $field . ' AS ' . $tableAlias . '__' . $key;
+                    if ( ! isset($this->_sqlParts['select'][$field])) {
+                        $select[$componentAlias][$field] = $field . ' AS ' . $tableAlias . '__' . $key;
+                    }
                 }
             }
         }
-        
+
         $q = 'SELECT ';
 
         if ($this->_sqlParts['distinct'] == true) {

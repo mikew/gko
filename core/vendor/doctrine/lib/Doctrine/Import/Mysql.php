@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Mysql.php 4617 2008-07-02 04:55:05Z jwage $
+ *  $Id: Mysql.php 5205 2008-11-21 13:10:55Z guilhermeblanco $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,14 +25,14 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Lukas Smith <smith@pooteeweet.org> (PEAR MDB2 library)
- * @version     $Revision: 4617 $
+ * @version     $Revision: 5205 $
  * @link        www.phpdoctrine.org
  * @since       1.0
  */
 class Doctrine_Import_Mysql extends Doctrine_Import
 {
     protected $sql  = array(
-                            'showDatabases'   => 'SHOW DATABASES',
+                            'listDatabases'   => 'SHOW DATABASES',
                             'listTableFields' => 'DESCRIBE %s',
                             'listSequences'   => 'SHOW TABLES',
                             'listTables'      => 'SHOW TABLES',
@@ -151,6 +151,7 @@ class Doctrine_Import_Mysql extends Doctrine_Import
             $decl = $this->conn->dataDict->getPortableDeclaration($val);
 
             $values = isset($decl['values']) ? $decl['values'] : array();
+            $val['default'] = $val['default'] == 'CURRENT_TIMESTAMP' ? null : $val['default'];
 
             $description = array(
                           'name'          => $val['field'],
@@ -166,9 +167,11 @@ class Doctrine_Import_Mysql extends Doctrine_Import
                           'notnull'       => (bool) ($val['null'] != 'YES'),
                           'autoincrement' => (bool) (strpos($val['extra'], 'auto_increment') !== false),
                           );
+            if (isset($decl['scale'])) {
+                $description['scale'] = $decl['scale'];
+            }
             $columns[$val['field']] = $description;
         }
-
 
         return $columns;
     }
@@ -226,7 +229,9 @@ class Doctrine_Import_Mysql extends Doctrine_Import
      */
     public function listViews($database = null)
     {
-        if ( ! is_null($database)) {
+        if (is_null($database)) {
+            $query = 'SELECT table_name FROM information_schema.VIEWS';
+        } else {
             $query = sprintf($this->sql['listViews'], ' FROM ' . $database);
         }
 

@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Connection.php 4827 2008-08-27 01:53:12Z jwage $
+ *  $Id: Connection.php 5261 2008-12-04 00:05:56Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -49,7 +49,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 4827 $
+ * @version     $Revision: 5261 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Lukas Smith <smith@pooteeweet.org> (MDB2 library)
  */
@@ -152,6 +152,7 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
                                                                  'escape_pattern' => false),
                                   'wildcards'           => array('%', '_'),
                                   'varchar_max_length'  => 255,
+                                  'sql_file_delimiter'  => ";\n",
                                   );
 
     /**
@@ -884,7 +885,7 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
      *
      * @param string $query             DQL query
      * @param array $params             query parameters
-     * @param int $hydrationMode        Doctrine::FETCH_ARRAY or Doctrine::FETCH_RECORD
+     * @param int $hydrationMode        Doctrine::HYDRATE_ARRAY or Doctrine::HYDRATE_RECORD
      * @see Doctrine_Query
      * @return Doctrine_Collection      Collection of Doctrine_Record objects
      */
@@ -1016,8 +1017,9 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
 
                 return $stmt;
             }
-        } catch (Doctrine_Adapter_Exception $e) {
-        } catch (PDOException $e) { }
+        } 
+        catch (Doctrine_Adapter_Exception $e) { }
+        catch (PDOException $e) { }
 
         $this->rethrowException($e, $this);
     }
@@ -1072,7 +1074,7 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
         $name = 'Doctrine_Connection_' . $this->driverName . '_Exception';
 
         $exc  = new $name($e->getMessage(), (int) $e->getCode());
-        if ( ! is_array($e->errorInfo)) {
+        if ( ! isset($e->errorInfo) || ! is_array($e->errorInfo)) {
             $e->errorInfo = array(null, null, null, null);
         }
         $exc->processErrorInfo($e->errorInfo);
@@ -1414,7 +1416,7 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
      */
     public function rollback($savepoint = null)
     {
-        $this->transaction->rollback($savepoint);
+        return $this->transaction->rollback($savepoint);
     }
 
     /**
@@ -1450,9 +1452,6 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
         } else {
             $dsn = $info['scheme'] . '://' . $this->getOption('username') . ':' . $this->getOption('password') . '@' . $info['host'] . '/' . $info['dbname'];
         }
-
-        // Re-open connection with the newly created database
-        $this->getManager()->openConnection($dsn, $this->getName(), true);
 
         if (isset($e)) {
             return $e;
@@ -1494,9 +1493,6 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
         } else {
             $dsn = $info['scheme'] . '://' . $this->getOption('username') . ':' . $this->getOption('password') . '@' . $info['host'] . '/' . $info['dbname'];
         }
-
-        // Re-open connection with the newly created database
-        $this->getManager()->openConnection($dsn, $this->getName(), true);
 
         if (isset($e)) {
             return $e;
@@ -1566,5 +1562,33 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
     public function __toString()
     {
         return Doctrine_Lib::getConnectionAsString($this);
+    }
+
+    /**
+     * Serialize. Remove database connection(pdo) since it cannot be serialized
+     *
+     * @return string $serialized
+     */
+    public function serialize()
+    {
+        $vars = get_object_vars($this);
+        $vars['dbh'] = null;
+        $vars['isConnected'] = false;
+        return serialize($vars);
+    }
+
+    /**
+     * Unserialize. Recreate connection from serialized content
+     *
+     * @param string $serialized 
+     * @return void
+     */
+    public function unserialize($serialized)
+    {
+        $array = unserialize($serialized);
+
+        foreach ($array as $name => $values) {
+            $this->$name = $values;
+        }
     }
 }

@@ -90,9 +90,9 @@ class Doctrine_Template_Listener_SoftDelete extends Doctrine_Record_Listener
         $field = $params['alias'] . '.' . $this->_options['name'];
         $query = $event->getQuery();
         if ( ! $query->contains($field)) {
-            $query->from('')->update($params['component'] . ' ' . $params['alias']);
-            $query->set($field, '?', array(false));
-            $query->addWhere($field . ' = ?', array(true));
+            $query->from('')->update($params['component']['table']->getOption('name') . ' ' . $params['alias']);
+            $query->set($field, '?', array(true));
+            $query->addWhere($field . ' = ? OR ' . $field . ' IS NULL', array(false));
         }
     }
 
@@ -109,7 +109,7 @@ class Doctrine_Template_Listener_SoftDelete extends Doctrine_Record_Listener
         $field = $params['alias'] . '.' . $this->_options['name'];
         $query = $event->getQuery();
         if ( ! $query->contains($field)) {
-            $query->addWhere($field . ' = ?', array(false));
+            $query->addWhere($field . ' = ? OR ' . $field . ' IS NULL', array(false));
         }
     }
 }
