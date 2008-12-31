@@ -272,8 +272,29 @@ form label
 {
 	float: left;
 	display: block;
+	width: auto;
 	width: 100px;
 	cursor: pointer;
+	font-weight: bold;
+	color: #606060;
+	border-bottom: 1px solid #ccc;
+	margin: 0 10px 0 0;
+	text-align: right;
+}
+form label:after
+{
+	content: ':';
+}
+form p:hover label
+{
+	color: #000;
+}
+form p span.summary
+{
+	font-size: 80%;
+	display: block;
+	margin: 0 0 0 110px;
+	color: #666;
 }
 
 #admin_nav
@@ -299,4 +320,22 @@ form label
 	font-weight: bold;
 	background: #ccc none;
 	-moz-border-radius: 3px;
+}
+
+.flash
+{
+	background: #ccc none;
+	padding: 10px 10px 10px 52px;
+	-webkit-border-radius: 10px;
+	width: 300px;
+	margin: auto;
+}
+.flash strong
+{
+	display: block;
+}
+
+#flash_success
+{
+	background: #A4FFBB url(/images/ok.png) 10px center no-repeat;
 }

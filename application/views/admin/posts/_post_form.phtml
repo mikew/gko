@@ -1,6 +1,5 @@
-<?= $context->errors_for('post') ?>
-
 <?= $context->form_tag_for(array('admin', $context->post, 'key'), null, &$f) ?>
+	<?= $f->errors() ?>
 	<p>
 		<?= $f->label('title') ?>
 		<?= $f->text_field('title') ?>
@@ -10,7 +9,7 @@
 		<?= $f->text_area('body') ?>
 	</p>
 	<p>
-		<?= $context->submit_button() ?> or <?= $context->link_to('Cancel', 'admin/posts') ?>
+		<?= $f->submit() ?> | <?= $f->reset() ?> | <?= $context->link_to('Cancel', 'admin/posts') ?>
 	</p>
 <?= $context->end_form_tag() ?>
 
