@@ -55,7 +55,7 @@ class CoreController {
 	final private function add_filter($where, $args) {
 		$source = Core::interpret_options($args);
 		foreach($source AS $filter) {
-			array_push($this->{$where . '_filters'}, $filter);
+			$this->{$where . '_filters'}[] = $filter;
 		}
 	}
 	
@@ -66,7 +66,7 @@ class CoreController {
 		foreach($this->{$from . '_filters'} AS $filter) {
 			$result = call_user_func(array($this, $filter));
 			if($result === false)
-				array_push($errors, $filter);
+				$errors[] = $filter;
 		}
 		
 		if(!empty($errors))

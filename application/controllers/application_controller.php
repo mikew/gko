@@ -4,4 +4,8 @@ class ApplicationController extends CoreController {
 	public $selected_nav = CONTROLLER;
 	public $breadcrumbs = array();
 	public $sidebar;
+	
+	public function push_title($with) {
+		$this->title[] = $with;
+	}
 }

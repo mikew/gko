@@ -25,7 +25,7 @@ class RSSElement {
 		if(in_array($key, $this->allowed)) {
 			$property = &$this->properties[$key];
 			if(is_array($property)) {
-				array_push($property, $value);
+				$property[] = $value;
 			} else {
 				$this->properties[$key] = $value;
 			}

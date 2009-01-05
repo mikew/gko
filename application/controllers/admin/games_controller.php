@@ -1,7 +1,7 @@
 <?php
 class Admin_GamesController extends AdminController {
 	public static function setup($self) {
-		array_push($self->title, 'Games');
+		$self->push_title('Games');
 	}
 	
 	public function index() {
