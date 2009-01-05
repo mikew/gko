@@ -11,7 +11,7 @@ class WelcomeController extends ApplicationController {
 	}
 	
 	public function index() {
-		array_push($this->title, 'Welcome');
+		$this->push_title('Welcome');
 		$this->breadcrumbs[''] = 'Welcome!';
 		
 		$this->kde_feed = $this->update_dko_cache();

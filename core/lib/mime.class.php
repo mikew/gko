@@ -38,16 +38,6 @@ class CoreMime {
 		return self::$extensions[self::interpret($mime)];
 	}
 	
-	// public static function find_template_file($file, $mime = '') {
-	// 	$file = File::join($file);
-	// 	
-	// 	$extension = self::extension($mime);
-	// 	$file = substr($file, 0, 1) == '/' ? $file : File::join(APP_HOME, 'views', String::underscore(CONTROLLER), $file);
-	// 	$file .= substr($file, -strlen($extension)) == $extension ? '' : $extension;
-	// 
-	// 	return File::exists($file) ? $file : false;
-	// }
-	
 	public static function set_headers() {
 		if(empty(self::$headers['Location'])) {
 			header('HTTP/1.0 ' . self::$status);
@@ -65,7 +55,7 @@ class CoreMime {
 	
 	public static function set_header($key, $value = '') {
 		if(empty($value))
-			array_push(self::$headers, $key);
+			self::$headers[] = $key;
 		else
 			self::$headers[$key] = $value;
 	}
@@ -84,5 +74,13 @@ class CoreMime {
 		}
 		
 		return $_SERVER['REQUEST_METHOD'];
+	}
+	
+	public static function is_post() {
+		return self::request_method() == 'POST';
+	}
+	
+	public static function is_get() {
+		return self::request_method() == 'GET';
 	}
 }

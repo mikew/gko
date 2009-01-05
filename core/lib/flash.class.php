@@ -10,7 +10,7 @@ class CoreFlash {
 	public function __set($key, $value) {
 		// if(!in_array($key, $this->used))
 		// echo $key;
-		array_push($this->used, $key);
+		$this->used[] = $key;
 		$_SESSION['flash'][$key] = $value;
 	}
 	

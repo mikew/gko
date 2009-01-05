@@ -6,8 +6,14 @@ class AdminController extends ApplicationController {
 		CoreRouter::redirect_to('admin/posts');
 	}
 	
+	public function logout() {
+		// TODO: none of this works
+		setcookie(session_name(), '', time() - 3600);
+		CoreRouter::redirect_to('/');
+	}
+	
 	public static function setup($self) {
-		array_push($self->title, 'Administration');
+		$self->push_title('Administration');
 		$self->add_before_filter('require_auth');
 	}
 	

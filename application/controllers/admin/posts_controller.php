@@ -1,7 +1,7 @@
 <?php
 class Admin_PostsController extends AdminController {
 	public static function setup($self) {
-		array_push($self->title, 'Posts');
+		$self->push_title('Posts');
 	}
 	
 	public function index() {
@@ -9,7 +9,7 @@ class Admin_PostsController extends AdminController {
 	}
 	
 	public function _new() {
-		array_push($this->title, 'New');
+		$this->push_title('New');
 		$this->post = new Posts();
 	}
 	

@@ -29,7 +29,7 @@ class CoreRouter {
 			$controller = basename($file, '.php');
 			$controller = str_replace('_controller', '', $controller);
 
-			array_push($controllers, $controller);
+			$controllers[] = $controller;
 		}
 
 		$callback = array('Horde_Routes_Utils', 'longestFirst');
