@@ -128,6 +128,15 @@ class CoreFormHelper {
 		return CoreHelper::instance()->simple_tag('input', $options);
 	}
 	
+	public static function reset_button($value = 'Reset', $options = array()) {
+		$options = CoreHelper::instance()->merge_attributes($options, array(
+			'type' => 'reset',
+			'value' => $value
+		));
+		
+		return CoreHelper::instance()->simple_tag('input', $options);
+	}
+	
 	public static function button_to($value, $url, $options = array()) {
 		$method = 'post';
 		if(isset($options['method'])) {
@@ -177,13 +186,27 @@ class CoreFormHelper {
 
 class CoreFormBuilder {
 	private $object_name;
+	
 	public function __construct($name) {
 		$this->object_name = String::lowercase(Inflector::singularize($name));
 	}
 	
+	public function errors() {
+		return CoreFormHelper::errors_for($this->object_name);
+	}
+	
+	public function submit() {
+		$args = func_get_args();
+		return call_user_func_array(array('CoreFormHelper', 'submit_button'), $args);
+	}
+	
+	public function reset() {
+		$args = func_get_args();
+		return call_user_func_array(array('CoreFormHelper', 'reset_button'), $args);
+	}
+	
 	public function __call($method, $arguments) {
 		array_unshift($arguments, $this->object_name);
-		// var_dump($arguments);
 		return call_user_func_array(array('CoreFormHelper', $method), $arguments);
 	}
 }
