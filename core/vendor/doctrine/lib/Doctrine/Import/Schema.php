@@ -301,7 +301,7 @@ class Doctrine_Import_Schema
                           'options'             =>  array(),
                           'package'             =>  null,
                           'inheritance'         =>  array(),
-                          'detect_relations'    =>  false);
+                          'detect_relations'    =>  true);
         
         $array = Doctrine_Parser::load($schema, $type);
 
