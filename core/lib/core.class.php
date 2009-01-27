@@ -60,6 +60,8 @@ final class Core {
 			require_once File::join(CORE_LIB_HOME, 'context.class.php');
 		} elseif($klass == 'coreflash') {
 			require_once File::join(CORE_LIB_HOME, 'flash.class.php');
+		} elseif($klass == 'cordial') {
+			require_once File::join(CORE_LIB_HOME, 'cordial.class.php');
 		} elseif(substr($klass, -10) == 'controller') {
 			require_once File::join(APP_HOME, 'controllers', String::underscore($class) . '.php');
 		} elseif(substr($klass, 0, 4) == 'core' && substr($klass, -6) == 'helper') {

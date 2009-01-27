@@ -8,13 +8,16 @@ abstract class BaseAuthors extends Doctrine_Record
   public function setTableDefinition()
   {
     $this->setTableName('authors');
-    $this->hasColumn('name', 'varchar', 255, array('type' => 'varchar', 'length' => '255'));
-    $this->hasColumn('handle', 'varchar', 255, array('type' => 'varchar', 'length' => '255'));
-    $this->hasColumn('password', 'varchar', 255, array('type' => 'varchar', 'length' => '255'));
+    $this->hasColumn('name', 'string', null, array('type' => 'string'));
+    $this->hasColumn('handle', 'string', null, array('type' => 'string'));
+    $this->hasColumn('password', 'string', null, array('type' => 'string'));
   }
 
   public function setUp()
   {
+    $this->hasMany('Posts', array('local' => 'id',
+                                  'foreign' => 'authors_id'));
+
     $timestampable0 = new Doctrine_Template_Timestampable();
     $sluggable0 = new Doctrine_Template_Sluggable(array('fields' => array(0 => 'handle'), 'alias' => 'key', 'indexName' => 'authors_slug'));
     $this->actAs($timestampable0);

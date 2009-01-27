@@ -8,13 +8,17 @@ abstract class BasePosts extends Doctrine_Record
   public function setTableDefinition()
   {
     $this->setTableName('posts');
-    $this->hasColumn('title', 'varchar', 255, array('type' => 'varchar', 'length' => '255', 'notblank' => true));
+    $this->hasColumn('title', 'string', null, array('type' => 'string'));
     $this->hasColumn('body', 'text', null, array('type' => 'text'));
     $this->hasColumn('body_markdown', 'text', null, array('type' => 'text'));
+    $this->hasColumn('authors_id', 'integer', 8, array('type' => 'integer', 'length' => 8));
   }
 
   public function setUp()
   {
+    $this->hasOne('Authors', array('local' => 'authors_id',
+                                   'foreign' => 'id'));
+
     $timestampable0 = new Doctrine_Template_Timestampable();
     $sluggable0 = new Doctrine_Template_Sluggable(array('fields' => array(0 => 'title'), 'alias' => 'key', 'indexName' => 'posts_slug'));
     $this->actAs($timestampable0);

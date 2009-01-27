@@ -15,5 +15,11 @@ class Admin_AuthorsController extends AdminController {
 	public function edit() {
 		// $this->post = Doctrine_Query::create()->from('Posts')->where('key = ?', $_GET['id'])->fetchOne();
 		$this->author = Doctrine_Query::create()->from('Authors')->where('handle = ?', $_GET['id'])->fetchOne();
+		$this->breadcrumbs[$this->author->handle] = $this->author->name;
+	}
+	
+	public function update() {
+		// $this->author = Doctrine_Query::create()->from
+		return Authors::table_name();
 	}
 }
