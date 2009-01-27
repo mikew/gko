@@ -1,7 +1,7 @@
 <?php
 class PostsController extends ApplicationController {
 	public static function setup($self) {
-		array_push($self->title, 'News');
+		$self->push_title('News');
 		$self->selected_nav = 'news';
 	}
 	
@@ -18,7 +18,7 @@ class PostsController extends ApplicationController {
 			'body' => 'stock comment (these do not actually work yet!)'
 		));
 		
-		array_push($this->title, '&#8220;' . $this->post->title . '&#8221;');
+		$this->push_title('&#8220;' . $this->post->title . '&#8221;');
 	}
 	
 	public function setup_authors() {
