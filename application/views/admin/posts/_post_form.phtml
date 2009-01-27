@@ -8,9 +8,4 @@
 		<?= $f->label('body')?>
 		<?= $f->text_area('body') ?>
 	</p>
-	<p>
-		<?= $f->submit() ?> | <?= $f->reset() ?> | <?= $context->link_to('Cancel', 'admin/posts') ?>
-	</p>
-<?= $context->end_form_tag() ?>
-
-<? if($context->post->exists()) echo $context->button_to('Delete', array('delete_admin/post', array('id' => $context->post->key)), array('method' => 'delete', 'confirm' => 'Are you sure?')); ?>
+<?= $context->end_admin_form($f, $context->post, 'key') ?>

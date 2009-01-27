@@ -88,4 +88,29 @@ class ApplicationHelper extends CoreHelper {
 			), self::instance()->tag('strong', '', Inflector::titleize($for)) . CoreContext::get('flash')->{$for});
 		}
 	}
+	
+	public static function end_admin_form($form, $object, $column_for_delete) {
+		$plural = String::lowercase(get_class($object));
+		$singular = Inflector::singularize($plural);
+		
+		$buttons = array(
+			$form->submit(),
+			$form->reset(),
+			self::instance()->link_to('Cancel', "admin/{$plural}")
+		);
+		
+		$generated = self::instance()->tag('p', '', implode(' &mdash; ', $buttons));
+		$generated .= self::instance()->end_form_tag();
+		
+		if($object->exists()) {
+			$generated .= self::instance()->button_to('Delete', array("delete_admin/{$singular}", array(
+				'id' => $object->{$column_for_delete}
+			)), array(
+				'method' => 'delete',
+				'confirm' => 'Are you sure?\n\nThis cannot be undone'
+			));
+		}
+		
+		return $generated;
+	}
 }

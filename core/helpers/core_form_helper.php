@@ -145,7 +145,7 @@ class CoreFormHelper {
 		}
 		
 		$form = self::form_tag($url, $method);
-		$form .= self::submit_button($value, $options);
+		$form .= CoreHelper::instance()->tag('p', '', self::submit_button($value, $options));
 		$form .= self::end_form_tag();
 		return $form;
 	}

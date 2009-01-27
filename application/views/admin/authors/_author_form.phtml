@@ -15,4 +15,4 @@
 		<?= $f->label('password_confirmation', 'Confirm') ?>
 		<?= $f->confirm_password_field('password') ?>
 	</p>
-<?= $context->end_form_tag() ?>
+<?= $context->end_admin_form($f, $context->author, 'handle') ?>
