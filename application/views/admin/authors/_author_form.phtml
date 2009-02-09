@@ -1,4 +1,5 @@
 <?= $context->form_tag_for(array('admin', $context->author, 'handle'), null, &$f) ?>
+	<?= $f->errors() ?>
 	<p>
 		<?= $f->label('name') ?>
 		<?= $f->text_field('name') ?>
