@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Mssql.php 5180 2008-11-17 13:34:50Z guilhermeblanco $
+ *  $Id: Mssql.php 5448 2009-01-31 22:44:38Z guilhermeblanco $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -27,7 +27,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Lukas Smith <smith@pooteeweet.org> (PEAR MDB2 library)
- * @version     $Revision: 5180 $
+ * @version     $Revision: 5448 $
  * @link        www.phpdoctrine.org
  * @since       1.0
  */
@@ -121,24 +121,29 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection
             $orderby = stristr($query, 'ORDER BY');
 
             if ($orderby !== false) {
-                $sort = (stripos($orderby, 'desc') !== false) ? 'desc' : 'asc';
+                $sort = (stripos($orderby, ' desc') !== false) ? 'desc' : 'asc';
                 $order = str_ireplace('ORDER BY', '', $orderby);
-                $order = trim(preg_replace('/ASC|DESC/i', '', $order));
-                $alias = trim(end(spliti(' as ', array_shift(explode(',', stristr($query,$order))))));
+                $order = trim(preg_replace('/\s+(ASC|DESC)$/i', '', $order));
+                
+                // Ticket #1835: Fix for ORDER BY alias
+                $aux = explode(',', stristr($query,$order));
+                $aux2 = spliti(' as ', array_shift($aux));
+                
+                $alias = trim(end($aux2));
             }
     
             $query = preg_replace('/^SELECT\s/i', 'SELECT TOP ' . ($count+$offset) . ' ', $query);    
             $query = 'SELECT * FROM (SELECT TOP ' . $count . ' * FROM (' . $query . ') AS ' . $this->quoteIdentifier('inner_tbl');
 
             if ($orderby !== false) {
-                $query .= ' ORDER BY ' . $this->quoteIdentifier('inner_tbl.' . $alias) . ' ';
+                $query .= ' ORDER BY ' . $this->quoteIdentifier('inner_tbl') . '.' . $alias . ' ';
                 $query .= (stripos($sort, 'asc') !== false) ? 'DESC' : 'ASC';
             }
 
             $query .= ') AS ' . $this->quoteIdentifier('outer_tbl');
 
             if ($orderby !== false) {
-                $query .= ' ORDER BY ' . $this->quoteIdentifier('outer_tbl.' . $alias) . ' ' . $sort;
+                $query .= ' ORDER BY ' . $this->quoteIdentifier('outer_tbl') . '.' . $alias . ' ' . $sort;
             }
         }
 
