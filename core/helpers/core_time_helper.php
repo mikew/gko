@@ -9,7 +9,7 @@ class CoreTimeHelper {
 	}
 	
 	public static function parse_datetime($test) {
-		return is_int($test) ? $test : strtotime($test);
+		return is_numeric($test) ? $test : strtotime($test);
 	}
 	
 	public static function time_distance_in_words($timestamp, $options = array()) {

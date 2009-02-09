@@ -4,7 +4,7 @@ class WelcomeController extends ApplicationController {
 	public $latest = array();
 	
 	const DKO_TTL = 1800;
-	const DKO_URL = 'http://www.kde.org/dotkdeorg.rdf';
+	const DKO_URL = 'http://dot.kde.org/rss.xml';
 	
 	public static function setup($self) {
 		$self->selected_nav = 'home';
@@ -15,15 +15,9 @@ class WelcomeController extends ApplicationController {
 		$this->breadcrumbs[''] = 'Welcome!';
 		
 		$this->kde_feed = $this->update_dko_cache();
-		$this->latest = Doctrine_Query::create()->from('Posts p')->limit(5)->execute();
-	}
-	
-	public function init_author() {
-		$auth = new Authors();
-		$auth->name = 'Mike Wyatt';
-		$auth->password = 'test';
-		$auth->handle = 'mikew';
-		// $auth->save();
+		$this->latest = Doctrine_Query::create()->from('Posts p')->orderBy('p.created_at DESC')->limit(5)->execute();
+		
+		Posts::find();
 	}
 	
 	protected function update_dko_cache() {

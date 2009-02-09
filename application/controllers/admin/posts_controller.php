@@ -5,7 +5,7 @@ class Admin_PostsController extends AdminController {
 	}
 	
 	public function index() {
-		$this->posts = Doctrine_Query::create()->from('Posts p')->execute();
+		$this->posts = Doctrine_Query::create()->from('Posts p')->orderBy('p.created_at DESC')->execute();
 	}
 	
 	public function _new() {
@@ -16,6 +16,8 @@ class Admin_PostsController extends AdminController {
 	public function create() {
 		$this->post = new Posts();
 		$this->post->merge($_POST['post']);
+		$this->post->Authors = $this->user;
+		
 		if(!$this->post->trySave()) {
 			$this->action_to_render = '_new';
 			return;
@@ -37,6 +39,12 @@ class Admin_PostsController extends AdminController {
 		$this->post->save();
 		
 		$this->flash->success = '"' . $this->post->title . '" was updated!';
+		
+		CoreRouter::redirect_to('admin/posts');
+	}
+	
+	public function delete() {
+		Doctrine_query::create()->delete()->from('Posts')->where('key = ?', $_GET['id'])->execute();
 		
 		CoreRouter::redirect_to('admin/posts');
 	}
