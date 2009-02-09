@@ -1,0 +1,8 @@
+Comments:
+    actAs: [Timestampable]
+    columns:
+        name:
+            type: string
+            minlength: 5
+        body: text
+        posts_id: integer

@@ -6,6 +6,13 @@ Authors:
             alias: key
             indexName: authors_slug
     columns:
-        name: varchar(255)
-        handle: varchar(255)
-        password: varchar(255)
+        name:
+            type: string
+            minlength: 5
+        handle:
+            type: string
+            minlength: 3
+        password:
+            type: string
+            confirm: true
+            minlength: 6

@@ -6,6 +6,11 @@ Posts:
             alias: key
             indexName: posts_slug
     columns:
-        title: varchar(255)
-        body: text
+        title:
+            type: string
+            minlength: 5
+        body:
+            type: text
+            notblank: true
         body_markdown: text
+        authors_id: integer
