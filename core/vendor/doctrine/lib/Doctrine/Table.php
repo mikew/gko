@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Table.php 5280 2008-12-08 23:18:33Z jwage $
+ *  $Id: Table.php 5460 2009-02-03 04:37:06Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -28,7 +28,7 @@
  * @package     Doctrine
  * @subpackage  Table
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version     $Revision: 5280 $
+ * @version     $Revision: 5460 $
  * @link        www.phpdoctrine.org
  * @since       1.0
  */
@@ -140,7 +140,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
      *
      *      -- checks                       the check constraints of this table, eg. 'price > dicounted_price'
      *
-     *      -- collation                    collation attribute
+     *      -- collate                      collate attribute
      *
      *      -- indexes                      the index definitions of this table
      *
@@ -159,7 +159,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
                                      'enumMap'        => array(),
                                      'type'           => null,
                                      'charset'        => null,
-                                     'collation'      => null,
+                                     'collate'        => null,
                                      'treeImpl'       => null,
                                      'treeOptions'    => array(),
                                      'indexes'        => array(),
@@ -1024,6 +1024,9 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
 
         if ($length == null) {
             switch ($type) {
+                case 'decimal':
+                    $length = 18;
+                break;
                 case 'string':
                 case 'clob':
                 case 'float':
@@ -1675,8 +1678,14 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
 
         if ($value === self::$_null) {
             $value = null;
-        } else if ($value instanceof Doctrine_Record) {
+        } else if ($value instanceof Doctrine_Record && $value->exists()) {
             $value = $value->getIncremented();
+        } else if ($value instanceof Doctrine_Record && ! $value->exists()) {
+            foreach($this->getRelations() as $relation) {
+                if ($fieldName == $relation->getLocalFieldName() && (get_class($value) == $relation->getClass() || is_subclass_of($value, $relation->getClass()))) {
+                    return $errorStack;
+                }
+            }
         }
 
         $dataType = $this->getTypeOf($fieldName);
@@ -1688,7 +1697,7 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable
             }
             if ($dataType == 'enum') {
                 $enumIndex = $this->enumIndex($fieldName, $value);
-                if ($enumIndex === false) {
+                if ($enumIndex === false && $value !== null) {
                     $errorStack->add($fieldName, 'enum');
                 }
             }

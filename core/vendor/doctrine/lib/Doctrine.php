@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Doctrine.php 5269 2008-12-04 23:50:28Z jwage $
+ *  $Id: Doctrine.php 5457 2009-02-03 03:55:57Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,14 +29,14 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 5269 $
+ * @version     $Revision: 5457 $
  */
 final class Doctrine
 {
     /**
      * VERSION
      */
-    const VERSION                   = '1.0.5';
+    const VERSION                   = '1.0.7';
 
     /**
      * ERROR CONSTANTS
@@ -196,6 +196,7 @@ final class Doctrine
     const ATTR_RECURSIVE_MERGE_FIXTURES = 162;
     const ATTR_USE_DQL_CALLBACKS        = 164;
     const ATTR_AUTO_ACCESSOR_OVERRIDE   = 165;
+    const ATTR_HYDRATE_OVERWRITE        = 166;
 
     /**
      * LIMIT CONSTANTS

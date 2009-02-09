@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Record.php 5264 2008-12-04 00:59:00Z jwage $
+ *  $Id: Record.php 5464 2009-02-03 17:48:11Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,7 +29,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 5264 $
+ * @version     $Revision: 5464 $
  */
 abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Countable, IteratorAggregate, Serializable
 {
@@ -152,6 +152,13 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     protected static $_customMutators = array();
 
     /**
+     * Whether or not to serialize references when a Doctrine_Record is serialized
+     *
+     * @var boolean
+     */
+    protected $_serializeReferences = false;
+
+    /**
      * @var integer $index                  this index is used for creating object identifiers
      */
     private static $_index = 1;
@@ -226,6 +233,22 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         $repository->add($this);
 
         $this->construct();
+    }
+
+    /**
+     * Set whether or not to serialize references.
+     * This is used by caching since we want to serialize references when caching
+     * but not when just normally serializing a instance
+     *
+     * @param boolean $bool
+     * @return boolean $bool
+     */
+    public function serializeReferences($bool = null)
+    {
+        if ( ! is_null($bool)) {
+            $this->_serializeReferences = $bool;
+        }
+        return $this->_serializeReferences;
     }
 
     /**
@@ -455,6 +478,29 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     { }
 
     /**
+     * Get the record error stack as a human readable string.
+     * Useful for outputting errors to user via web browser
+     *
+     * @return string $message
+     */
+    public function getErrorStackAsString()
+    {
+        $errorStack = $this->getErrorStack();
+
+        if (count($errorStack)) {
+            $message = sprintf("Validation failed in class %s\n\n", get_class($this));
+
+            $message .= "  " . count($errorStack) . " field" . (count($errorStack) > 1 ?  's' : null) . " had validation error" . (count($errorStack) > 1 ?  's' : null) . ":\n\n";
+            foreach ($errorStack as $field => $errors) {
+                $message .= "    * " . count($errors) . " validator" . (count($errors) > 1 ?  's' : null) . " failed on $field (" . implode(", ", $errors) . ")\n";
+            }
+            return $message;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * getErrorStack
      *
      * @return Doctrine_Validator_ErrorStack    returns the errorStack associated with this record
@@ -499,7 +545,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             $k = $this->_table->getFieldName($k);
             $old = $this->get($k, false);
 
-            if ((string) $old !== (string) $v || $old === null) {
+            if (((string) $old !== (string) $v || $old === null) && !in_array($k, $this->_modified)) {
                 $this->set($k, $v);
             }
         }
@@ -569,8 +615,14 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      */
     public function hydrate(array $data)
     {
-        $this->_values = array_merge($this->_values, $this->cleanData($data));
-        $this->_data = array_merge($this->_data, $data);
+        if ($this->getTable()->getAttribute(Doctrine::ATTR_HYDRATE_OVERWRITE)) {
+            $this->_values = array_merge($this->_values, $this->cleanData($data));
+            $this->_data = array_merge($this->_data, $data);
+        } else {
+            $this->_values = array_merge($this->cleanData($data), $this->_values);
+            $this->_data = array_merge($data, $this->_data);
+        }
+
         if (count($this->_values) < $this->_table->getColumnCount()) {
             $this->_state = self::STATE_PROXY;
         }
@@ -629,7 +681,9 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
 
         $vars = get_object_vars($this);
 
-        unset($vars['_references']);
+        if ( ! $this->serializeReferences()) {
+            unset($vars['_references']);
+        }
         unset($vars['_table']);
         unset($vars['_errorStack']);
         unset($vars['_filter']);
@@ -787,6 +841,9 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         }
         $id = array_values($id);
 
+        $overwrite = $this->getTable()->getAttribute(Doctrine::ATTR_HYDRATE_OVERWRITE);
+        $this->getTable()->setAttribute(Doctrine::ATTR_HYDRATE_OVERWRITE, true);
+
         if ($deep) {
             $query = $this->getTable()->createQuery();
             foreach (array_keys($this->_references) as $name) {
@@ -802,6 +859,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
                 $this->hydrate($record);
             }
         }
+
+        $this->getTable()->setAttribute(Doctrine::ATTR_HYDRATE_OVERWRITE, $overwrite);
 
         if ($record === false) {
             throw new Doctrine_Record_Exception('Failed to refresh. Record does not exist.');
@@ -1129,6 +1188,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             return false;
         } else if (in_array($type, array('decimal', 'float')) && is_numeric($old) && is_numeric($new)) {
             return $old * 100 != $new * 100;
+        } else if (in_array($type, array('integer', 'int')) && is_numeric($old) && is_numeric($new)) {
+            return (int) $old !== (int) $new;
         } else {
             return $old !== $new;
         }
@@ -1623,9 +1684,10 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      */
     public function exists()
     {
-        return ($this->_state !== Doctrine_Record::STATE_TCLEAN &&
-                $this->_state !== Doctrine_Record::STATE_TDIRTY &&
-                $this->_state !== Doctrine_Record::STATE_TLOCKED);
+        return ($this->_state !== Doctrine_Record::STATE_TCLEAN  &&
+                $this->_state !== Doctrine_Record::STATE_TDIRTY  &&
+                $this->_state !== Doctrine_Record::STATE_TLOCKED &&
+                $this->_state !== null);
     }
 
     /**
@@ -2056,7 +2118,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         }
 
         foreach ($this->_table->getTemplates() as $template) {
-            if (method_exists($template, $method)) {
+            if (is_callable(array($template, $method))) {
                 $template->setInvoker($this);
                 $this->_table->setMethodOwner($method, $template);
 

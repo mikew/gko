@@ -83,6 +83,7 @@ class Doctrine_Import_Schema
                                                           'actAs',
                                                           'options',
                                                           'package',
+                                                          'package_custom_path',
                                                           'inheritance',
                                                           'detect_relations',
                                                           'listeners',
@@ -220,7 +221,10 @@ class Doctrine_Import_Schema
 
         foreach ((array) $schema AS $s) {
             if (is_file($s)) {
-                $array = array_merge($array, $this->parseSchema($s, $format));
+                $e = explode('.', $s);
+                if (end($e) === $format) {
+                    $array = array_merge($array, $this->parseSchema($s, $format));
+                }
             } else if (is_dir($s)) {
                 $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($s),
                                                       RecursiveIteratorIterator::LEAVES_ONLY);
@@ -301,7 +305,7 @@ class Doctrine_Import_Schema
                           'options'             =>  array(),
                           'package'             =>  null,
                           'inheritance'         =>  array(),
-                          'detect_relations'    =>  true);
+                          'detect_relations'    =>  false);
         
         $array = Doctrine_Parser::load($schema, $type);
 
@@ -313,6 +317,7 @@ class Doctrine_Import_Schema
                             'actAs',
                             'options',
                             'package',
+                            'package_custom_path',
                             'inheritance',
                             'detect_relations');
 
