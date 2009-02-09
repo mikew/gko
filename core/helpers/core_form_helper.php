@@ -2,7 +2,7 @@
 class CoreFormHelper {
 	public static function form_tag($url = array(), $method = 'post', $options = array()) {
 		$simulate = CoreMime::should_simulate_post($method);
-		
+
 		$attributes = CoreHelper::instance()->merge_attributes($options, array(
 			'method' => $simulate ? 'post' : $method,
 			'action' => CoreHelper::instance()->url_for($url)
@@ -45,7 +45,6 @@ class CoreFormHelper {
 	}
 
 	public static function label($object, $key, $text = '', $attributes = array()) {
-		// print_r(func_get_args());
 		if(empty($text))
 			$text = Inflector::titleize($key);
 
@@ -89,7 +88,7 @@ class CoreFormHelper {
 			'type' => 'password',
 			'name' => self::interpret_pair($object, $key . '_confirmation', 'name'),
 			'id' => self::interpret_pair($object, $key . '_confirmation', 'id'),
-			'value' => self::interpret_pair($object, $key)
+			'value' => CoreMime::is_get() ? self::interpret_pair($object, $key) : ''
 		)));
 	}
 	
@@ -155,16 +154,31 @@ class CoreFormHelper {
 			$object = CoreContext::instance()->{$object};
 		
 		$stack = $object->errorStack();
+		$validators = $stack->getValidators();
+		// print_r($validators);
+		
 		if($stack->count() > 0) {
+			// $contents = CoreHelper::instance()->tag('h1', '', CoreHelper::pluralize($stack->count(), 'error') . ' occurred');
+			// $contents .= '<ul>';
+			// foreach($stack AS $key => $value) {
+			// 	// echo "{$key} => " . var_dump($value) . '<br />';
+			// 	$contents .= CoreHelper::instance()->tag('li', '', implode(', ', $value) . ' on ' . $key);
+			// }
+			// $contents .= '</ul>';
+			// 		
+			// return CoreHelper::instance()->tag('div', array('class' => 'errors'), $contents);
+			
 			$contents = CoreHelper::instance()->tag('h1', '', CoreHelper::pluralize($stack->count(), 'error') . ' occurred');
 			$contents .= '<ul>';
-			foreach($stack AS $key => $value) {
-				// echo "{$key} => " . var_dump($value) . '<br />';
-				$contents .= CoreHelper::instance()->tag('li', '', implode(', ', $value) . ' on ' . $key);
+			foreach($validators AS $field => $errors) {
+				$contents .= "<li>{$field}";
+				// print_r($value);
+				foreach($errors AS $error) {
+					echo $error->field;
+				}
 			}
 			$contents .= '</ul>';
-		
-			return CoreHelper::instance()->tag('div', array('class' => 'errors'), $contents);
+			return $contents;
 		}
 	}
 	
