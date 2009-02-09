@@ -16,8 +16,6 @@ class WelcomeController extends ApplicationController {
 		
 		$this->kde_feed = $this->update_dko_cache();
 		$this->latest = Doctrine_Query::create()->from('Posts p')->orderBy('p.created_at DESC')->limit(5)->execute();
-		
-		Posts::find();
 	}
 	
 	protected function update_dko_cache() {
