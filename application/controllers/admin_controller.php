@@ -22,7 +22,7 @@ class AdminController extends ApplicationController {
 	}
 	
 	public function process_http_auth($username, $password) {
-		$user = Doctrine_Query::create()->from('Authors a')->where('handle = ? AND password = ?', array($username, $password))->fetchOne();
+		$user = Doctrine_Query::create()->from('Author a')->where('a.handle = ? AND password = ?', array($username, $password))->fetchOne();
 		return $user;
 	}
 }

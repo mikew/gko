@@ -5,15 +5,15 @@ class Admin_AuthorsController extends AdminController {
 	}
 	
 	public function index() {
-		$this->authors = Doctrine_query::create()->from('Authors a')->execute();
+		$this->authors = Doctrine_query::create()->from('Author a')->execute();
 	}
 	
 	public function _new() {
-		$this->author = new Authors();
+		$this->author = new Author();
 	}
 	
 	public function create() {
-		$this->author = new Authors();
+		$this->author = new Author();
 		$this->author->merge($_POST['author']);
 		// $this->author->isValid();
 		if(!$this->author->trySave()) {
@@ -27,7 +27,7 @@ class Admin_AuthorsController extends AdminController {
 	}
 	
 	public function update() {
-		$this->author = Doctrine_Query::create()->from('Authors')->where('handle = ?', $_GET['id'])->fetchOne();
+		$this->author = Doctrine_Query::create()->from('Author a')->where('a.handle = ?', $_GET['id'])->fetchOne();
 		$this->author->merge($_POST['author']);
 		
 		if(!$this->author->trySave()) {
@@ -41,14 +41,13 @@ class Admin_AuthorsController extends AdminController {
 	}
 	
 	public function delete() {
-		Doctrine_query::create()->delete()->from('Authors')->where('handle = ?', $_GET['id'])->execute();
+		Doctrine_query::create()->delete()->from('Author a')->where('a.handle = ?', $_GET['id'])->execute();
 		
 		CoreRouter::redirect_to('admin/authors');
 	}
 	
 	public function edit() {
-		// $this->post = Doctrine_Query::create()->from('Posts')->where('key = ?', $_GET['id'])->fetchOne();
-		$this->author = Doctrine_Query::create()->from('Authors')->where('handle = ?', $_GET['id'])->fetchOne();
+		$this->author = Doctrine_Query::create()->from('Author a')->where('a.handle = ?', $_GET['id'])->fetchOne();
 		$this->breadcrumbs[$this->author->handle] = $this->author->name;
 	}
 }

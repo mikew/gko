@@ -5,7 +5,7 @@ class Admin_PostsController extends AdminController {
 	}
 	
 	public function index() {
-		$this->posts = Doctrine_Query::create()->from('Posts p')->orderBy('p.created_at DESC')->execute();
+		$this->posts = Doctrine_Query::create()->from('Post p')->orderBy('p.created_at DESC')->execute();
 	}
 	
 	public function _new() {
@@ -14,9 +14,9 @@ class Admin_PostsController extends AdminController {
 	}
 	
 	public function create() {
-		$this->post = new Posts();
+		$this->post = new Post();
 		$this->post->merge($_POST['post']);
-		$this->post->Authors = $this->user;
+		$this->post->Author = $this->user;
 		
 		if(!$this->post->trySave()) {
 			$this->action_to_render = '_new';
@@ -29,12 +29,12 @@ class Admin_PostsController extends AdminController {
 	}
 	
 	public function edit() {
-		$this->post = Doctrine_Query::create()->from('Posts')->where('key = ?', $_GET['id'])->fetchOne();
+		$this->post = Doctrine_Query::create()->from('Post p')->where('p.key = ?', $_GET['id'])->fetchOne();
 		$this->breadcrumbs[$this->post->key] = $this->post->title;
 	}
 	
 	public function update() {
-		$this->post = Doctrine_Query::create()->from('Posts')->where('key = ?', $_GET['id'])->fetchOne();
+		$this->post = Doctrine_Query::create()->from('Post p')->where('p.key = ?', $_GET['id'])->fetchOne();
 		$this->post->merge($_POST['post']);
 		$this->post->save();
 		
@@ -44,7 +44,7 @@ class Admin_PostsController extends AdminController {
 	}
 	
 	public function delete() {
-		Doctrine_query::create()->delete()->from('Posts')->where('key = ?', $_GET['id'])->execute();
+		Doctrine_query::create()->delete()->from('Post p')->where('p.key = ?', $_GET['id'])->execute();
 		
 		CoreRouter::redirect_to('admin/posts');
 	}

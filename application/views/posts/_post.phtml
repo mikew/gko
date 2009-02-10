@@ -1,6 +1,6 @@
 <div class="post">
 <h2><?= $context->link_to_post($post) ?></h2>
-<p class="summary">posted <?= $context->time_distance_in_words($post->created_at) ?> | games, news, release | <?= $post->Authors->handle ?></p>
+<p class="summary">posted <?= $context->time_distance_in_words($post->created_at) ?> | games, news, release | <?= $post->Author->handle ?></p>
 <?= $post->body_markdown ?>
 <div class="hr"></div>
 </div>
