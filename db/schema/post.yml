@@ -1,10 +1,10 @@
-Posts:
+Post:
     actAs:
         Timestampable:
         Sluggable:
             fields: [title]
             alias: key
-            indexName: posts_slug
+            indexName: post_slug
     columns:
         title:
             type: string
@@ -13,4 +13,4 @@ Posts:
             type: text
             notblank: true
         body_markdown: text
-        authors_id: integer
+        author_id: integer

@@ -1,10 +1,10 @@
-Authors:
+Author:
     actAs:
         Timestampable:
         Sluggable:
             fields: [handle]
             alias: key
-            indexName: authors_slug
+            indexName: author_slug
     columns:
         name:
             type: string

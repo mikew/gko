@@ -1,10 +1,10 @@
-Games:
+Game:
     actAs:
         Timestampable:
         Sluggable:
             fields: [title]
             alias: key
-            indexName: games_slug
+            indexName: game_slug
     columns:
         title: string
         genre:

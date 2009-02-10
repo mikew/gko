@@ -1,8 +1,8 @@
-Comments:
+Comment:
     actAs: [Timestampable]
     columns:
         name:
             type: string
             minlength: 5
         body: text
-        posts_id: integer
+        post_id: integer
