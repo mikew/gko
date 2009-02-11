@@ -1,4 +1,12 @@
 <?php
+function kfa($array, $key) {
+	return is_array($array) && array_key_exists($key, $array) ? $array[$key] : false ;
+}
+
+function is_true_array($array) {
+	return kfa(array_keys($array), 0) === 0;
+}
+
 final class Core {
 	public static function join_paths() {
 		$args = func_get_args();
