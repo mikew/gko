@@ -268,16 +268,52 @@ p.summary
 	background: transparent url(/images/arrow_indent.png) center left no-repeat;
 }
 
+label
+{
+	cursor: pointer;
+	font-weight: bold;
+	border-bottom: 1px solid #ccc;
+}
+
+.errors
+{
+	border: 1px solid #ccc;
+	-webkit-border-radius: 7px;
+	width: 300px;
+	padding: 5px 10px;
+}
+.errors h3
+{
+	font-variant: small-caps;
+	margin: 0;
+	margin-bottom: 5px;
+	padding: 5px;
+	border-bottom: 1px solid #aaa;
+}
+.errors label
+{
+	float: none;
+	display: inline;
+	color: #000;
+}
+.errors ul
+{
+	margin: 5px;
+	padding: 0;
+	list-style: none;
+}
+.errors ul ul
+{
+	list-style: square;
+	margin: 0  0 5px 15px;
+}
+
 form label
 {
 	float: left;
 	display: block;
-	width: auto;
 	width: 100px;
-	cursor: pointer;
-	font-weight: bold;
 	color: #606060;
-	border-bottom: 1px solid #ccc;
 	margin: 0 10px 0 0;
 	text-align: right;
 }
