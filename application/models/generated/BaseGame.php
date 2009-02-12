@@ -8,16 +8,19 @@ abstract class BaseGame extends Doctrine_Record
     public function setTableDefinition()
     {
         $this->setTableName('game');
-        $this->hasColumn('title', 'string', null, array('type' => 'string'));
+        $this->hasColumn('title', 'string', null, array('type' => 'string', 'minlength' => '5'));
         $this->hasColumn('genre', 'enum', null, array('type' => 'enum', 'values' => array(0 => 'arcade', 1 => 'board', 2 => 'card', 3 => 'dice', 4 => 'logic', 5 => 'strategy', 6 => 'toy')));
         $this->hasColumn('online', 'boolean', null, array('type' => 'boolean'));
         $this->hasColumn('multiplayer', 'boolean', null, array('type' => 'boolean'));
-        $this->hasColumn('blurb', 'text', null, array('type' => 'text'));
-        $this->hasColumn('howto', 'text', null, array('type' => 'text'));
+        $this->hasColumn('blurb', 'text', null, array('type' => 'text', 'minlength' => '20'));
+        $this->hasColumn('howto', 'text', null, array('type' => 'text', 'minlength' => '20'));
     }
 
     public function setUp()
     {
+        $this->hasMany('GameContributor', array('local' => 'id',
+                                                'foreign' => 'game_id'));
+
         $timestampable0 = new Doctrine_Template_Timestampable();
         $sluggable0 = new Doctrine_Template_Sluggable(array('fields' => array(0 => 'title'), 'alias' => 'key', 'indexName' => 'game_slug'));
         $this->actAs($timestampable0);

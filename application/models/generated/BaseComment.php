@@ -9,7 +9,7 @@ abstract class BaseComment extends Doctrine_Record
     {
         $this->setTableName('comment');
         $this->hasColumn('name', 'string', null, array('type' => 'string', 'minlength' => '5'));
-        $this->hasColumn('body', 'text', null, array('type' => 'text'));
+        $this->hasColumn('body', 'text', null, array('type' => 'text', 'minlength' => '7'));
         $this->hasColumn('post_id', 'integer', 8, array('type' => 'integer', 'length' => 8));
     }
 

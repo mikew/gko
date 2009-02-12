@@ -1,0 +1,12 @@
+GameContributor:
+    columns:
+        name:
+            type: string
+            minlength: 5
+        email:
+            type: string
+            email: true
+        type:
+            type: enum
+            values: [original, contributor]
+        game_id: integer
