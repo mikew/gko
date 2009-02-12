@@ -25,4 +25,8 @@ class AdminController extends ApplicationController {
 		$user = Doctrine_Query::create()->from('Author a')->where('a.handle = ? AND password = ?', array($username, $password))->fetchOne();
 		return $user;
 	}
+	
+	protected function flash_success($title, $verb) {
+		$this->flash->success = '"' . $title . '" has been ' . $verb;
+	}
 }

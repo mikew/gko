@@ -10,22 +10,22 @@ class Admin_PostsController extends AdminController {
 	
 	public function _new() {
 		$this->push_title('New');
-		$this->post = new Posts();
+		$this->post = new Post();
 	}
 	
 	public function create() {
-		$this->post = new Post();
-		$this->post->merge($_POST['post']);
-		$this->post->Author = $this->user;
+		try {
+			$this->post = new Post();
+			$this->post->merge($_POST['post']);
+			$this->post->Author = $this->user;
+			$this->post->save();
 		
-		if(!$this->post->trySave()) {
+			$this->flash->success = '"' . $this->post->title . '" was created!';
+		
+			CoreRouter::redirect_to('admin/posts');
+		} catch(Doctrine_Validator_Exception $e) {
 			$this->action_to_render = '_new';
-			return;
 		}
-		
-		$this->flash->success = '"' . $this->post->title . '" was created!';
-		
-		CoreRouter::redirect_to('admin/posts');
 	}
 	
 	public function edit() {
@@ -34,13 +34,17 @@ class Admin_PostsController extends AdminController {
 	}
 	
 	public function update() {
-		$this->post = Doctrine_Query::create()->from('Post p')->where('p.key = ?', $_GET['id'])->fetchOne();
-		$this->post->merge($_POST['post']);
-		$this->post->save();
+		try {
+			$this->post = Doctrine_Query::create()->from('Post p')->where('p.key = ?', $_GET['id'])->fetchOne();
+			$this->post->merge($_POST['post']);
+			$this->post->save();
 		
-		$this->flash->success = '"' . $this->post->title . '" was updated!';
+			$this->flash->success = '"' . $this->post->title . '" was updated!';
 		
-		CoreRouter::redirect_to('admin/posts');
+			CoreRouter::redirect_to('admin/posts');
+		} catch(Doctrine_Validator_Exception $e) {
+			$this->action_to_render = 'edit';
+		}
 	}
 	
 	public function delete() {

@@ -13,41 +13,42 @@ class Admin_AuthorsController extends AdminController {
 	}
 	
 	public function create() {
-		$this->author = new Author();
-		$this->author->merge($_POST['author']);
-		// $this->author->isValid();
-		if(!$this->author->trySave()) {
+		try {
+			$this->author = new Author();
+			$this->author->merge($_POST['author']);
+			$this->author->save();
+		
+			$this->flash_success($this->author->name, 'created');
+		
+			CoreRouter::redirect_to('admin/authors');
+		} catch(Doctrine_Validator_Exception $e) {
 			$this->action_to_render = '_new';
-			return;
 		}
-		
-		$this->flash->success = '"' . $this->author->name . '" was created!';
-		
-		CoreRouter::redirect_to('admin/authors');
-	}
-	
-	public function update() {
-		$this->author = Doctrine_Query::create()->from('Author a')->where('a.handle = ?', $_GET['id'])->fetchOne();
-		$this->author->merge($_POST['author']);
-		
-		if(!$this->author->trySave()) {
-			$this->action_to_render = 'edit';
-			return;
-		}
-		
-		$this->flash->success = '"' . $this->author->name . '" was edited!';
-		
-		CoreRouter::redirect_to('admin/authors');
-	}
-	
-	public function delete() {
-		Doctrine_query::create()->delete()->from('Author a')->where('a.handle = ?', $_GET['id'])->execute();
-		
-		CoreRouter::redirect_to('admin/authors');
 	}
 	
 	public function edit() {
 		$this->author = Doctrine_Query::create()->from('Author a')->where('a.handle = ?', $_GET['id'])->fetchOne();
 		$this->breadcrumbs[$this->author->handle] = $this->author->name;
+	}
+	
+	public function update() {
+		try {
+			$this->author = Doctrine_Query::create()->from('Author a')->where('a.handle = ?', $_GET['id'])->fetchOne();
+			$this->author->merge($_POST['author']);
+			$this->author->save();
+		
+			$this->flash_success($this->author->name, 'updated');
+		
+			CoreRouter::redirect_to('admin/authors');
+		} catch(Doctrine_Validator_Exception $e) {
+			$this->action_to_render = 'edit';
+		}
+	}
+	
+	public function delete() {
+		Doctrine_query::create()->delete()->from('Author a')->where('a.handle = ?', $_GET['id'])->execute();
+		$this->flash_success($this->author->name, 'deleted');
+		
+		CoreRouter::redirect_to('admin/authors');
 	}
 }
