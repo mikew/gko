@@ -1,0 +1,28 @@
+<?= $context->form_tag_for(array('admin', $context->game, 'key'), null, &$f) ?>
+	<?= $f->errors() ?>
+	<p>
+		<?= $f->label('title') ?>
+		<?= $f->text_field('title') ?>
+	</p>
+	<p>
+		<?= $f->label('genre') ?>
+		<?= $f->select_one('genre') ?>
+	</p>
+	<p>
+		<?= $f->label('blurb') ?>
+		<?= $f->text_area('blurb') ?>
+		<?= $context->field_summary('Only a short description of the game is needed here!') ?>
+	</p>
+	<p>
+		<?= $f->label('howto') ?>
+		<?= $f->text_area('howto') ?>
+	</p>
+	<p>
+		<?= $f->label('online', 'Online?') ?>
+		<?= $f->check_box('online') ?>
+	</p>
+	<p>
+		<?= $f->label('multiplayer', 'Multiplayer?') ?>
+		<?= $f->check_box('multiplayer') ?>
+	</p>
+<?= $context->end_admin_form($f, $context->game, 'key') ?>

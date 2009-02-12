@@ -1,3 +1,6 @@
 <ul>
 	<li><strong><?= $context->link_to('Add a New Game', 'new_admin/game') ?></strong></li>
+<? foreach($context->games AS $game) { ?>
+	<li><?= $context->link_to($game->title, array('edit_admin/game', array('id' => $game->key))) ?></li>
+<? } ?>
 </ul>
