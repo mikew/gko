@@ -3,7 +3,7 @@ class CoreTagHelper {
 	protected static $cached_attributes = array();
 	
 	public static function image_tag($image, $options = array()) {
-		$options = CoreHelper::instance()->merge_attributes(array(
+		$options = CoreTagHelper::merge_attributes(array(
 			'src' => CoreHelper::instance()->url_for('/images/' . $image),
 			'alt' => $image
 		), $options);
