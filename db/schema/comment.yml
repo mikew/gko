@@ -4,5 +4,7 @@ Comment:
         name:
             type: string
             minlength: 5
-        body: text
+        body:
+            type: text
+            minlength: 7
         post_id: integer

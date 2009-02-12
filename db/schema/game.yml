@@ -6,11 +6,17 @@ Game:
             alias: key
             indexName: game_slug
     columns:
-        title: string
+        title:
+            type: string
+            minlength: 5
         genre:
             type: enum
             values: [arcade, board, card, dice, logic, strategy, toy]
         online: boolean
         multiplayer: boolean
-        blurb: text
-        howto: text
+        blurb:
+            type: text
+            minlength: 20
+        howto:
+            type: text
+            minlength: 20
