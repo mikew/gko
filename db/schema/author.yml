@@ -9,9 +9,11 @@ Author:
         name:
             type: string
             minlength: 5
+            unique: true
         handle:
             type: string
             minlength: 3
+            unique: true
         password:
             type: string
             confirm: true

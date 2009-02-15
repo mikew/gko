@@ -8,8 +8,8 @@ abstract class BaseAuthor extends Doctrine_Record
     public function setTableDefinition()
     {
         $this->setTableName('author');
-        $this->hasColumn('name', 'string', null, array('type' => 'string', 'minlength' => '5'));
-        $this->hasColumn('handle', 'string', null, array('type' => 'string', 'minlength' => '3'));
+        $this->hasColumn('name', 'string', null, array('type' => 'string', 'minlength' => '5', 'unique' => true));
+        $this->hasColumn('handle', 'string', null, array('type' => 'string', 'minlength' => '3', 'unique' => true));
         $this->hasColumn('password', 'string', null, array('type' => 'string', 'confirm' => true, 'minlength' => '6'));
     }
 

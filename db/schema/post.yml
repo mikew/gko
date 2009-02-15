@@ -9,6 +9,7 @@ Post:
         title:
             type: string
             minlength: 5
+            unique: true
         body:
             type: text
             notblank: true

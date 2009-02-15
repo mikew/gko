@@ -8,7 +8,8 @@ Game:
     columns:
         title:
             type: string
-            minlength: 5
+            notblank: true
+            unique: true
         genre:
             type: enum
             values: [arcade, board, card, dice, logic, strategy, toy]

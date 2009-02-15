@@ -8,7 +8,7 @@ abstract class BaseGame extends Doctrine_Record
     public function setTableDefinition()
     {
         $this->setTableName('game');
-        $this->hasColumn('title', 'string', null, array('type' => 'string', 'minlength' => '5'));
+        $this->hasColumn('title', 'string', null, array('type' => 'string', 'notblank' => true, 'unique' => true));
         $this->hasColumn('genre', 'enum', null, array('type' => 'enum', 'values' => array(0 => 'arcade', 1 => 'board', 2 => 'card', 3 => 'dice', 4 => 'logic', 5 => 'strategy', 6 => 'toy')));
         $this->hasColumn('online', 'boolean', null, array('type' => 'boolean'));
         $this->hasColumn('multiplayer', 'boolean', null, array('type' => 'boolean'));

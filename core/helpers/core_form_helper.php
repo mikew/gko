@@ -214,9 +214,11 @@ class CoreFormHelper {
 				$contents .= '</ul></li>';
 			}
 			$contents .= '</ul>';
+			
+			$contents = CoreHelper::instance()->tag('div', array('class' => 'errors'), $contents);
 		}
 		
-		return CoreHelper::instance()->tag('div', array('class' => 'errors'), $contents);
+		return $contents;
 	}
 	
 	public static function error_message_for($type, $arguments) {
@@ -248,6 +250,14 @@ class CoreFormHelper {
 	
 	public static function confirm_validation_message() {
 		return 'Did not match confirmation';
+	}
+	
+	public static function notblank_validation_message() {
+		return 'Cannot be empty';
+	}
+	
+	public static function unique_validation_message() {
+		return 'Must be unique';
 	}
 }
 
