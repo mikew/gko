@@ -69,9 +69,11 @@ class CoreView {
 		$context = CoreContext::instance();
 		$contents = '';
 		
-		foreach($locals AS $key => $value) {
-			${$key} = $value;
-		}
+		// foreach($locals AS $key => $value) {
+		// 	${$key} = $value;
+		// }
+		
+		extract($locals, EXTR_SKIP);
 		
 		$interpreted = self::interpret_file($file);
 		$name = $interpreted->name;
