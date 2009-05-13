@@ -1,6 +1,6 @@
 <?php
 /*
- *    $Id: NestedSet.php 5424 2009-01-26 22:10:33Z guilhermeblanco $
+ *    $Id: NestedSet.php 5543 2009-02-24 19:52:07Z guilhermeblanco $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -27,7 +27,7 @@
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       www.phpdoctrine.org
  * @since      1.0
- * @version    $Revision: 5424 $
+ * @version    $Revision: 5543 $
  * @author     Joe Simms <joe.simms@websites4.com>
  * @author     Roman Borschel <roman@code-factory.org>     
  */
@@ -830,6 +830,8 @@ class Doctrine_Node_NestedSet extends Doctrine_Node implements Doctrine_Node_Int
             $this->setRootValue($newRootId);
             $this->record['level'] = 0;
             
+            $this->record->save();
+            
             $conn->commit();
             
             return true;
@@ -1058,9 +1060,8 @@ class Doctrine_Node_NestedSet extends Doctrine_Node implements Doctrine_Node_Int
         $qLeft = $qLeft->update($componentName)
                 ->set($componentName . '.lft', $componentName.'.lft + ?', $delta)
                 ->where($componentName . '.lft >= ?', $first);
-        
         $qLeft = $this->_tree->returnQueryWithRootId($qLeft, $rootId);
-        
+
         $resultLeft = $qLeft->execute();
         
         // shift right columns

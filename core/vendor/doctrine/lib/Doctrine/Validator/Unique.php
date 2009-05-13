@@ -49,14 +49,23 @@ class Doctrine_Validator_Unique
                 $pks[$i] = $conn->quoteIdentifier($pks[$i]);
             }
             
-            $pks = join(',', $pks);
+            $pks = implode(', ', $pks);
         }
 
-        $sql = 'SELECT ' . $pks . ' FROM ' . $conn->quoteIdentifier($table->getTableName()) 
-             . ' WHERE ' . $conn->quoteIdentifier($table->getColumnName($this->field)) . ' = ?';
+        $sql = 'SELECT ' . $pks . ' FROM ' . $conn->quoteIdentifier($table->getTableName()) . ' WHERE ';
         
-        $values = array();
-        $values[] = $value;
+        if (is_array($this->field)) {
+            foreach ($this->field as $k => $v) {
+                $this->field[$k] = $conn->quoteIdentifier($table->getColumnName($v));
+            }
+        
+            $sql .= implode(' = ? AND ', $this->field) . ' = ?';
+            $values = $value;
+        } else {
+            $sql .= $conn->quoteIdentifier($table->getColumnName($this->field)) . ' = ?';
+            $values = array();
+            $values[] = $value;
+        }
         
         // If the record is not new we need to add primary key checks because its ok if the 
         // unique value already exists in the database IF the record in the database is the same
@@ -68,7 +77,7 @@ class Doctrine_Validator_Unique
                 $values[] = $this->invoker->$pk;
             }
         }
-        
+
         $stmt  = $table->getConnection()->getDbh()->prepare($sql);
         $stmt->execute($values);
 
