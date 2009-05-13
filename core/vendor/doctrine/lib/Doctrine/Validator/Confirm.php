@@ -10,7 +10,8 @@
 class Doctrine_Validator_Confirm
 {
     /**
-     * checks the post data
+     * fetches the post data of a field named $this->field . '_confirmation'
+     * and compares it to our own value
      *
      * @param mixed $value
      * @return boolean
