@@ -182,6 +182,11 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
             case Doctrine::ATTR_RECURSIVE_MERGE_FIXTURES;
             case Doctrine::ATTR_USE_DQL_CALLBACKS;
             case Doctrine::ATTR_AUTO_ACCESSOR_OVERRIDE;
+            case Doctrine::ATTR_AUTO_FREE_QUERY_OBJECTS;
+            case Doctrine::ATTR_DEFAULT_TABLE_CHARSET;
+            case Doctrine::ATTR_DEFAULT_TABLE_COLLATE;
+            case Doctrine::ATTR_DEFAULT_IDENTIFIER_OPTIONS;
+            case Doctrine::ATTR_DEFAULT_COLUMN_OPTIONS;
             case Doctrine::ATTR_HYDRATE_OVERWRITE;
 
                 break;
@@ -197,6 +202,7 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
             case Doctrine::ATTR_SEQNAME_FORMAT:
             case Doctrine::ATTR_IDXNAME_FORMAT:
             case Doctrine::ATTR_TBLNAME_FORMAT:
+            case Doctrine::ATTR_FKNAME_FORMAT:
                 if ($this instanceof Doctrine_Table) {
                     throw new Doctrine_Exception('Sequence / index name format attributes cannot be set'
                                                . 'at table level (only at connection or global level).');
@@ -458,6 +464,46 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * Set the charset
+     *
+     * @param string $charset
+     */
+    public function setCharset($charset)
+    {
+        $this->setAttribute(Doctrine::ATTR_DEFAULT_TABLE_CHARSET, $charset);
+    }
+
+    /**
+     * Get the charset
+     *
+     * @return mixed
+     */
+    public function getCharset()
+    {
+        return $this->getAttribute(Doctrine::ATTR_DEFAULT_TABLE_CHARSET);
+    }
+
+    /**
+     * Set the collate
+     *
+     * @param string $collate
+     */
+    public function setCollate($collate)
+    {
+        $this->setAttribute(Doctrine::ATTR_DEFAULT_TABLE_COLLATE, $collate);
+    }
+
+    /**
+     * Get the collate
+     *
+     * @return mixed $collate
+     */
+    public function getCollate()
+    {
+        return $this->getAttribute(Doctrine::ATTR_DEFAULT_TABLE_COLLATE);
     }
 
     /**

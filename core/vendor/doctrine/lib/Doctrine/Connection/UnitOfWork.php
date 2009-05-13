@@ -65,9 +65,7 @@ class Doctrine_Connection_UnitOfWork extends Doctrine_Connection_Module
 
             $record->state($state);
 
-            $event = new Doctrine_Event($record, Doctrine_Event::RECORD_SAVE);
-            $record->preSave($event);
-            $record->getTable()->getRecordListener()->preSave($event);
+            $event = $record->invokeSaveHooks('pre', 'save');
             $state = $record->state();
 
             $isValid = true;
@@ -93,9 +91,17 @@ class Doctrine_Connection_UnitOfWork extends Doctrine_Connection_Module
                 foreach ($record->getPendingDeletes() as $pendingDelete) {
                     $pendingDelete->delete();
                 }
+                
+                foreach ($record->getPendingUnlinks() as $alias => $ids) {
+                    if ( ! $ids) {
+                        $record->unlinkInDb($alias, array());
+                    } else {
+                        $record->unlinkInDb($alias, array_keys($ids));
+                    }
+                }
+                $record->resetPendingUnlinks();
 
-                $record->postSave($event);
-                $record->getTable()->getRecordListener()->postSave($event);
+                $record->invokeSaveHooks('post', 'save', $event);
             } else {
                 $conn->transaction->addInvalid($record);
             }
@@ -131,42 +137,9 @@ class Doctrine_Connection_UnitOfWork extends Doctrine_Connection_Module
             throw $e;
         }
 
+        $record->clearInvokedSaveHooks();
+
         return true;
-    }
-
-    /**
-     * saves the given record
-     *
-     * @param Doctrine_Record $record
-     * @return void
-     */
-    public function save(Doctrine_Record $record)
-    {
-        $event = new Doctrine_Event($record, Doctrine_Event::RECORD_SAVE);
-
-        $record->preSave($event);
-
-        $record->getTable()->getRecordListener()->preSave($event);
-
-        if ( ! $event->skipOperation) {
-            switch ($record->state()) {
-                case Doctrine_Record::STATE_TDIRTY:
-                case Doctrine_Record::STATE_TCLEAN:
-                    $this->insert($record);
-                    break;
-                case Doctrine_Record::STATE_DIRTY:
-                case Doctrine_Record::STATE_PROXY:
-                    $this->update($record);
-                    break;
-                case Doctrine_Record::STATE_CLEAN:
-                    // do nothing
-                    break;
-            }
-        }
-
-        $record->getTable()->getRecordListener()->postSave($event);
-
-        $record->postSave($event);
     }
 
     /**
@@ -522,12 +495,10 @@ class Doctrine_Connection_UnitOfWork extends Doctrine_Connection_Module
      */
     public function update(Doctrine_Record $record)
     {
-        $event = new Doctrine_Event($record, Doctrine_Event::RECORD_UPDATE);
-        $record->preUpdate($event);
-        $table = $record->getTable();
-        $table->getRecordListener()->preUpdate($event);
+        $event = $record->invokeSaveHooks('pre', 'update');;
 
-        if ($record->isValid()) {
+        if ($record->isValid(false, false)) {
+            $table = $record->getTable();
             if ( ! $event->skipOperation) {
                 $identifier = $record->identifier();
                 if ($table->getOption('joinedParents')) {
@@ -541,9 +512,7 @@ class Doctrine_Connection_UnitOfWork extends Doctrine_Connection_Module
                 $record->assignIdentifier(true);
             }
 
-            $table->getRecordListener()->postUpdate($event);
-
-            $record->postUpdate($event);
+            $record->invokeSaveHooks('post', 'update', $event);
 
             return true;
         }
@@ -559,13 +528,11 @@ class Doctrine_Connection_UnitOfWork extends Doctrine_Connection_Module
      */
     public function insert(Doctrine_Record $record)
     {
-        // listen the onPreInsert event
-        $event = new Doctrine_Event($record, Doctrine_Event::RECORD_INSERT);
-        $record->preInsert($event);
-        $table = $record->getTable();
-        $table->getRecordListener()->preInsert($event);
+        $event = $record->invokeSaveHooks('pre', 'insert');
 
-        if ($record->isValid()) {
+        if ($record->isValid(false, false)) {
+            $table = $record->getTable();
+
             if ( ! $event->skipOperation) {
                 if ($table->getOption('joinedParents')) {
                     // just for bc!
@@ -577,8 +544,7 @@ class Doctrine_Connection_UnitOfWork extends Doctrine_Connection_Module
             }
 
             $table->addRecord($record);
-            $table->getRecordListener()->postInsert($event);
-            $record->postInsert($event);
+            $record->invokeSaveHooks('post', 'insert', $event);
 
             return true;
         }
